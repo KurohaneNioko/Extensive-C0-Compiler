@@ -30,3 +30,6 @@
 *.exe
 *.out
 *.app
+
+# vs2017 sln concerned
+Browse.VC.*
