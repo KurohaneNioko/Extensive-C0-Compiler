@@ -1,0 +1,4 @@
+﻿  test_000_1110-2325.cpp
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\c04test\test_000_1110-2325.cpp(31): warning C4326: “main”的返回类型应为“int”而非“void”
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\c04test\test_000_1110-2325.cpp(34): warning C4101: “m1”: 未引用的局部变量
+  Extensive-C0-Compiler.vcxproj -> C:\Users\秦子檸\ProgrammingProjects\Extensive-C0-Compiler\Debug\Extensive-C0-Compiler.exe
