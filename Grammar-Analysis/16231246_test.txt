@@ -6,6 +6,8 @@ int x;
 
 int fact(int t)
 {
+	const int zero=1;
+	printf(zero);
 	if(t < 3)
 		return(t);
 	else
@@ -25,7 +27,7 @@ void fun2
 
 void main()
 {
-	const int b = +01, c = 2, d = 3, e = 4;
+	const int b =+01, c=2, d=3, e=4;
 	char ar[2];
 	int r, m1[8];
 	int aa, a;
