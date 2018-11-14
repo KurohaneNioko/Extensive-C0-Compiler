@@ -114,7 +114,7 @@ int Lex::getsym()
 			}
 			catch(const std::out_of_range& oor){
 #if DEBUG
-				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (LineCounter + 1) << std::endl;
+				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 				return Lex::UNKNOWN;
 			}
@@ -124,7 +124,7 @@ int Lex::getsym()
 		else
 		{
 #if DEBUG
-			std::cout << "Invalid int at Line: " << Lex::LineCounter << " Colomn: " << (LineCounter + 1) << std::endl;
+			std::cout << "Invalid int at Line: " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::UNKNOWN;
 		}
@@ -180,7 +180,7 @@ int Lex::getsym()
 		if (Lex::curElmt[Lex::curElmt.size() - 1] != '"')
 		{
 #if DEBUG
-			std::cout << "Miss right double quote: Line " << Lex::LineCounter << " Colomn: " << (LineCounter + 1) << std::endl;
+			std::cout << "Miss right double quote: Line " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::UNKNOWN;
 		}
@@ -188,7 +188,7 @@ int Lex::getsym()
 		{
 			/* TODO: warning*/
 #if DEBUG
-			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (LineCounter + 1) << std::endl;
+			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::STRING;
 		}
@@ -236,10 +236,14 @@ int Lex::getsym()
 				curElmt += c;
 				return Lex::RSVD_SYM;
 			}
+			else
+			{
+				BACK_1_CHAR
+			}
 		}
 	}
 #if DEBUG
-	std::cout << "UNKNOWN word at Line: " << Lex::LineCounter << " Colomn: "<< (LineCounter+1) << std::endl;
+	std::cout << "UNKNOWN word at Line: " << Lex::LineCounter << " Colomn: "<< (linePointer+1-Lex::curElmt.size()) << std::endl;
 #endif
 	return Lex::UNKNOWN;
 }

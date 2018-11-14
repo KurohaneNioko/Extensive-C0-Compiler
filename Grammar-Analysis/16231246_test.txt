@@ -3,7 +3,7 @@ const int one = 1, minus_two = -0002;
 const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
 int x;
-
+!
 int fact(int t)
 {
 	const int zero=1;
