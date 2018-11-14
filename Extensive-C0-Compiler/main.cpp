@@ -1,2 +1,2 @@
-//#include "LexerHead.h"
-//#include "Compiler.h"
+#include "LexerHead.h"
+#include "Compiler.h"

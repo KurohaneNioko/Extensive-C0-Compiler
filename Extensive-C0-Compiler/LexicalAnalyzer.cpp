@@ -9,6 +9,41 @@
 std::size_t linePointer = 0;	//next char stars from s[i]
 std::string codeLine = "";
 
+/* definition of head file */
+std::ifstream Lex::code_file;
+std::string Lex::curElmt;
+int Lex::curNum = 0;
+int Lex::LineCounter = 0;
+const std::map<std::string, std::string> Lex::reservedWords =
+{
+	{"const",	"CONST_SYM"},
+	{"int",		"INT_SYM"},
+	{"char",	"CHAR_SYM"},
+	{"void",	"VOID_SYM"},
+	{"main",	"MAIN_SYM"},
+	{"if",		"IF_SYM"},
+	{"else",	"ELSE_SYM"},
+	{"for",		"FOR_SYM" },
+	{"while",	"WHILE_SYM"},
+	{"scanf",	"SCANF_SYM"},
+	{"printf",	"PRINTF_SYM"},
+	{"return",	"RET_SYM"}
+};
+const std::map<std::string, std::string> Lex::non_alpha_sym =
+{
+	{"+",	"ADD"},		{"-",	"SUB"},
+	{"*",	"MUL"},		{"/",	"DIV"},
+	{"(",	"L_SMALL"},	{")",	"R_SMALL"},
+	{"[",	"L_MID"},	{"]",	"R_MID"},
+	{"{",	"L_BIG"},	{"}",	"R_BIG"},
+	{"=",	"ASSIGN"},
+	{"!=",	"NOT_EQL"},	{"==",	"EQUAL"},
+	{">",	"GREATER"},	{">=",	"GRT_EQL"},
+	{"<",	"LESS"},	{"<=",	"LES_EQL"},
+	{"\"",	"DBL_QUOTE"},{"'",	"SGL_QUOTE"},
+	{",",	"COMMA"},	{";",	"SEMICOLON"}
+};
+
 char readCharFromLine()
 {
 	if (linePointer == codeLine.size())

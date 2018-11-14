@@ -9,15 +9,15 @@
 #define Lexical_Out 1
 namespace Lex
 {
-	constexpr auto UNKNOWN = 0;		// 5StarsBB
-	constexpr auto IDEN = 1;		// ISLAND
-	constexpr auto UNSGN_INT = 2;		// 19260817
-	constexpr auto SGL_CHARA = 3;		// 'a'
-	constexpr auto STRING = 4;		// "HuaLaiShi"
-	constexpr auto RSVD_WD = 5;		// if
-	constexpr auto RSVD_SYM = 6;		// ==
+	extern constexpr auto UNKNOWN = 0;		// 5StarsBB
+	extern constexpr auto IDEN = 1;		// ISLAND
+	extern constexpr auto UNSGN_INT = 2;		// 19260817
+	extern constexpr auto SGL_CHARA = 3;		// 'a'
+	extern constexpr auto STRING = 4;		// "HuaLaiShi"
+	extern constexpr auto RSVD_WD = 5;		// if
+	extern constexpr auto RSVD_SYM = 6;		// ==
 	/* reserved words -> symbol 4 recognition */
-	const std::map<std::string, std::string> reservedWords =
+	extern const std::map<std::string, std::string> reservedWords;/* =
 	{
 		{"const",	"CONST_SYM"},
 		{"int",		"INT_SYM"},
@@ -31,9 +31,9 @@ namespace Lex
 		{"scanf",	"SCANF_SYM"},
 		{"printf",	"PRINTF_SYM"},
 		{"return",	"RET_SYM"}
-	};
+	};*/
 	/* reserved symbols, no alpha */
-	const std::map<std::string, std::string> non_alpha_sym =
+	extern const std::map<std::string, std::string> non_alpha_sym; /*=
 	{
 		{"+",	"ADD"},		{"-",	"SUB"},
 		{"*",	"MUL"},		{"/",	"DIV"},
@@ -46,14 +46,14 @@ namespace Lex
 		{"<",	"LESS"},	{"<=",	"LES_EQL"},
 		{"\"",	"DBL_QUOTE"},{"'",	"SGL_QUOTE"},
 		{",",	"COMMA"},	{";",	"SEMICOLON"}
-	};
+	};*/
 	/* code input */
-	std::ifstream code_file;
+	extern std::ifstream code_file;
 	/* current word */
-	std::string curElmt;
-	int curNum = 0;
+	extern std::string curElmt;
+	extern int curNum;
 	/* record Line No. */
-	int LineCounter = 0;
+	extern int LineCounter;
 	int getsym();
 }
 

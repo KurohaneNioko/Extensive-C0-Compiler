@@ -24,12 +24,18 @@
     <ClCompile Include="main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="SyntacticAnalysis.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LexerHead.h">
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Compiler.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SyntaxHead.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
