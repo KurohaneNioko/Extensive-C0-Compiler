@@ -121,7 +121,9 @@
     </ClCompile>
     <ClCompile Include="LexicalAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="SyntacticAnalysis.cpp" />
+    <ClCompile Include="SyntacticAnalysis.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />

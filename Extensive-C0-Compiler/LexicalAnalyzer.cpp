@@ -287,9 +287,9 @@ int Lex::getsym()
 int main(int argc, char** argv)
 {
 	std::string code_path(argv[1]);
-	//../Grammar-Analysis/16231246_test.txt
+	//../Docs/16231246_test.txt
 	Lex::code_file.open(code_path, std::ifstream::in);
-	std::ofstream f_out("../Grammar-Analysis/16231246_Lex_out.txt", std::ios::trunc|std::ofstream::ate);
+	std::ofstream f_out("../Docs/16231246_Lex_out.txt", std::ios::trunc|std::ofstream::ate);
 	int r;
 	if (!Lex::code_file || !f_out)
 	{
