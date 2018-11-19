@@ -12,6 +12,9 @@
 #define is_scanfsym		(Lex::curElmt == "scanf")
 #define is_printfsym	(Lex::curElmt == "printf")
 #define is_returnsym	(Lex::curElmt == "return")
+#define is_reserved		(is_constsym || is_intsym || is_charsym || is_voidsym || \
+						 is_mainsym || is_ifsym || is_elsesym || is_forsym || \
+						 is_whilesym || is_scanfsym || is_printfsym || is_returnsym )
 
 #define is_add			(Lex::curElmt == "+")
 #define is_sub			(Lex::curElmt == "-")
@@ -34,6 +37,8 @@
 #define is_sgl_quote	(Lex::curElmt == "'")
 #define is_comma		(Lex::curElmt == ",")
 #define is_semicolon	(Lex::curElmt == ";") 
+
+std::string curFunc = "";	// "" means global
 
 int _int()
 {
@@ -85,7 +90,6 @@ void const_define()
 				/* TODO: fill in sym table */
 				/* TODO: skip until ',' | ';' 
 						if meet reservedwords, then 
-						modify curElmt to ";" and 
 						break with err"lack semi" */
 				/* TODO: if is_comma then getsym(), IDEN expected*/
 			}
@@ -94,7 +98,6 @@ void const_define()
 				/* TODO: miss iden after "const int|char" */
 				/* TODO: skip until ';' | IDEN, 
 						if meet reservedwords, then 
-						modify curElmt to ";" and 
 						break with err"lack semi"*/
 			}
 		} while (!is_semicolon);
@@ -102,25 +105,13 @@ void const_define()
 	else 
 	{
 		/* TODO: expect int|char after const  */
-		/* TODO: skip until ';' | IDEN */
+		/* TODO: skip until ';'
+				if meet reservedwords, then
+				break with err"lack semi" */
 	}
 }
 
-void const_declare()
-{
-	do
-	{
-		Lex::getsym();
-		if (is_constsym)
-		{
-			Lex::getsym();
-			const_define();
-		}
-	} while (is_comma);
-	
-}
-
-void variable_declaration()
+void variable_define()
 {
 
 }
@@ -129,9 +120,30 @@ void program()
 {
 	int r;
 	r = Lex::getsym();
-	if (r == Lex::RSVD_WD && is_constsym)
+	while (is_constsym)
 	{
 		Lex::getsym();
-		const_define();
+		const_define();		//out: curE = ";" / reserved
+		if (is_reserved)
+		{
+			break;
+		}
+		else if (is_semicolon)
+		{
+			Lex::getsym();	//const expeccted
+		}
+		else { assert(0); }		//my fault?
+	}
+	//tricky time
+	/* int|char -> IDEN ->  [ -> var array
+							, -> var next
+					ban var	( -> para_func_def 
+					ban var { -> no_para_func_def 
+	   void -> main -> out:main_part
+	  ban var  IDEN ->  ( -> para_func_def 
+						{ -> no_para_func_def */
+	if (is_intsym || is_charsym)	
+	{
+
 	}
 }

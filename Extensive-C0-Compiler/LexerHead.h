@@ -7,7 +7,7 @@
 #include"Compiler.h"
 
 #if DEBUG
-#define Lexical_Out 1
+#define Lexical_Out 0
 #else
 #define Lexical_Out 0
 #endif

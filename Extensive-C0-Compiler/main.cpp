@@ -1,2 +1,5 @@
-#include "LexerHead.h"
-#include "Compiler.h"
+
+int main()
+{
+
+}
