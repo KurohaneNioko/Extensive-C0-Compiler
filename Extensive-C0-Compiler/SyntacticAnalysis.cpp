@@ -1,5 +1,4 @@
-#include "LexerHead.h"
-#include "Compiler.h"
+#include "SyntaxHead.h"
 
 #define is_constsym		(Lex::curElmt == "const")
 #define is_intsym		(Lex::curElmt == "int")
@@ -36,45 +35,74 @@
 #define is_comma		(Lex::curElmt == ",")
 #define is_semicolon	(Lex::curElmt == ";") 
 
-void _int()
+int _int()
 {
-	if()
+	int r;
+	int sign = 1;		// check whether - before num
+	if (is_add || is_sub)
+	{
+		if (is_sub)
+		{
+			sign = -1;
+		}
+		r = Lex::getsym();	//unsigned int expected
+	}
+	if (r != Lex::UNSGN_INT)
+	{
+		/* TODO: not int after const int*/
 
+	}
+	return sign * Lex::curNum;
 }
 
 void const_define()
 {
 	int r;		//ret value from getsym
 	bool const_int = false;
-	if (is_intsym)	//const int
+	if (is_intsym || is_charsym)	//const int|char
 	{
-		const_int = true;	// define const int, then not allow const char
+		const_int = is_intsym;	// define const int, then not allow const char
 		r = Lex::getsym();
-		if (r == Lex::IDEN)
+		do
 		{
-			/* TODO: search in symbolTable
-						-> exist in the same layer(function, var, const) -> err
-						-> not exist -> enSymbolTable
-			*/
-			Lex::getsym();
-			if (is_assign)
+			if (r == Lex::IDEN)
 			{
+				/* TODO: search in symbolTable
+							-> exist in the same layer(function, var, const) -> err
+							-> not exist -> enSymbolTable
+				*/
 				Lex::getsym();
-
+				int val = 0;
+				if (is_assign)
+				{
+					r = Lex::getsym();
+					val = _int();
+				}
+				else
+				{
+					/* TODO: miss '=' after "const int|char x" ,use default val 0 */
+				}
+				/* TODO: fill in sym table */
+				/* TODO: skip until ',' | ';' 
+						if meet reservedwords, then 
+						modify curElmt to ";" and 
+						break with err"lack semi" */
+				/* TODO: if is_comma then getsym(), IDEN expected*/
 			}
 			else
 			{
-				/* TODO: miss '=' after "const int x" */
+				/* TODO: miss iden after "const int|char" */
+				/* TODO: skip until ';' | IDEN, 
+						if meet reservedwords, then 
+						modify curElmt to ";" and 
+						break with err"lack semi"*/
 			}
-		}
-		else
-		{
-			/* TODO: miss iden after "const int" */
-		}
+		} while (!is_semicolon);
 	}
-	else if (is_charsym)	//const char
+	else 
 	{
-		const_int = false;	//not allow const int
+		/* TODO: expect int|char after const  */
+		/* TODO: skip until ';' | IDEN */
 	}
 }
 
@@ -99,5 +127,11 @@ void variable_declaration()
 
 void program()
 {
-
+	int r;
+	r = Lex::getsym();
+	if (r == Lex::RSVD_WD && is_constsym)
+	{
+		Lex::getsym();
+		const_define();
+	}
 }

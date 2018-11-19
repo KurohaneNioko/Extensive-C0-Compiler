@@ -1,12 +1,11 @@
-#include "Compiler.h"
 #include "LexerHead.h"
-#define BACK_1_CHAR		{if(linePointer!=0){linePointer -= 1;}else{Lex::LineCounter-=1;codeLine="\n";}}
+
+#define BACK_1_CHAR		{if(Lex::linePointer!=0){Lex::linePointer -= 1;}else{Lex::LineCounter-=1;codeLine="\n";}}
 #define isALPHA(c)		(('a'<=c && c<='z') || ('A'<=c && c<='Z') || (c=='_'))
 #define isWHITE(c)		(c=='\t' || c==' ' || c=='\n')
 #define isSGL_CHAR(c)	(c=='+' || c=='-' || c=='*' || c=='/' || isALPHA(c) || bool(isdigit(c)))
 #define isSGL_QTE(c)	(c=='\'')
 #define isDBL_QTE(c)	(c=='"')
-std::size_t linePointer = 0;	//next char stars from s[i]
 std::string codeLine = "";
 
 /* definition of head file */
@@ -14,6 +13,8 @@ std::ifstream Lex::code_file;
 std::string Lex::curElmt;
 int Lex::curNum = 0;
 int Lex::LineCounter = 0;
+std::size_t Lex::linePointer = 0;	//next char stars from s[i]
+
 const std::map<std::string, std::string> Lex::reservedWords =
 {
 	{"const",	"CONST_SYM"},
@@ -46,11 +47,11 @@ const std::map<std::string, std::string> Lex::non_alpha_sym =
 
 char readCharFromLine()
 {
-	if (linePointer == codeLine.size())
+	if (Lex::linePointer == codeLine.size())
 	{
 		if (std::getline(Lex::code_file, codeLine))
 		{
-			linePointer = 0;
+			Lex::linePointer = 0;
 			codeLine += '\n';		// add \n after a line, useful 4 judge
 			Lex::LineCounter += 1;
 		}
@@ -63,7 +64,7 @@ char readCharFromLine()
 		}
 
 	}
-	return codeLine[linePointer++];
+	return codeLine[Lex::linePointer++];
 }
 
 int Lex::getsym()
@@ -149,8 +150,9 @@ int Lex::getsym()
 			}
 			catch(const std::out_of_range& oor){
 #if DEBUG
-				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
+				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
+				Lex::curNum = 0;		// support for fault
 				return Lex::UNKNOWN;
 			}
 			Lex::curNum = num_from_cur;
@@ -159,7 +161,7 @@ int Lex::getsym()
 		else
 		{
 #if DEBUG
-			std::cout << "Invalid int at Line: " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
+			std::cout << "Invalid int at Line: " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::UNKNOWN;
 		}
@@ -215,7 +217,7 @@ int Lex::getsym()
 		if (Lex::curElmt[Lex::curElmt.size() - 1] != '"')
 		{
 #if DEBUG
-			std::cout << "Miss right double quote: Line " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
+			std::cout << "Miss right double quote: Line " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::UNKNOWN;
 		}
@@ -223,7 +225,7 @@ int Lex::getsym()
 		{
 			/* TODO: warning*/
 #if DEBUG
-			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (linePointer + 1 - Lex::curElmt.size()) << std::endl;
+			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			return Lex::STRING;
 		}
@@ -278,7 +280,7 @@ int Lex::getsym()
 		}
 	}
 #if DEBUG
-	std::cout << "UNKNOWN word at Line: " << Lex::LineCounter << " Colomn: "<< (linePointer+1-Lex::curElmt.size()) << std::endl;
+	std::cout << "UNKNOWN word at Line: " << Lex::LineCounter << " Colomn: "<< (Lex::linePointer+1-Lex::curElmt.size()) << std::endl;
 #endif
 	return Lex::UNKNOWN;
 }

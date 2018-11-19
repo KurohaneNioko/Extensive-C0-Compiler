@@ -39,4 +39,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Docs\grammar改.txt">
+      <Filter>资源文件</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

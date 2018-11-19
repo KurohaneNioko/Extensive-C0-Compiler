@@ -66,3 +66,5 @@
 	head = const
 ＜变量说明＞  ::= ＜变量定义＞;{＜变量定义＞;}
 	head = int | char 
+
+symbol table design:

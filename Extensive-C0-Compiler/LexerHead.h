@@ -6,7 +6,12 @@
 #include<map>
 #include"Compiler.h"
 
+#if DEBUG
 #define Lexical_Out 1
+#else
+#define Lexical_Out 0
+#endif
+
 namespace Lex
 {
 	extern constexpr auto UNKNOWN = 0;		// 5StarsBB
@@ -54,6 +59,8 @@ namespace Lex
 	extern int curNum;
 	/* record Line No. */
 	extern int LineCounter;
+	/* record colomn No. */
+	extern std::size_t linePointer;
 	int getsym();
 }
 
