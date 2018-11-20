@@ -38,11 +38,26 @@
 #define is_comma		(Lex::curElmt == ",")
 #define is_semicolon	(Lex::curElmt == ";") 
 
+#define sent_head_rsvd	(is_ifsym || is_forsym || is_semicolon || is_L_big || \
+						 is_whilesym || is_scanfsym || is_printfsym || is_returnsym )
+
 std::string curFunc = "";	// "" means global
+
+void skipTill(const std::set<std::string> symbols, const std::set<int> wordType)
+{
+	//symbol e.g. "," ";"	wordType e.g. Lex::RSVD_WD
+	int r = -1;
+	while (symbols.count(Lex::curElmt) == 0 && !CODEEOF)
+	{
+		r = Lex::getsym();
+		if (wordType.count(r) == 1)
+			break;
+	}
+}
 
 int _int()
 {
-	int r;
+	int r = Lex::getsym();
 	int sign = 1;		// check whether - before num
 	if (is_add || is_sub)
 	{
@@ -54,10 +69,30 @@ int _int()
 	}
 	if (r != Lex::UNSGN_INT)
 	{
-		/* TODO: not int after const int*/
+		/* TODO: not int after const int */
 
 	}
+#if Syn_Out
+	std::cout << "int got: " << sign * Lex::curNum << std::endl;
+#endif
 	return sign * Lex::curNum;
+}
+
+char single_char()
+{
+	int r = Lex::getsym();
+
+	if (r != Lex::SGL_CHARA)
+	{
+		/* TODO: not int after const int */
+
+	}
+	else {
+#if Syn_Out
+		std::cout << "char got: " << Lex::curElmt[1] << std::endl;
+#endif
+	}
+	return Lex::curElmt[1];
 }
 
 void const_define()
@@ -67,9 +102,9 @@ void const_define()
 	if (is_intsym || is_charsym)	//const int|char
 	{
 		const_int = is_intsym;	// define const int, then not allow const char
-		r = Lex::getsym();
 		do
 		{
+			r = Lex::getsym();
 			if (r == Lex::IDEN)
 			{
 				/* TODO: search in symbolTable
@@ -77,16 +112,27 @@ void const_define()
 							-> not exist -> enSymbolTable
 				*/
 				Lex::getsym();
-				int val = 0;
+				int int_val = 0;
+				char char_val = '0';
 				if (is_assign)
 				{
-					r = Lex::getsym();
-					val = _int();
+					if (const_int)
+					{
+						int_val = _int();
+					}
+					else
+					{
+						char_val = single_char();
+					}
 				}
 				else
 				{
 					/* TODO: miss '=' after "const int|char x" ,use default val 0 */
 				}
+#if Syn_Out
+				std::cout << "Line: "<< Lex::LineCounter 
+					<< " const " << (const_int ? "int " : "char ") << "def" << std::endl;
+#endif
 				/* TODO: fill in sym table */
 				/* TODO: skip until ',' | ';' 
 						if meet reservedwords, then 
@@ -96,11 +142,11 @@ void const_define()
 			else
 			{
 				/* TODO: miss iden after "const int|char" */
-				/* TODO: skip until ';' | IDEN, 
+				/* TODO: skip until ';', 
 						if meet reservedwords, then 
 						break with err"lack semi"*/
 			}
-		} while (!is_semicolon);
+		} while (!is_semicolon && !CODEEOF);
 	}
 	else 
 	{
@@ -111,39 +157,372 @@ void const_define()
 	}
 }
 
-void variable_define()
+void continuous_var_def(bool inttype)
+{	
+	int r;
+	do
+	{	
+		r = Lex::getsym();
+		//curElmt is IDEN
+		if (r == Lex::IDEN)
+		{
+			Lex::getsym();
+			if (is_comma)
+			{
+				/* TODO: fill in sym tab*/
+#if Syn_Out
+				std::cout << "Line: " << Lex::LineCounter
+					<< " continuous var " << (inttype ? "int " : "char ") << "def" << std::endl;
+#endif
+				continue;
+			}
+			else if (is_L_mid)
+			{
+				int length = _int();
+				length = length > 0 ? length : 1;
+				Lex::getsym();		// ']'
+				if (!is_R_mid)
+				{
+					/* TODO: miss R_mid */
+					/* skip until ","->continue_var | ";"->continue */
+				}
+				else
+				{
+					/* TODO: fill in sym table */
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " continuous array " << (inttype ? "int " : "char ") << "def" << std::endl;
+#endif
+					Lex::getsym();	// , | ;
+				}
+			}
+			else
+			{
+				/* TODO: expect , | ; */
+				/* skip until , | ; */
+			}
+		}
+		else
+		{
+			/* TODO: expect IDEN after ',' */
+			/* skip until ',' | ';'*/
+		}
+	} while (!is_semicolon && !CODEEOF);
+}
+
+void var_def_complex()
+{
+	int r;
+	if (is_intsym || is_charsym)
+	{
+		bool ret_int = is_intsym;	// func/var type (int|char)
+
+		r = Lex::getsym();
+		if (r == Lex::IDEN)
+		{
+			std::string key = Lex::curElmt;
+			Lex::getsym();
+			if (is_semicolon)
+			{
+				/* TODO: fill in sym table */
+#if Syn_Out
+				std::cout << "Line: " << Lex::LineCounter
+					<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+				Lex::getsym();
+				return;
+			}
+			else if (is_L_mid)
+			{
+				int length = _int();
+				length = length > 0 ? length : 1;
+				Lex::getsym();		// ']'
+				if (!is_R_mid)
+				{
+					/* TODO: miss R_mid */
+					/* skip until ","->continue_var | ";"->continue */
+				}
+				else
+				{
+					/* TODO: fill in sym table */
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " array " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+					continuous_var_def(ret_int);	//after it, ';'
+				}
+			}
+			else if (is_comma)
+			{
+				/* TODO: fill in sym table */
+#if Syn_Out
+				std::cout << "Line: " << Lex::LineCounter
+					<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+				continuous_var_def(ret_int);	//after it, ';'
+			}
+			else
+			{
+				/* TODO: invalid word after int|char IDEN */
+			}
+		}
+		else
+		{
+			/* TODO: IDEN expected */
+		}
+	}
+	else
+	{
+		/* TODO: no var def */
+		
+	}
+	
+}
+
+void sentence()
 {
 
 }
+
+void sentence_list()
+{
+
+}
+
+void complex_sentence()
+{
+	int r;
+	do
+	{
+		r = Lex::getsym();
+		if (is_constsym)
+		{
+			Lex::getsym();
+			const_define();	//after it, curElmt = ";" bad->rsvd_wd
+		}
+		else
+		{
+			break;	
+		}
+	} while (is_semicolon && !CODEEOF);
+	if (is_semicolon)
+	{
+		r = Lex::getsym();		// int | char 
+	}
+	var_def_complex();
+	if (is_semicolon)
+	{
+		r = Lex::getsym();		// sentence list start
+	}
+	sentence_list();
+}
+
+void param_list(std::string func_name)
+{
+	int r;
+	do
+	{
+		r = Lex::getsym();
+		if (is_intsym || is_charsym)
+		{
+			bool int_para = is_intsym;
+			r = Lex::getsym();
+			if (r == Lex::IDEN)
+			{
+				std::string IDEN_name = Lex::curElmt;
+#if Syn_Out
+				std::cout << "Line: " << Lex::LineCounter << " Function "
+					<< func_name << " param: " << (int_para ? "int " : "char ") << IDEN_name << std::endl;
+#endif
+				/* TODO: enSymTable func_name->param */
+				Lex::getsym();
+			}
+			else
+			{
+				/* TODO: invalid IDEN after int|char */
+			}
+			
+		}
+		else
+		{
+			/* TODO: invalid param type */
+
+		}
+	} while (!is_comma && !is_R_small && !CODEEOF);
+}
+
+void param_func_def_piece(std::string func_name)
+{
+	param_list(func_name);	//after it, curElmt = non-comma word
+	if (is_R_small)
+	{
+		Lex::getsym();
+		if (is_L_big)
+		{
+			complex_sentence();
+		}
+		else
+		{
+			/* TODO: no { */
+		}
+	}
+	else
+	{
+		/* TODO: no ) */
+	}
+}
+
+void no_param_func_def_piece()
+{
+	complex_sentence();
+}
+
 
 void program()
 {
 	int r;
 	r = Lex::getsym();
-	while (is_constsym)
+	while (is_constsym && !CODEEOF)
 	{
 		Lex::getsym();
 		const_define();		//out: curE = ";" / reserved
+		if (is_constsym)
+		{
+			continue;	// miss ;
+		}
 		if (is_reserved)
 		{
 			break;
 		}
 		else if (is_semicolon)
 		{
-			Lex::getsym();	//const expeccted
+			Lex::getsym();	//const expected
 		}
-		else { assert(0); }		//my fault?
+		else 
+		{
+			/* TODO: invalid reserved word */
+		}		
 	}
 	//tricky time
 	/* int|char -> IDEN ->  [ -> var array
 							, -> var next
+							; -> var end
 					ban var	( -> para_func_def 
 					ban var { -> no_para_func_def 
 	   void -> main -> out:main_part
 	  ban var  IDEN ->  ( -> para_func_def 
 						{ -> no_para_func_def */
-	if (is_intsym || is_charsym)	
-	{
+	bool in_func_def = false;
+	while (!CODEEOF) {
+		if (is_intsym || is_charsym)
+		{
+			bool ret_int = is_intsym;	// func/var type (int|char)
 
+			r = Lex::getsym();
+			if (r == Lex::IDEN)
+			{
+				std::string key = Lex::curElmt;
+				Lex::getsym();
+				if (is_semicolon && !in_func_def)
+				{
+					/* TODO: fill in sym table */
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+					Lex::getsym();
+					continue;
+				}
+				else if (is_L_mid && !in_func_def)
+				{
+					int length = _int();
+					length = length > 0 ? length : 1;
+					Lex::getsym();		// ']'
+					if (!is_R_mid)
+					{
+						/* TODO: miss R_mid */
+						/* skip until ","->continue_var | ";"->continue */
+					}
+					else
+					{
+						/* TODO: fill in sym table */
+#if Syn_Out
+						std::cout << "Line: " << Lex::LineCounter
+							<< " array " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+						Lex::getsym();	// , | ;
+					}
+				}
+				else if (is_comma)
+				{
+					/* TODO: fill in sym table */
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
+#endif
+					continuous_var_def(ret_int);
+				}
+				else if (is_L_small)
+				{
+					in_func_def = true;
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " para-function " << (ret_int ? "int " : "char ") << std::endl;
+#endif
+					param_func_def_piece(key);
+
+
+				}
+				else if (is_L_big)
+				{
+					in_func_def = true;
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " non-para-function " << (ret_int ? "int " : "char ") << std::endl;
+#endif
+				}
+				else
+				{
+					/* TODO: invalid word after int|char IDEB */
+				}
+			}
+			else
+			{
+				/* TODO: IDEN expected */
+			}
+		}
+		else if (is_voidsym)
+		{
+			in_func_def = true;
+		}
+		else
+		{
+			/* TODO: int/char/void expected*/
+			skipTill({ "int", "char", "void" }, { Lex::RSVD_WD });
+
+		}
 	}
 }
+
+#if Syn_Out
+int main(int argc, char** argv)
+{
+	std::string code_path(argv[1]);
+	//../Docs/16231246_test.txt
+	Lex::code_file.open(code_path, std::ifstream::in);
+	std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
+	int r;
+	if (!Lex::code_file || !f_out)
+	{
+		std::cout << "open failed";
+		return -1;
+	}
+	unsigned long cnt = 0;
+	program();
+	if (Lex::code_file.is_open())
+	{
+		Lex::code_file.close();
+	}
+	return 0;
+}
+#endif

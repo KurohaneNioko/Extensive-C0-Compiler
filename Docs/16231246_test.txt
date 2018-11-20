@@ -2,7 +2,7 @@ const int zero = 0;
 const int one = 1, minus_two = -0002;
 const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
-int x;
+int x, yy, zz, yyy[7];
 
 int fact(int t)
 {
@@ -85,4 +85,3 @@ void main()
 	}
 	printf(x);
 }
-!

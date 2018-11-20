@@ -14,7 +14,6 @@ std::string Lex::curElmt;
 int Lex::curNum = 0;
 int Lex::LineCounter = 0;
 std::size_t Lex::linePointer = 0;	//next char stars from s[i]
-
 const std::map<std::string, std::string> Lex::reservedWords =
 {
 	{"const",	"CONST_SYM"},
