@@ -55,6 +55,7 @@ void skipTill(const std::set<std::string> symbols, const std::set<int> wordType)
 	}
 }
 
+// about var def
 int _int()
 {
 	int r = Lex::getsym();
@@ -167,14 +168,18 @@ void continuous_var_def(bool inttype)
 		if (r == Lex::IDEN)
 		{
 			Lex::getsym();
-			if (is_comma)
+			if (is_comma || is_semicolon)
 			{
+				bool out = is_semicolon;
 				/* TODO: fill in sym tab*/
 #if Syn_Out
 				std::cout << "Line: " << Lex::LineCounter
 					<< " continuous var " << (inttype ? "int " : "char ") << "def" << std::endl;
 #endif
-				continue;
+				if (!out)
+					continue;
+				else
+					return;
 			}
 			else if (is_L_mid)
 			{
@@ -279,19 +284,41 @@ void var_def_complex()
 	
 }
 
+// about sentence
+void if_sentence()
+{
+
+}
+
 void sentence()
 {
 
 }
 
-void sentence_list()
+void sentence_list(int first_word_cls)
 {
-
+	int r = first_word_cls;
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " sentence_list " << "start" << std::endl;
+#endif
+	while (sent_head_rsvd || r == Lex::IDEN)
+	{
+		sentence();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " sentence_list " << "end" << std::endl;
+#endif
 }
 
 void complex_sentence()
 {
 	int r;
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " complex_sentence " << "end" << std::endl;
+#endif
 	do
 	{
 		r = Lex::getsym();
@@ -309,14 +336,28 @@ void complex_sentence()
 	{
 		r = Lex::getsym();		// int | char 
 	}
-	var_def_complex();
+	do
+	{
+		var_def_complex();
+		if (is_semicolon)
+		{
+			r = Lex::getsym();		// int | char 
+		}
+	} while ((is_intsym || is_charsym) && !CODEEOF);
+	
 	if (is_semicolon)
 	{
 		r = Lex::getsym();		// sentence list start
 	}
-	sentence_list();
+	sentence_list(r);		// before: new word, after: "}"
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " complex_sentence " << "end" << std::endl;
+#endif
+
 }
 
+//about func def
 void param_list(std::string func_name)
 {
 	int r;
@@ -360,6 +401,14 @@ void param_func_def_piece(std::string func_name)
 		if (is_L_big)
 		{
 			complex_sentence();
+			if (!is_R_big)
+			{
+				/* TODO: no } after func def */
+			}
+#if Syn_Out
+			std::cout << "Line: " << Lex::LineCounter
+				<< " param Function " << "def piece" << std::endl;
+#endif
 		}
 		else
 		{
@@ -372,11 +421,51 @@ void param_func_def_piece(std::string func_name)
 	}
 }
 
-void no_param_func_def_piece()
+void no_param_func_def_piece(std::string func_name)
 {
 	complex_sentence();
+	if (!is_R_big)
+	{
+		/* TODO: no } after func def */
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " non-param Function " << "def piece" << std::endl;
+#endif
 }
 
+void main_piece()
+{
+	int r = Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+		if (is_R_small)
+		{
+			Lex::getsym();
+			if (is_L_big)
+			{
+				complex_sentence();
+			}
+			else
+			{
+				/* TODO: miss {*/
+			}
+		}
+		else
+		{
+			/* TODO: miss ) */
+		}
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " main piece over" << std::endl;
+#endif
+}
 
 void program()
 {
@@ -469,6 +558,7 @@ void program()
 					std::cout << "Line: " << Lex::LineCounter
 						<< " para-function " << (ret_int ? "int " : "char ") << std::endl;
 #endif
+					/* TODO: fill in sym table (func) */
 					param_func_def_piece(key);
 
 
@@ -480,6 +570,8 @@ void program()
 					std::cout << "Line: " << Lex::LineCounter
 						<< " non-para-function " << (ret_int ? "int " : "char ") << std::endl;
 #endif
+					/* TODO: fill in sym table (func) */
+					no_param_func_def_piece(key);
 				}
 				else
 				{
@@ -494,6 +586,24 @@ void program()
 		else if (is_voidsym)
 		{
 			in_func_def = true;
+			r = Lex::getsym();
+			if (r == Lex::IDEN)
+			{
+
+			}
+			else if(is_mainsym)
+			{
+#if Syn_Out
+				std::cout << "Line: " << Lex::LineCounter
+					<< " main start" << std::endl;
+#endif
+				break;		// to main
+			}
+			else
+			{
+				/* TODO: miss main/iden */
+				
+			}
 		}
 		else
 		{
@@ -502,6 +612,12 @@ void program()
 
 		}
 	}
+	assert(is_mainsym);
+	main_piece();
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " main over" << std::endl;
+#endif
 }
 
 #if Syn_Out
