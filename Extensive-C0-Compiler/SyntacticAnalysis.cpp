@@ -29,7 +29,7 @@
 #define is_assign		(Lex::curElmt == "=")
 #define is_not_eql		(Lex::curElmt == "!=")
 #define is_eql			(Lex::curElmt == "==")
-#define is_grater		(Lex::curElmt == ">")
+#define is_greater		(Lex::curElmt == ">")
 #define is_grt_eql		(Lex::curElmt == ">=")
 #define is_less			(Lex::curElmt == "<")
 #define is_les_eql		(Lex::curElmt == "<=")
@@ -40,6 +40,9 @@
 
 #define sent_head_rsvd	(is_ifsym || is_forsym || is_semicolon || is_L_big || \
 						 is_whilesym || is_scanfsym || is_printfsym || is_returnsym )
+#define is_compare_op	(is_not_eql || is_eql || is_greater || is_grt_eql || is_less || is_les_eql)
+#define is_IDEN			(Lex::curCls==Lex::IDEN)
+#define is_STRING		(Lex::curCls==Lex::STRING)
 
 std::string curFunc = "";	// "" means global
 
@@ -285,24 +288,449 @@ void var_def_complex()
 }
 
 // about sentence
+void value_param(std::string func_name)
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " value_param " << "start" << std::endl;
+#endif
+	expression();
+	while (is_comma)
+	{
+		expression();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " value_param " << "over" << std::endl;
+#endif
+}
+
+void factor()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " factor " << "start" << std::endl;
+#endif
+	int r;
+	if (is_IDEN)
+	{
+		std::string name = Lex::curElmt;
+		/* TODO: check table*/
+		r = Lex::getsym();
+		if (is_L_mid)
+		{
+			Lex::getsym();
+			expression();
+			if (is_R_mid)
+			{
+				Lex::getsym();
+
+			}
+			else {
+				/* TODO: miss ] */
+			}
+		}
+		else if (is_L_small) {
+			Lex::getsym();
+			value_param(name);
+			if (is_R_small)
+			{
+				Lex::getsym();
+			}
+			else {
+				/* TODO: miss ) */
+			}
+		}
+		else {
+			/* TODO: no_param_func / int / char */
+			Lex::getsym();
+		}
+	}
+	else if (is_L_small)
+	{
+		Lex::getsym();
+		expression();
+		if (is_R_small)
+		{
+			Lex::getsym();
+		}
+		else {
+			/* TODO: miss ) */
+		}
+	}
+	else{
+		/* TODO: to fix  bug */
+		//Lex::getsym();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " factor " << "end" << std::endl;
+#endif
+
+}
+
+void term()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " term " << "start" << std::endl;
+#endif
+	factor();
+	while (is_mul || is_div)
+	{
+		Lex::getsym();
+		factor();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " term " << "over" << std::endl;
+#endif
+
+}
+
+void expression()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " expression " << "start" << std::endl;
+#endif
+	int r;
+	int symbol = 1;	// + | -
+	if (is_add || is_sub)
+	{
+		symbol = is_add ? 1 : -1;
+		Lex::getsym();
+	}
+	term();
+	while (is_add || is_sub)
+	{
+		symbol = is_add ? 1 : -1;
+		Lex::getsym();
+		term();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " expression " << "over" << std::endl;
+#endif
+
+}
+
+void condition()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " conditon " << "start" << std::endl;
+#endif
+
+	expression();
+	if (is_compare_op)
+	{
+		Lex::getsym();
+		expression();
+	}
+#if Syn_Out
+		std::cout << "Line: " << Lex::LineCounter
+		<< " condition " << "end" << std::endl;
+#endif
+
+}
+
 void if_sentence()
 {
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " if " << "start" << std::endl;
+#endif
+	int r = Lex::getsym();
+	if (is_L_small)
+	{
+		r = Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	condition();
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
 
+	}
+	sentence();
+	if (is_elsesym)
+	{
+		sentence();
+
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " if " << "overt" << std::endl;
+#endif
+
+}
+
+void scanf_sentence()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " scanf " << "start" << std::endl;
+#endif
+
+	Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	if (is_IDEN)
+	{
+
+		Lex::getsym();
+	}
+	while (is_comma)
+	{
+		Lex::getsym();
+		if (is_IDEN)
+		{
+
+			Lex::getsym();
+		}
+	}
+#if Syn_Out
+		std::cout << "Line: " << Lex::LineCounter
+		<< " scanf " << "over" << std::endl;
+#endif
+
+}
+
+void printf_sentence()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " printf " << "start" << std::endl;
+#endif
+
+	Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	if (is_STRING)
+	{
+
+		Lex::getsym();
+		if (is_comma)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+			if (is_R_small)
+			{
+				Lex::getsym();
+			}
+			else
+			{
+
+			}
+#if Syn_Out
+			std::cout << "Line: " << Lex::LineCounter
+				<< " printf " << "over" << std::endl;
+#endif
+			return;
+		}
+	}
+	expression();
+	/* print */
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " printf " << "over" << std::endl;
+#endif
+
+}
+
+void return_sentence()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " return " << "start" << std::endl;
+#endif
+
+	Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+		expression();
+		if (is_R_small)
+		{
+			Lex::getsym();
+
+		}
+		else
+		{
+			/* TODO: miss ) */
+		}
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " return " << "over" << std::endl;
+#endif
+
+}
+
+void while_sentence()
+{
+	Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+	}
 }
 
 void sentence()
 {
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " sentence " << "start" << std::endl;
+#endif
+	if (is_ifsym)
+	{
+		if_sentence();
+	}
+	else if (is_whilesym)
+	{
+
+	}
+	else if (is_forsym)
+	{
+
+	}
+	else if (is_L_big)
+	{
+		sentence_list();
+	}
+	else if (is_IDEN)
+	{
+		std::string name = Lex::curElmt;
+		Lex::getsym();
+		if (is_semicolon)
+		{
+			Lex::getsym();
+		}
+		else if (is_L_small)
+		{
+			value_param(name);
+			if (is_R_small)
+			{
+				Lex::getsym();
+			}
+			else 
+			{
+
+			}
+			if (is_semicolon)
+			{
+				Lex::getsym();
+			}
+			else
+			{
+				/* TODO: miss ; */
+			}
+		}
+		else if (is_L_mid)
+		{
+			Lex::getsym();
+			expression();
+			if (is_R_mid)
+			{
+				Lex::getsym();
+			}
+			else
+			{
+			
+			}
+			if (is_assign)
+			{
+				Lex::getsym();
+			}
+			else
+			{
+
+			}
+			expression();
+			if (is_semicolon)
+			{
+				Lex::getsym();
+			}
+		}
+		else if (is_assign)
+		{
+			Lex::getsym();
+			expression();
+			if (is_semicolon)
+			{
+				Lex::getsym();
+			}
+		}
+		else
+		{
+			/* TODO: miss ; */
+		}
+	}
+	else if (is_scanfsym)
+	{
+		scanf_sentence();
+	}
+	else if (is_printfsym)
+	{
+		printf_sentence();
+	}
+	else if (is_semicolon)
+	{
+		Lex::getsym();
+	}
+	else if (is_returnsym)
+	{
+		return_sentence();
+	}
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " sentence " << "over" << std::endl;
+#endif
 
 }
 
-void sentence_list(int first_word_cls)
+void sentence_list()
 {
-	int r = first_word_cls;
+	//int r = Lex::curCls;
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " sentence_list " << "start" << std::endl;
 #endif
-	while (sent_head_rsvd || r == Lex::IDEN)
+	while (sent_head_rsvd || is_IDEN)
 	{
 		sentence();
 	}
@@ -349,7 +777,7 @@ void complex_sentence()
 	{
 		r = Lex::getsym();		// sentence list start
 	}
-	sentence_list(r);		// before: new word, after: "}"
+	sentence_list();		// before: new word, after: "}"
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " complex_sentence " << "end" << std::endl;
@@ -467,7 +895,7 @@ void main_piece()
 #endif
 }
 
-void program()
+void Syn::program()
 {
 	int r;
 	r = Lex::getsym();
@@ -634,7 +1062,7 @@ int main(int argc, char** argv)
 		return -1;
 	}
 	unsigned long cnt = 0;
-	program();
+	Syn::program();
 	if (Lex::code_file.is_open())
 	{
 		Lex::code_file.close();

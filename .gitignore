@@ -36,4 +36,5 @@ Browse.VC.*
 
 #
 *.zip
- available\ reference/
+ available reference/
+/available reference

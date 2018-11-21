@@ -19,5 +19,8 @@ namespace Syn {
 	extern constexpr auto VAR_TYP = 2;
 	extern constexpr auto ARRAY_TYP = 3;
 	// length of IDEN = 1 ~ inf, int|char-1, fun-1, array-len
-
+	void program();
 }
+void expression();
+void sentence();
+void sentence_list();

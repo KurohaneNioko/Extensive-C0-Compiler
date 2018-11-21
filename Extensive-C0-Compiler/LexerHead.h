@@ -55,6 +55,7 @@ namespace Lex
 	/* current word */
 	extern std::string curElmt;
 	extern int curNum;
+	extern int curCls;
 	/* record Line No. */
 	extern int LineCounter;
 	/* record colomn No. */
