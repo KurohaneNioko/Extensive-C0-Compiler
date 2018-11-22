@@ -160,6 +160,7 @@ int Lex::getsym()
 				return Lex::UNSGN_INT;
 			}
 			Lex::curNum = num_from_cur;
+			Lex::curCls = Lex::UNSGN_INT;
 			return Lex::UNSGN_INT;
 		}
 		else

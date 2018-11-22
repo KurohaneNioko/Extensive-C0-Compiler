@@ -43,7 +43,8 @@
 #define is_compare_op	(is_not_eql || is_eql || is_greater || is_grt_eql || is_less || is_les_eql)
 #define is_IDEN			(Lex::curCls==Lex::IDEN)
 #define is_STRING		(Lex::curCls==Lex::STRING)
-
+#define is_UNSGN_INT	(Lex::curCls==Lex::UNSGN_INT)
+#define is_SGL_CHARA	(Lex::curCls==Lex::SGL_CHARA)
 std::string curFunc = "";	// "" means global
 
 void skipTill(const std::set<std::string> symbols, const std::set<int> wordType)
@@ -311,12 +312,11 @@ void factor()
 	std::cout << "Line: " << Lex::LineCounter
 		<< " factor " << "start" << std::endl;
 #endif
-	int r;
 	if (is_IDEN)
 	{
 		std::string name = Lex::curElmt;
 		/* TODO: check table*/
-		r = Lex::getsym();
+		Lex::getsym();
 		if (is_L_mid)
 		{
 			Lex::getsym();
@@ -342,8 +342,8 @@ void factor()
 			}
 		}
 		else {
-			/* TODO: no_param_func / int / char */
-			Lex::getsym();
+			/* TODO: no_param_func / const|var(int / char) */
+			//Lex::getsym();
 		}
 	}
 	else if (is_L_small)
@@ -359,8 +359,32 @@ void factor()
 		}
 	}
 	else{
-		/* TODO: to fix  bug */
+		/* TODO: int | char  */
 		//Lex::getsym();
+		if (is_SGL_CHARA)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+			int sign = 1;		// check whether - before num
+			if (is_add || is_sub)
+			{
+				if (is_sub)
+				{
+					sign = -1;
+				}
+				Lex::getsym();	//unsigned int expected
+			}
+			if (is_UNSGN_INT)
+			{
+				Lex::getsym();
+			}
+			else
+			{
+
+			}
+		}
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -462,6 +486,7 @@ void if_sentence()
 	sentence();
 	if (is_elsesym)
 	{
+		Lex::getsym();
 		sentence();
 
 	}
@@ -501,6 +526,14 @@ void scanf_sentence()
 
 			Lex::getsym();
 		}
+	}
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+
 	}
 #if Syn_Out
 		std::cout << "Line: " << Lex::LineCounter
@@ -630,7 +663,16 @@ void sentence()
 	}
 	else if (is_L_big)
 	{
+		Lex::getsym();
 		sentence_list();
+		if (is_R_big)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+
+		}
 	}
 	else if (is_IDEN)
 	{
@@ -1067,6 +1109,6 @@ int main(int argc, char** argv)
 	{
 		Lex::code_file.close();
 	}
-	return 0;
+	return 0;  
 }
 #endif
