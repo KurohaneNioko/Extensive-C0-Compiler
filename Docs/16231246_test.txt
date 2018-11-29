@@ -4,6 +4,9 @@ const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
 int x, yy, zz, yyy[7];
 
+
+
+
 int fact(int t)
 {
 	const int zero=1;
@@ -16,13 +19,13 @@ int fact(int t)
 
 int rt15
 {
-	return(3*5);
+	return(3*5/ONE);
 }
 
-void fun2
+char fun2(int a, int b, int c, int d, int e, int f)
 {
-	printf("114514");
-	return;
+	printf(a+b*c*d/e-f);
+	return('A');
 }
 
 void main()
@@ -32,12 +35,12 @@ void main()
 	int r, m1[8];
 	int aa, a;
 	
-	x = -1;
+	x = +-1;
 	r = -4;
 	aa = 6;
-	printf("!@#$%%abcdABCD963287~;: ", aa);
-	printf(fact(aa));
-	fun2;
+	printf("!@#$%%abcd114514ABCD963287~;: ", fact(AA));
+	AR[d*e+6*(minus_two+b-1)] = fun2(x-r, aa, b, e, c, minus_two);
+	printf((ar[ZeRo/fact(4)]));
 	ar[1] = '0'+rt15;
 	aa = -b * ar[1] + (c - e * 9) + 2 * 'm';
 	printf(aa);
@@ -85,3 +88,10 @@ void main()
 	}
 	printf(x);
 }
+
+else 后可以接新if （else 后直接跟语句if）
+参数可以是字符
++-6 合法
+数组下标可用表达式 包括但不限于iden 函数 加减乘除
+return 字符
+标识符不区分大小写->可以用同名大写

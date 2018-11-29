@@ -298,6 +298,7 @@ void value_param(std::string func_name)
 	expression();
 	while (is_comma)
 	{
+		Lex::getsym();
 		expression();
 	}
 #if Syn_Out
@@ -492,7 +493,7 @@ void if_sentence()
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
-		<< " if " << "overt" << std::endl;
+		<< " if " << "over" << std::endl;
 #endif
 
 }
@@ -636,11 +637,143 @@ void return_sentence()
 
 void while_sentence()
 {
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " while " << "start" << std::endl;
+#endif
+
 	Lex::getsym();
 	if (is_L_small)
 	{
 		Lex::getsym();
 	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	condition();
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ) */
+	}
+	sentence();
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " while " << "over" << std::endl;
+#endif
+
+}
+
+void for_sentence()
+{
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " for " << "start" << std::endl;
+#endif
+	Lex::getsym();
+	if (is_L_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ( */
+	}
+	if (is_IDEN)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss IDEN */
+	}
+	if (is_assign)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* miss = */
+	}
+	expression();
+	if (is_semicolon)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss semi */
+	}
+
+	condition();
+	if (is_semicolon)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss semi */
+	}
+
+	if (is_IDEN)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss IDEN */
+	}
+	if (is_assign)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* miss = */
+	}
+	if (is_IDEN)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss IDEN */
+	}
+	if (is_add || is_sub)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* miss + | - */
+	}
+	if (is_UNSGN_INT)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* miss unsigned int */
+	}
+
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ) */
+	}
+	sentence();
+#if Syn_Out
+	std::cout << "Line: " << Lex::LineCounter
+		<< " for " << "over" << std::endl;
+#endif
+
 }
 
 void sentence()
@@ -655,11 +788,11 @@ void sentence()
 	}
 	else if (is_whilesym)
 	{
-
+		while_sentence();
 	}
 	else if (is_forsym)
 	{
-
+		for_sentence();
 	}
 	else if (is_L_big)
 	{
