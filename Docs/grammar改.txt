@@ -71,6 +71,8 @@ ok＜返回语句＞   ::=  return['('＜表达式＞')']
 
 symbol table design:
 name -> string
-class -> INT CHA FUN
-type -> CONST VAR ARRAY
+class -> INT CHA 
+type -> CONST VAR ARRAY FUN
 length -> (INT|CHA -> 1) (ARRAY -> 1,2,3,4...)
+
+找到函数定义后 函数定义结束后 进入main以后 记得修改记录当前函数名字的string

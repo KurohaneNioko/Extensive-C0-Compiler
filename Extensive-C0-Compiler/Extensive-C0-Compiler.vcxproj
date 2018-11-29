@@ -121,6 +121,7 @@
     </ClCompile>
     <ClCompile Include="LexicalAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="SyntacticAnalysis.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
     </ClCompile>
@@ -128,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
     <ClInclude Include="LexerHead.h" />
+    <ClInclude Include="SymbolHead.h" />
     <ClInclude Include="SyntaxHead.h" />
   </ItemGroup>
   <ItemGroup>
