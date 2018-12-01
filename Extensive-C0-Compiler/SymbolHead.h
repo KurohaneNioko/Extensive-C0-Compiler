@@ -15,7 +15,7 @@ typedef struct
 	//int regIndex;
 } varinfo;
 
-namespace Sym {
+namespace ST {	//Symbol Table
 	// class of IDEN = {INT, CHAR}
 	extern constexpr auto INT_CLS = 1;
 	extern constexpr auto CHA_CLS = 2;
@@ -26,9 +26,13 @@ namespace Sym {
 	extern constexpr auto ARRAY_TYP = 3;
 	extern constexpr auto FUN_TYP = 4;
 	extern constexpr auto PARAM_TYP = 5;
-	// length of IDEN = 0 ~ inf, int|char-0(const->value), fun-num_of_params, array-len
 
 	extern std::map<std::string, varinfo> global_sym;
 	extern std::map<std::string, std::map<std::string, varinfo>> func_sym;
+
+	varinfo *lookup(std::string curFunc, std::string name, bool local);
+	void addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line);
+	void printSym();
+
 }
 

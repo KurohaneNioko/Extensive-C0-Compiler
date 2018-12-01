@@ -1,4 +1,5 @@
 #pragma once
+#include "SymbolHead.h"
 #include "LexerHead.h"
 #include "Compiler.h"
 

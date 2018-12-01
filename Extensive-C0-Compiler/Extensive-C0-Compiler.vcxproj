@@ -119,6 +119,7 @@
     <ClCompile Include="C04test\test_000_1110-2325.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="GenIntermediate.cpp" />
     <ClCompile Include="LexicalAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
@@ -128,6 +129,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Compiler.h" />
+    <ClInclude Include="Intermediate.h" />
     <ClInclude Include="LexerHead.h" />
     <ClInclude Include="SymbolHead.h" />
     <ClInclude Include="SyntaxHead.h" />

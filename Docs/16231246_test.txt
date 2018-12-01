@@ -2,15 +2,10 @@ const int zero = 0;
 const int one = 1, minus_two = -0002;
 const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
-int x, yy, zz, yyy[7];
-
-
-
+int yyy[7],xxxx;
 
 int fact(int t)
 {
-	const int zero=1;
-	printf(zero);
 	if(t < 3)
 		return(t);
 	else
@@ -19,7 +14,8 @@ int fact(int t)
 
 int rt15
 {
-	return(3*5/ONE);
+	const int zero=1;
+	return(3*5/ONE+one-ZERO);
 }
 
 char fun2(int a, int b, int c, int d, int e, int f)
@@ -39,10 +35,10 @@ void main()
 	r = -4;
 	aa = 6;
 	printf("!@#$%%abcd114514ABCD963287~;: ", fact(AA));
-	AR[d*e+6*(minus_two+b-1)] = fun2(x-r, aa, b, e, c, minus_two);
+	AR[d*e+6*(minus_two+b-1)] = fun2(x-r, aa, b, e, c, minus_two) ;
 	printf((ar[ZeRo/fact(4)]));
-	ar[1] = '0'+rt15;
-	aa = -b * ar[1] + (c - e * 9) + 2 * 'm';
+	ar[1] = '0';
+	aa = -b * (ar[1] + rt15) + (c - e * 9) + 2 * 'm';
 	printf(aa);
 	a = aa;
 	scanf(a, x);
