@@ -38,3 +38,5 @@ Browse.VC.*
 *.zip
  available reference/
 /available reference
+~*.doc
+~*.docx
