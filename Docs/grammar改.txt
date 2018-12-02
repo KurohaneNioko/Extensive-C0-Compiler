@@ -76,3 +76,37 @@ type -> CONST VAR ARRAY FUN
 length -> (INT|CHA -> 1) (ARRAY -> 1,2,3,4...)
 
 找到函数定义后 函数定义结束后 进入main以后 记得修改记录当前函数名字的string
+字符串如果出现 \ 那么要把它变成 \\
+不要求检查函数的每个分支都有return
+
+【ok】_int
+【ok】_single_char
+const_def
+continue_var_def
+var_def_complex
+
+value_para
+factor
+term
+expression
+condition
+if_sent
+scanf_sent
+printf_sent
+return_sent
+while_sent
+for_sent
+sent
+sent_list
+【ok】complex_sent
+
+param_list
+param_func_def
+no_param_func_def
+main_piece
+
+
+intermediate code
+
+FUNC_BEGIN <name>
++ - * / rst op1 op2 

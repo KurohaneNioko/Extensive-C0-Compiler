@@ -118,6 +118,7 @@
   <ItemGroup>
     <ClCompile Include="C04test\test_000_1110-2325.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="GenIntermediate.cpp" />
     <ClCompile Include="LexicalAnalyzer.cpp" />

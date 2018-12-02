@@ -175,7 +175,7 @@ void const_define()
 //先读后进
 void continuous_var_def(bool inttype)
 {	
-	int r;
+	//int r;
 	do
 	{	
 		//curElmt is IDEN
@@ -355,7 +355,7 @@ void var_def_complex()
 	}
 	else
 	{
-		/* TODO: no var def */
+		/* TODO: no var def, maybe no error */
 		
 	}
 	
@@ -381,7 +381,7 @@ void value_param(std::string func_name)
 #endif
 }
 //先读后进
-void factor()
+void factor(int &ret_cls, std::string &ret_val)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -390,12 +390,40 @@ void factor()
 	if (is_IDEN)
 	{
 		std::string name = Lex::curElmt;
-		/* TODO: check table*/
+		const varinfo *temp_iden = ST::lookup(curFunc, name, false);
+		if (temp_iden == nullptr)
+		{
+			/* TODO: not def */
+		}
+		int factor_class = temp_iden->cls;
 		Lex::getsym();
 		if (is_L_mid)
 		{
+			if (temp_iden->type != ST::ARRAY_TYP)
+			{
+				/* TODO: use [ when IDEN is NOT array, escape */
+			}
 			Lex::getsym();
-			expression();
+			//expr check type=int
+			int temp_ret_cls;
+			std::string temp_ret_val;
+			expression(temp_ret_cls, temp_ret_val);
+			if (temp_ret_cls != ST::INT_CLS)
+			{
+				/* expr return NOT INT */
+			}
+			//expr check val=num, avoid array out of index
+			int *array_index = Med::is_operand_num(ret_val);
+			if (array_index != nullptr)		// not nullptr <=> stoi success
+			{
+				if (!(*array_index >= 0 && *array_index < temp_iden->length))
+				{
+					/* TODO: index out of range */
+				}
+			}
+			ret_val = Med::gen_temp();
+			Med::addIMC(ret_val, OP::READ_ARR, name, std::to_string(*array_index));
+			// expect ]
 			if (is_R_mid)
 			{
 				Lex::getsym();
@@ -487,13 +515,13 @@ void term()
 
 }
 //先读后进
-void expression()
+void expression(int &ret_class, std::string &value)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " expression " << "start" << std::endl;
 #endif
-	int r;
+	//int r;
 	int symbol = 1;	// + | -
 	if (is_add || is_sub)
 	{
@@ -686,20 +714,19 @@ void return_sentence()
 	if (is_L_small)
 	{
 		Lex::getsym();
-		expression();
-		if (is_R_small)
-		{
-			Lex::getsym();
-
-		}
-		else
-		{
-			/* TODO: miss ) */
-		}
 	}
 	else
 	{
 		/* TODO: miss ( */
+	}
+	expression();
+	if (is_R_small)
+	{
+		Lex::getsym();
+	}
+	else
+	{
+		/* TODO: miss ) */
 	}
 	
 #if Syn_Out
@@ -952,10 +979,28 @@ void sentence()
 	else if (is_scanfsym)
 	{
 		scanf_sentence();
+		Lex::getsym();
+		if (is_semicolon)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+
+		}
 	}
 	else if (is_printfsym)
 	{
 		printf_sentence();
+		if (is_semicolon)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+
+		}
+
 	}
 	else if (is_semicolon)
 	{
@@ -964,6 +1009,15 @@ void sentence()
 	else if (is_returnsym)
 	{
 		return_sentence();
+		if (is_semicolon)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+
+		}
+
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1058,10 +1112,17 @@ void param_list(std::string func_name)
 				std::cout << "Line: " << Lex::LineCounter << " Function "
 					<< func_name << " param: " << (int_para ? "int " : "char ") << IDEN_name << std::endl;
 #endif
-				ST::addsym(func_name, IDEN_name, _cls, ST::PARAM_TYP, 0, Lex::LineCounter);
-				varinfo *finfo = ST::lookup("", func_name, false);
-				assert(finfo != nullptr);
-				++(finfo->length);	
+				if (ST::lookup(func_name, IDEN_name, true) == nullptr)
+				{
+					ST::addsym(func_name, IDEN_name, _cls, ST::PARAM_TYP, 0, Lex::LineCounter);
+					varinfo *finfo = ST::lookup("", func_name, false);
+					assert(finfo != nullptr);
+					++(finfo->length);	
+				}
+				else
+				{
+					/* TODO: re def */
+				}
 				Lex::getsym();
 			}
 			else
@@ -1094,7 +1155,11 @@ void param_func_def_piece(std::string func_name)
 		/* TODO: no { */
 	}
 	complex_sentence();
-	if (!is_R_big)
+	if (is_R_big)
+	{
+		Lex::getsym();
+	}
+	else
 	{
 		/* TODO: no } after func def */
 	}
@@ -1107,7 +1172,11 @@ void param_func_def_piece(std::string func_name)
 void no_param_func_def_piece(std::string func_name)
 {
 	complex_sentence();
-	if (!is_R_big)
+	if (is_R_big)
+	{
+		Lex::getsym();
+	}
+	else
 	{
 		/* TODO: no } after func def */
 	}
@@ -1138,13 +1207,15 @@ void main_piece()
 	{
 		/* TODO: miss ) */
 	}
-	if (is_L_big)
-	{
-		complex_sentence();
-	}
-	else
+	if (!is_L_big)
 	{
 		/* TODO: miss {*/
+	}
+
+	complex_sentence();
+	if (!is_R_big)
+	{
+
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1270,7 +1341,6 @@ void Syn::program()
 #endif
 					if (ST::lookup(curFunc, key, true) == nullptr)
 					{
-						int _cls = ret_int ? ST::INT_CLS : ST::CHA_CLS;
 						ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
 					}
 					else
@@ -1330,7 +1400,7 @@ void Syn::program()
 				}
 				else
 				{
-					/* TODO: invalid word after int|char IDEB */
+					/* TODO: invalid word after int|char IDEN */
 				}
 			}
 			else
@@ -1344,7 +1414,51 @@ void Syn::program()
 			r = Lex::getsym();
 			if (r == Lex::IDEN)
 			{
+				std::string key = Lex::curElmt;
+				Lex::getsym();
+				if (is_L_small)
+				{
+					in_func_def = true;
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " para-function " << "void" << std::endl;
+#endif
+					if (ST::lookup(curFunc, key, true) == nullptr)
+					{
+						ST::addsym(curFunc, key, ST::VOID_CLS, ST::FUN_TYP, 0, Lex::LineCounter);
+					}		// modify length later
+					else
+					{
+						/* TODO: re def */
+					}
+					curFunc = key;
+					param_func_def_piece(key);
+					curFunc = "";
 
+				}
+				else if (is_L_big)
+				{
+					in_func_def = true;
+#if Syn_Out
+					std::cout << "Line: " << Lex::LineCounter
+						<< " non-para-function " << "void" << std::endl;
+#endif
+					if (ST::lookup(curFunc, key, true) == nullptr)
+					{
+						ST::addsym(curFunc, key, ST::VOID_CLS, ST::FUN_TYP, 0, Lex::LineCounter);
+					}
+					else
+					{
+						/* TODO: re def */
+					}
+					curFunc = key;
+					no_param_func_def_piece(key);
+					curFunc = "";
+				}
+				else
+				{
+
+				}
 			}
 			else if(is_mainsym)
 			{
@@ -1382,7 +1496,7 @@ int main(int argc, char** argv)
 	//../Docs/16231246_test.txt
 	Lex::code_file.open(code_path, std::ifstream::in);
 	std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
-	int r;
+	//int r;
 	if (!Lex::code_file || !f_out)
 	{
 		std::cout << "open failed";

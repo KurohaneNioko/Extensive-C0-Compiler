@@ -1,6 +1,7 @@
 #pragma once
 #include "SymbolHead.h"
 #include "LexerHead.h"
+#include "Intermediate.h"
 #include "Compiler.h"
 
 #if DEBUG
@@ -13,6 +14,6 @@ namespace Syn {
 	
 	void program();
 }
-void expression();
+void expression(int &ret_class, std::string &value);
 void sentence();
 void sentence_list();

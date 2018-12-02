@@ -3,16 +3,21 @@
 
 typedef struct
 {
-	std::string name;
 	int cls;		// class: int char void
 	int type;		// type: const var array fun param
-	int length;		// int|char->0,const->value []->length, func->num_of_params
+	int length;		// const->value []->length, func->num_of_params
 	int defLine;	// Line No. of def of IDEN
 	int addr;		// addr of IDEN
+	/*ATTENTION: if var-int/ var-char 
+		length=0 <=> we should read it from addr 
+		length=1 <=> addr is its value
+	*/
+
 	//记录下这个局部变量在这个函数的每个基本块里的使用情况
 	//bool flag[kMaxBasicBlock];
 	//记录下这个标识符对应的寄存器，仅仅对临时变量和简单变量以及参数变量有效
 	//int regIndex;
+	std::string name;
 } varinfo;
 
 namespace ST {	//Symbol Table

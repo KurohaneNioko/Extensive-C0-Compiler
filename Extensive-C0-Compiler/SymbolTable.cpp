@@ -56,7 +56,7 @@ void ST::addsym(std::string curFunc, std::string namae, int _class, int type, in
 	{
 		assert(func_sym.count(curFunc) > 0);	//current function exists
 		assert(func_sym[curFunc].count(namae) == 0);	// not exist
-		//assert(curFunc != namae);		// name of var != func name
+		assert(curFunc != namae);		// name of var != func name
 		func_sym[curFunc].insert(std::pair<std::string, varinfo>(namae, temp));
 	}
 }
