@@ -150,7 +150,7 @@ int Lex::getsym()
 			try {
 				num_from_cur = std::stoi(Lex::curElmt, nullptr);
 			}
-			catch(const std::out_of_range& oor){
+			catch(const std::out_of_range&){
 #if DEBUG
 				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
@@ -217,6 +217,10 @@ int Lex::getsym()
 					Lex::curElmt += c;
 				}
 				break;
+			}
+			if (c == '\\')
+			{
+				Lex::curElmt += c;	// new: avoid \n->nwe_line, \t->tab
 			}
 			Lex::curElmt += c;
 		}

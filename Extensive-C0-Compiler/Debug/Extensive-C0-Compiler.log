@@ -1,5 +1,23 @@
 ﻿  SyntacticAnalysis.cpp
-c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(178): warning C4101: “r”: 未引用的局部变量
-c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(496): warning C4101: “r”: 未引用的局部变量
-c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1470): warning C4101: “r”: 未引用的局部变量
-  Extensive-C0-Compiler.vcxproj -> C:\Users\秦子檸\ProgrammingProjects\Extensive-C0-Compiler\Debug\Extensive-C0-Compiler.exe
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(771): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(804): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(891): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(901): error C2660: “condition”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(586): note: 参见“condition”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(960): error C2660: “sentence”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntaxhead.h(65): note: 参见“sentence”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(980): error C2660: “while_sentence”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(821): note: 参见“while_sentence”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1009): error C2664: “void value_param(const varinfo *)”: 无法将参数 1 从“std::string”转换为“const varinfo *”
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1009): note: 没有可用于执行该转换的用户定义的转换运算符，或者无法调用该运算符
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1030): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1047): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1056): error C2660: “expression”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(543): note: 参见“expression”的声明
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(1126): error C2660: “sentence”: 函数不接受 0 个参数
+  c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\syntacticanalysis.cpp(968): note: 参见“sentence”的声明

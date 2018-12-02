@@ -33,6 +33,24 @@ varinfo* ST::lookup(std::string curFunc, std::string name, bool local)
 						x.type == ARRAY_TYP ? "array" : \
 						x.type == FUN_TYP ? "func" : "para"))
 
+inline const std::map<std::string, varinfo> ST::lookup_func(const std::string &func_name)
+{
+	assert(func_sym.count(func_name) == 1);
+	return func_sym[func_name];
+}
+
+const varinfo* ST::lookup_para(const std::map<std::string, varinfo> func_symtab, int place)
+{
+	for (auto iter = func_symtab.begin(); iter != func_symtab.end(); ++iter)
+	{
+		if (iter->second.length == place)
+		{
+			return &(iter->second);
+		}
+	}
+	return nullptr;
+}
+
 /* length of IDEN = 0 ~ inf, int|char-0(const->value), fun-num_of_params, array-len */
 void ST::addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line)
 {
@@ -40,7 +58,7 @@ void ST::addsym(std::string curFunc, std::string namae, int _class, int type, in
 	temp.name = namae;
 	temp.cls = _class;
 	temp.type = type;
-	temp.length = length;
+	temp.length = length;	//if param, length is relative addr of param, range(0, length_of_func)
 	temp.defLine = line;
 	if (curFunc == "")	//global
 	{

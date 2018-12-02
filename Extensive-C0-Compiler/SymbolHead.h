@@ -8,11 +8,6 @@ typedef struct
 	int length;		// const->value []->length, func->num_of_params
 	int defLine;	// Line No. of def of IDEN
 	int addr;		// addr of IDEN
-	/*ATTENTION: if var-int/ var-char 
-		length=0 <=> we should read it from addr 
-		length=1 <=> addr is its value
-	*/
-
 	//记录下这个局部变量在这个函数的每个基本块里的使用情况
 	//bool flag[kMaxBasicBlock];
 	//记录下这个标识符对应的寄存器，仅仅对临时变量和简单变量以及参数变量有效
@@ -36,6 +31,9 @@ namespace ST {	//Symbol Table
 	extern std::map<std::string, std::map<std::string, varinfo>> func_sym;
 
 	varinfo *lookup(std::string curFunc, std::string name, bool local);
+	inline const std::map<std::string, varinfo> lookup_func(const std::string &func_name);
+	const varinfo *lookup_para(const std::map<std::string, varinfo> func_symtab, int place);
+
 	void addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line);
 	void printSym();
 

@@ -1,6 +1,13 @@
 #pragma once
 #include "Compiler.h"
 
+#if DEBUG
+#define IMC_Out 1
+#else
+#define IMC_Out 0
+#endif
+
+
 typedef struct
 {
 	std::string rst;
@@ -29,7 +36,7 @@ namespace OP
 	constexpr auto SCAN = "scanf";		//la li syscall
 	constexpr auto PRINT = "print";		
 
-	constexpr auto PUSH_PARA = "push";	// push para into stack
+	constexpr auto PUSH_PARA = "push";	// push para into stack --> value_param1 push 0 0
 	constexpr auto CALL = "call";		// push reg into stack
 	constexpr auto RET = "ret";			// save ret_val to $v0, sp+, fp+
 	
@@ -55,7 +62,8 @@ namespace Med
 	std::string gen_label();
 	std::string gen_str();
 
-	int *is_operand_num(std::string &s);
-	void addIMC(std::string rst, std::string op, std::string op1, std::string op2);
+	void is_operand_num(std::string &s, int *value);
+	void addIMC(std::string rst, const std::string &op, std::string op1, std::string op2);
+	void printIMC();
 
 }

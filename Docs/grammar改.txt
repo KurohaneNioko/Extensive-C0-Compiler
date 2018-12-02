@@ -85,11 +85,11 @@ const_def
 continue_var_def
 var_def_complex
 
-value_para
-factor
-term
-expression
-condition
+【ok】value_para
+【ok】factor
+【ok】term
+【ok】expression
+【ok】condition
 if_sent
 scanf_sent
 printf_sent
@@ -100,10 +100,10 @@ sent
 sent_list
 【ok】complex_sent
 
-param_list
-param_func_def
-no_param_func_def
-main_piece
+【ok】param_list
+【ok】param_func_def
+【ok】no_param_func_def
+【ok】main_piece
 
 
 intermediate code
