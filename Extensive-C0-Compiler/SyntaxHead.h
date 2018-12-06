@@ -62,5 +62,5 @@ namespace Syn {
 	void program();
 }
 void expression(int &ret_class, std::string &value);
-void sentence(bool &with_ret_val, int &ret_cls, std::string name);
-void sentence_list();
+void sentence(bool &value_return, const int &ret_cls, std::string func_name);
+void sentence_list(bool &value_return, const int &ret_cls, std::string func_name);

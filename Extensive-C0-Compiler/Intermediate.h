@@ -30,7 +30,7 @@ namespace OP
 	constexpr auto LES = "<";
 	constexpr auto LESEQ = "<=";
 
-	constexpr auto SAVE_ARR = "[]=";	// sw sb
+	constexpr auto SAVE_ARR = "[]=";	// sw sb --> arr []= 3 t
 	constexpr auto READ_ARR = "=[]";	// lw lb --> t =[] arr 5
 	
 	constexpr auto SCAN = "scanf";		//la li syscall
@@ -43,6 +43,7 @@ namespace OP
 	constexpr auto GOTO = "goto";	// j
 	constexpr auto FUNC_BEGIN = "func_begin";	// func label
 	constexpr auto LABEL = "label";	//if for while label
+	constexpr auto EXIT = "exit";	// met return in main
 }
 
 namespace Med
@@ -60,7 +61,7 @@ namespace Med
 
 	std::string gen_temp();
 	std::string gen_label();
-	std::string gen_str();
+	//std::string gen_str();
 
 	void is_operand_num(std::string &s, int *value);
 	void addIMC(std::string rst, const std::string &op, std::string op1, std::string op2);

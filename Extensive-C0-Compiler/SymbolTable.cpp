@@ -1,8 +1,9 @@
 #include "SymbolHead.h"
 std::map<std::string, varinfo> ST::global_sym;
 std::map<std::string, std::map<std::string, varinfo>> ST::func_sym;
+std::map<std::string, int> ST::output_str_sym;
 
-varinfo* ST::lookup(std::string curFunc, std::string name, bool local)
+varinfo* ST::lookup(const std::string &curFunc, const std::string &name, bool local)
 {
 	if (curFunc != "")	// local
 	{
@@ -79,9 +80,25 @@ void ST::addsym(std::string curFunc, std::string namae, int _class, int type, in
 	}
 }
 
+int str_sym_counter = 0;
+inline int ST::addStr(std::string &s)
+{
+	if (output_str_sym.count(s) == 0)
+	{
+		ST::output_str_sym.insert(std::pair<std::string, int>(s, ++str_sym_counter));
+		return str_sym_counter;
+	}
+	return output_str_sym[s];
+}
+
 
 void ST::printSym()
 {
+	for (auto iter = output_str_sym.begin(); iter != output_str_sym.end(); iter++)
+	{
+		std::cout << "string_" << std::to_string(iter->second)
+			<< " : .asciiz \"" << iter->first << '"' << std::endl;
+	}
 	std::cout << std::right;
 	std::cout << "global:" << std::endl;
 	for (auto iter = global_sym.begin(); iter != global_sym.end(); iter++)

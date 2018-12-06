@@ -351,7 +351,7 @@ void value_param(const varinfo *func_name)
 		<< " value_param " << "over" << std::endl;
 #endif
 }
-//先读后进
+//先读后进, 语句返回类型/值
 void factor(int &ret_cls, std::string &ret_val)
 {
 #if Syn_Out
@@ -423,7 +423,7 @@ void factor(int &ret_cls, std::string &ret_val)
 				Lex::getsym();
 				Med::addIMC(name, OP::CALL, zero, zero);
 				std::string move_ret_to = Med::gen_temp();
-				Med::addIMC(move_ret_to, OP::ADD, ret_val, zero);
+				Med::addIMC(move_ret_to, OP::ADD, ret_val_mark, zero);
 				ret_val = move_ret_to;
 			}
 			else {
@@ -512,7 +512,7 @@ void factor(int &ret_cls, std::string &ret_val)
 #endif
 
 }
-//先读后进
+//先读后进 语句返回类型/值
 void term(int &ret_cls, std::string &ret_val)
 {
 #if Syn_Out
@@ -539,7 +539,7 @@ void term(int &ret_cls, std::string &ret_val)
 #endif
 
 }
-//先读后进
+//先读后进 语句返回类型/值
 void expression(int &ret_class, std::string &value)
 {
 #if Syn_Out
@@ -632,8 +632,8 @@ void condition(std::string &label)
 #endif
 
 }
-//先读后进
-void if_sentence(bool &with_ret_val, int &ret_cls, std::string name)
+//先读后进，所在函数返回类型/值
+void if_sentence(bool &value_return, const int &ret_cls, std::string name)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -661,14 +661,14 @@ void if_sentence(bool &with_ret_val, int &ret_cls, std::string name)
 	{
 
 	}
-	sentence(with_ret_val, ret_cls, name);
+	sentence(value_return, ret_cls, name);
 	if (is_elsesym)
 	{
 		std::string label2 = Med::gen_label();
 		Med::addIMC(label2, OP::GOTO, zero, zero);
 		Med::addIMC(label1, OP::LABEL, zero, zero);
 		Lex::getsym();
-		sentence(with_ret_val, ret_cls, name);
+		sentence(value_return, ret_cls, name);
 		Med::addIMC(label2, OP::LABEL, zero, zero);
 	}
 	else		// no else
@@ -698,27 +698,50 @@ void scanf_sentence()
 	{
 		/* TODO: miss ( */
 	}
-	if (is_IDEN)
+	do
 	{
-
-		Lex::getsym();
-	}
-	while (is_comma)
-	{
-		Lex::getsym();
 		if (is_IDEN)
 		{
-
+			std::string name = Lex::curElmt;
+			varinfo *temp_iden = ST::lookup(curFunc, name, false);
+			if (temp_iden == nullptr)	// must def before use
+			{
+				/* TODO: undef iden*/
+				Lex::getsym();
+				continue;
+			}
+			if (temp_iden->type != ST::VAR_TYP && temp_iden->type != ST::PARAM_TYP)
+			{	// var | param can be read
+				/* expect var/param*/
+			}
+			if (temp_iden->cls == ST::INT_CLS)
+			{
+				Med::addIMC(name, OP::SCAN, "int", zero);
+			}
+			else if (temp_iden->cls == ST::CHA_CLS)
+			{
+				Med::addIMC(name, OP::SCAN, "char", zero);
+			}
+			else
+			{
+				std::cerr << "scanf wtf? " << temp_iden->cls;
+				assert(false);
+			}
 			Lex::getsym();
 		}
-	}
+		else
+		{
+			/* lack iden */
+		}
+	} while (is_comma);
+	
 	if (is_R_small)
 	{
 		Lex::getsym();
 	}
 	else
 	{
-
+		/* lack ) */
 	}
 #if Syn_Out
 		std::cout << "Line: " << Lex::LineCounter
@@ -745,10 +768,11 @@ void printf_sentence()
 	}
 	if (is_STRING)
 	{
-
+		int str_no = ST::addStr(Lex::curElmt);
 		Lex::getsym();
 		if (is_comma)
 		{
+			Med::addIMC(Med::strhd + std::to_string(str_no), OP::PRINT, zero, zero);
 			Lex::getsym();
 		}
 		else
@@ -759,16 +783,27 @@ void printf_sentence()
 			}
 			else
 			{
-
+				/* miss ) */
 			}
 #if Syn_Out
 			std::cout << "Line: " << Lex::LineCounter
 				<< " printf " << "over" << std::endl;
 #endif
+			Med::addIMC(Med::strhd + std::to_string(str_no), OP::PRINT, zero, zero);
 			return;
 		}
 	}
-	expression();
+	int ret_cls = -1;
+	std::string value;
+	expression(ret_cls, value);
+	if (ret_cls == ST::INT_CLS)
+	{
+		Med::addIMC(value, OP::PRINT, "int", zero);
+	}
+	else if (ret_cls == ST::CHA_CLS)
+	{
+		Med::addIMC(value, OP::PRINT, "char", zero);
+	}
 	/* print */
 	if (is_R_small)
 	{
@@ -776,7 +811,7 @@ void printf_sentence()
 	}
 	else
 	{
-
+		/* TODO: lack ) */
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -784,8 +819,8 @@ void printf_sentence()
 #endif
 
 }
-//先读后进
-void return_sentence()
+//先读后进，所在函数返回类型/值
+void return_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -796,29 +831,56 @@ void return_sentence()
 	if (is_L_small)
 	{
 		Lex::getsym();
+		int expr_ret_cls = -1;
+		std::string value;
+		expression(expr_ret_cls, value);
+		if (expr_ret_cls == ST::INT_CLS || expr_ret_cls == ST::CHA_CLS)
+		{
+			value_return = true;
+		}
+		if (ret_cls == ST::VOID_CLS)
+		{
+			/* TODO: return sth when void*/
+		}
+		else if (ret_cls != expr_ret_cls)
+		{
+			/* class(expr) != return class(func) */
+		}
+		else
+		{
+			Med::addIMC(ret_val_mark, OP::ADD, value, zero);
+		}
+		if (is_R_small)
+		{
+			Lex::getsym();
+		}
+		else
+		{
+			/* TODO: miss ) */
+		}
+		if (func_name != "main")
+			Med::addIMC(zero, OP::RET, zero, zero);
+		else
+			Med::addIMC(zero, OP::EXIT, zero, zero);
+		return;
 	}
+	if (ret_cls != ST::VOID_CLS)
+	{
+		/* TODO: miss (, need return sth */
+	}
+	if (func_name != "main")
+		Med::addIMC(zero, OP::RET, zero, zero);
 	else
-	{
-		/* TODO: miss ( */
-	}
-	expression();
-	if (is_R_small)
-	{
-		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ) */
-	}
-	
+		Med::addIMC(zero, OP::EXIT, zero, zero);
+	return;	
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " return " << "over" << std::endl;
 #endif
 
 }
-//先读后进
-void while_sentence(bool &with_ret_val, int &ret_cls, std::string name)
+//先读后进，所在函数返回类型/值
+void while_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -847,7 +909,7 @@ void while_sentence(bool &with_ret_val, int &ret_cls, std::string name)
 	{
 		/* TODO: miss ) */
 	}
-	sentence(with_ret_val, ret_cls, name);
+	sentence(value_return, ret_cls, func_name);
 	Med::addIMC(label1, OP::GOTO, zero, zero);
 	Med::addIMC(label2, OP::LABEL, zero, zero);
 #if Syn_Out
@@ -856,8 +918,8 @@ void while_sentence(bool &with_ret_val, int &ret_cls, std::string name)
 #endif
 
 }
-//先读后进
-void for_sentence()
+//先读后进，所在函数返回类型/值
+void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -957,15 +1019,15 @@ void for_sentence()
 	{
 		/* TODO: miss ) */
 	}
-	sentence();
+	sentence(value_return, ret_cls, func_name);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " for " << "over" << std::endl;
 #endif
 
 }
-//先读后进
-void sentence(bool &with_ret_val, int &ret_cls, std::string name)
+//先读后进，所在函数返回类型/值
+void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 {
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -973,40 +1035,57 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 #endif
 	if (is_ifsym)
 	{
-		if_sentence(with_ret_val, ret_cls, name);
+		if_sentence(value_return, ret_cls, func_name);
 	}
 	else if (is_whilesym)
 	{
-		while_sentence();
+		while_sentence(value_return, ret_cls, func_name);
 	}
 	else if (is_forsym)
 	{
-		for_sentence();
+		for_sentence(value_return, ret_cls, func_name);
 	}
 	else if (is_L_big)
 	{
 		Lex::getsym();
-		sentence_list();
+		sentence_list(value_return, ret_cls, func_name);
 		if (is_R_big)
 		{
 			Lex::getsym();
 		}
 		else
 		{
-
+			/* TODO: miss } */
 		}
 	}
 	else if (is_IDEN)
 	{
 		std::string name = Lex::curElmt;
+		varinfo *temp_iden = ST::lookup(func_name, name, false);
+		if (temp_iden == nullptr)
+		{
+			/* TODO: undef iden*/
+			return;
+		}
 		Lex::getsym();
 		if (is_semicolon)
 		{
+			if (!(temp_iden->type == ST::FUN_TYP && temp_iden->length == 0))
+			{
+				/* TODO: expect no para func */
+			}
+			Med::addIMC(name, OP::CALL, zero, zero);
 			Lex::getsym();
 		}
 		else if (is_L_small)
 		{
-			value_param(name);
+			if (temp_iden->type != ST::FUN_TYP)
+			{
+				/* TODO: expect param func */
+			}
+			Lex::getsym();
+			value_param(temp_iden);
+			Med::addIMC(name, OP::CALL, zero, zero);
 			if (is_R_small)
 			{
 				Lex::getsym();
@@ -1026,15 +1105,30 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 		}
 		else if (is_L_mid)
 		{
+			if (temp_iden->type != ST::ARRAY_TYP)
+			{
+				/* TODO: expect array */
+			}
+			int expr_ret_cls = -1;
+			std::string value;
 			Lex::getsym();
-			expression();
+			expression(expr_ret_cls, value);
+			int *num;
+			Med::is_operand_num(value, num);
+			if (num != nullptr)
+			{
+				if (!(*num >= 0 && *num < temp_iden->length))
+				{
+					/* TODO: index out of range */
+				}
+			}
 			if (is_R_mid)
 			{
 				Lex::getsym();
 			}
 			else
 			{
-			
+				/* TODO: miss ]*/
 			}
 			if (is_assign)
 			{
@@ -1044,19 +1138,46 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 			{
 
 			}
-			expression();
+			int right_expr_ret_cls = -1;
+			std::string right_value;
+			Lex::getsym();
+			expression(right_expr_ret_cls, right_value);
+			if (temp_iden->cls == ST::CHA_CLS && right_expr_ret_cls == ST::INT_CLS)
+			{
+				/* TODO: unable to assign int to char */
+			}
+			Med::addIMC(name, OP::SAVE_ARR, value, right_value);
 			if (is_semicolon)
 			{
 				Lex::getsym();
 			}
+			else
+			{
+				/* TODO: miss ;*/
+			}
 		}
 		else if (is_assign)
 		{
+			if (temp_iden->type != ST::VAR_TYP && temp_iden->type != ST::PARAM_TYP)
+			{
+				/* TODO: expect var/param*/
+			}
 			Lex::getsym();
-			expression();
+			int expr_ret_cls;
+			std::string value;
+			expression(expr_ret_cls, value);
+			if (temp_iden->cls == ST::CHA_CLS && expr_ret_cls == ST::INT_CLS)
+			{
+				/* TODO: unable assign char with int */
+			}
+			Med::addIMC(name, OP::ADD, value, zero);
 			if (is_semicolon)
 			{
 				Lex::getsym();
+			}
+			else
+			{
+				/* TODO: miss ; */
 			}
 		}
 		else
@@ -1067,7 +1188,6 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 	else if (is_scanfsym)
 	{
 		scanf_sentence();
-		Lex::getsym();
 		if (is_semicolon)
 		{
 			Lex::getsym();
@@ -1096,7 +1216,7 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 	}
 	else if (is_returnsym)
 	{
-		return_sentence();
+		return_sentence(value_return, ret_cls, func_name);
 		if (is_semicolon)
 		{
 			Lex::getsym();
@@ -1113,8 +1233,8 @@ void sentence(bool &with_ret_val, int &ret_cls, std::string name)
 #endif
 
 }
-//先读后进
-void sentence_list()
+//先读后进，所在函数返回类型/值
+void sentence_list(bool &value_return, const int &ret_cls, std::string func_name)
 {
 	//int r = Lex::curCls;
 #if Syn_Out
@@ -1123,15 +1243,15 @@ void sentence_list()
 #endif
 	while (sent_head_rsvd || is_IDEN)
 	{
-		sentence();
+		sentence(value_return, ret_cls, func_name);
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " sentence_list " << "end" << std::endl;
 #endif
 }
-//	先进后读
-void complex_sentence()
+//	先进后读，所在函数返回类型/值
+void complex_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 {
 	int r;
 #if Syn_Out
@@ -1172,7 +1292,7 @@ void complex_sentence()
 	{
 		r = Lex::getsym();		// sentence list start
 	}
-	sentence_list();		// before: new word, after: "}"
+	sentence_list(value_return, ret_cls, func_name);		// before: new word, after: "}"
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " complex_sentence " << "end" << std::endl;
@@ -1227,7 +1347,7 @@ void param_list(std::string func_name)
 	} while (is_comma);
 }
 //	先进后读
-void param_func_def_piece(std::string func_name)
+void param_func_def_piece(const std::string func_name)
 {
 	param_list(func_name);	//after it, curElmt = non-comma word
 	if (is_R_small)
@@ -1245,16 +1365,16 @@ void param_func_def_piece(std::string func_name)
 	bool with_return_value = false;
 	auto func_info = ST::lookup("", func_name, false);
 	Med::addIMC(func_name, OP::FUNC_BEGIN, zero, zero);
-	complex_sentence();
+	complex_sentence(with_return_value, func_info->cls, func_name);
 	if (is_R_big)
 	{
 		Lex::getsym();
-		if (!with_return_value && func_info->cls != ST::VOID_CLS)
+		if (func_info->cls != ST::VOID_CLS)
 		{	// need return sth but not
 			/* TDOD: need return sth */
 
 		}
-		else if (with_return_value && func_info->cls == ST::VOID_CLS)
+		else if (func_info->cls == ST::VOID_CLS)
 		{	// mustn't return sth but return sth
 			/* TDOD: mustn't return sth */
 
@@ -1271,12 +1391,12 @@ void param_func_def_piece(std::string func_name)
 #endif
 }
 //	先进后读
-void no_param_func_def_piece(std::string func_name)
+void no_param_func_def_piece(const std::string func_name)
 {
 	bool with_return_value = false;
 	auto func_info = ST::lookup("", func_name, false);
 	Med::addIMC(func_name, OP::FUNC_BEGIN, zero, zero);
-	complex_sentence();
+	complex_sentence(with_return_value, func_info->cls, func_name);
 	if (is_R_big)
 	{
 		Lex::getsym();
@@ -1326,8 +1446,8 @@ void main_piece()
 	{
 		/* TODO: miss {*/
 	}
-
-	complex_sentence();
+	bool with_return_value = false;
+	complex_sentence(with_return_value, ST::VOID_CLS, curFunc);
 	if (!is_R_big)
 	{
 

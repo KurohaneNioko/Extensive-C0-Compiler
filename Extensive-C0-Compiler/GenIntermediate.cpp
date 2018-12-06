@@ -16,10 +16,10 @@ std::string Med::gen_label()
 	return Med::labelhd + std::to_string(++label_order);
 }
 
-std::string Med::gen_str()
+/*std::string Med::gen_str()
 {
 	return Med::strhd + std::to_string(++str_order);
-}
+}*/
 
 void Med::addIMC(std::string rst, const std::string &op, std::string op1, std::string op2)
 {

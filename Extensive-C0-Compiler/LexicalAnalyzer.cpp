@@ -242,9 +242,11 @@ int Lex::getsym()
 			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
 			Lex::curCls = Lex::STRING;
+			Lex::curElmt.pop_back();	//remove last "
 			return Lex::STRING;
 		}
 		Lex::curCls = Lex::STRING;
+		Lex::curElmt.pop_back();	//remove last "
 		return Lex::STRING;		//all ok
 	}
 	else

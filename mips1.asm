@@ -1,5 +1,6 @@
 .data
-a : .asciiz "fdwsafa12\n"
+a : .asciiz "fdwsaa12\\n"
+aa : .asciiz "3rr34e"
 x2: .byte 5
 x1 : .word 49
 .extern x 3
@@ -11,8 +12,10 @@ lui $t5 32
 main:
 li $t1 26
 sw $t1 x1
-la $a0 a
+la $a0 aa
+li $v0 4
+syscall
 la $s1 x1
 sw $t1, 0x10010008
 seq $t9, $0, $0
-b
+

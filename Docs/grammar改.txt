@@ -81,23 +81,23 @@ length -> (INT|CHA -> 1) (ARRAY -> 1,2,3,4...)
 
 【ok】_int
 【ok】_single_char
-const_def
-continue_var_def
-var_def_complex
+【ok】const_def
+【ok】continue_var_def
+【ok】var_def_complex
 
 【ok】value_para
 【ok】factor
 【ok】term
 【ok】expression
 【ok】condition
-if_sent
-scanf_sent
-printf_sent
-return_sent
-while_sent
+【ok】if_sent
+【ok】scanf_sent
+【ok】printf_sent
+【ok】return_sent
+【ok】while_sent
 for_sent
-sent
-sent_list
+【ok】sent
+【ok】sent_list
 【ok】complex_sent
 
 【ok】param_list
@@ -110,3 +110,16 @@ intermediate code
 
 FUNC_BEGIN <name>
 + - * / rst op1 op2 
+
+
+注意：临时变量移动用的都是add 0 
+
+
+
+
+else 后可以接新if （else 后直接跟语句if）
+参数可以是字符
++-6 合法
+数组下标可用表达式 包括但不限于iden 函数 加减乘除
+return 字符
+标识符不区分大小写->可以用同名大写
