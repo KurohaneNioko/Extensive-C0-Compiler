@@ -32,11 +32,11 @@ namespace ST {	//Symbol Table
 	extern std::map<std::string, int> output_str_sym;
 
 	varinfo *lookup(const std::string &curFunc, const std::string &name, bool local);
-	inline const std::map<std::string, varinfo> lookup_func(const std::string &func_name);
+	std::map<std::string, varinfo> lookup_func(const std::string &func_name);
 	const varinfo *lookup_para(const std::map<std::string, varinfo> func_symtab, int place);
 
 	void addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line);
-	inline int addStr(std::string &s);
+	int addStr(std::string &s);
 	void printSym();
 
 }

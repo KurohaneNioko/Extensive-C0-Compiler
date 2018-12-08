@@ -34,7 +34,7 @@ varinfo* ST::lookup(const std::string &curFunc, const std::string &name, bool lo
 						x.type == ARRAY_TYP ? "array" : \
 						x.type == FUN_TYP ? "func" : "para"))
 
-inline const std::map<std::string, varinfo> ST::lookup_func(const std::string &func_name)
+std::map<std::string, varinfo> ST::lookup_func(const std::string &func_name)
 {
 	assert(func_sym.count(func_name) == 1);
 	return func_sym[func_name];
@@ -81,7 +81,7 @@ void ST::addsym(std::string curFunc, std::string namae, int _class, int type, in
 }
 
 int str_sym_counter = 0;
-inline int ST::addStr(std::string &s)
+int ST::addStr(std::string &s)
 {
 	if (output_str_sym.count(s) == 0)
 	{
@@ -97,7 +97,7 @@ void ST::printSym()
 	for (auto iter = output_str_sym.begin(); iter != output_str_sym.end(); iter++)
 	{
 		std::cout << "string_" << std::to_string(iter->second)
-			<< " : .asciiz \"" << iter->first << '"' << std::endl;
+			<< " : .asciiz " << iter->first << '"' << std::endl;
 	}
 	std::cout << std::right;
 	std::cout << "global:" << std::endl;

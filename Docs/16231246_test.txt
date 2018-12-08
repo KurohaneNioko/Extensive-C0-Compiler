@@ -2,7 +2,7 @@ const int zero = 0;
 const int one = 1, minus_two = -0002;
 const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
-int yyy[7],xxxx;
+int yyy[7],xxxx, x;
 
 int fact(int t)
 {
@@ -47,7 +47,7 @@ void main()
 		printf("1 hit ");
 		if (x <= 0) {
 			r = a / x * a;
-			printf("2 hit ");
+			printf("2 hit");
 		}
 		r = r + aa;
 	}
