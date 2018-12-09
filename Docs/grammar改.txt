@@ -123,3 +123,183 @@ else 后可以接新if （else 后直接跟语句if）
 数组下标可用表达式 包括但不限于iden 函数 加减乘除
 return 字符
 标识符不区分大小写->可以用同名大写
+
+$0	$zero	常量0
+$1	$at	保留给汇编器
+$2-$3	$v0-$v1	函数调用返回值
+$4-$7	$a0-$a3	函数调用参数
+$8-$15	$t0-$t7	临时寄存器
+$16-$23	$s0-$s7	全局寄存器
+$24-$25	$t8-$t9	临时寄存器
+$28	$gp	全局指针(Global Pointer)
+$29	$sp	堆栈指针(Stack Pointer)
+$30	$fp	帧指针(Frame Pointer)
+$31	$ra	返回地址(return address)
+string_1 : .asciiz "!@#$%%abcd114514ABCD963287~;: "
+string_2 : .asciiz "1 hit "
+string_3 : .asciiz "2 hit"
+string_4 : .asciiz "3 hit "
+string_5 : .asciiz "4 hit "
+string_6 : .asciiz "5 hit "
+string_7 : .asciiz "6 hit "
+global:
+          fact|  int|  func|    1|    7|
+   first_alpha| char| const|   97|    4|
+first_captical| char| const|   65|    4|
+          fun2| char|  func|    6|   21|
+          main| void|  func|    0|   27|
+     minus_two|  int| const|   -2|    2|
+           one|  int| const|    1|    2|
+          renn| char| const|   48|    3|
+          rt15|  int|  func|    0|   16|
+             x|  int|   var|    0|    5|
+          xxxx|  int|   var|    0|    5|
+           yyy|  int| array|    7|    5|
+          zero|  int| const|    0|    1|
+
+fact:
+             t|  int|  para|    0|    7|
+fun2:
+             a|  int|  para|    0|   21|
+             b|  int|  para|    1|   21|
+             c|  int|  para|    2|   21|
+             d|  int|  para|    3|   21|
+             e|  int|  para|    4|   21|
+             f|  int|  para|    5|   21|
+rt15:
+          zero|  int| const|    1|   17|
+
+main:
+             a|  int|   var|    0|   32|
+            aa|  int|   var|    0|   32|
+            ar| char| array|    2|   30|
+             b|  int| const|    1|   29|
+             c|  int| const|    2|   29|
+             d|  int| const|    3|   29|
+             e|  int| const|    4|   29|
+            m1|  int| array|    8|   31|
+             r|  int|   var|    0|   31|
+
+          fact  func_begin               0               0
+            %1          >=               t               3
+        RET_v0           +               t               0
+             0         ret               0               0
+            %2        goto               0               0
+            %1       label               0               0
+            #1           -               t               1
+            #1        push               0               0
+          fact        call               0               0
+            #2           +          RET_v0               0
+            #3           *              #2               t
+        RET_v0           +              #3               0
+             0         ret               0               0
+            %2       label               0               0
+          rt15  func_begin               0               0
+            #4           *               3               5
+            #5           /              #4               1
+            #6           +              #5               1
+            #7           -              #6               1
+        RET_v0           +              #7               0
+             0         ret               0               0
+          fun2  func_begin               0               0
+            #8           *               b               c
+            #9           *              #8               d
+           #10           /              #9               e
+           #11           +               a             #10
+           #12           -             #11               f
+           #12       print             int               0
+        RET_v0           +             'A'               0
+             0         ret               0               0
+          main  func_begin               0               0
+             x           +              -1               0
+           #13           -               0               4
+             r           +             #13               0
+            aa           +               6               0
+            ~1       print               0               0
+            aa        push               0               0
+          fact        call               0               0
+           #14           +          RET_v0               0
+           #14       print             int               0
+           #15           *               3               4
+           #16           +              -2               1
+           #17           -             #16               1
+           #18           *               6             #17
+           #19           +             #15             #18
+           #20           -               x               r
+           #20        push               0               0
+            aa        push               0               0
+             1        push               0               0
+             4        push               0               0
+             2        push               0               0
+            -2        push               0               0
+          fun2        call               0               0
+           #21           +          RET_v0               0
+            ar         []=             #19             #21
+             4        push               0               0
+          fact        call               0               0
+           #22           +          RET_v0               0
+           #23           /               0             #22
+           #24         =[]              ar             #23
+           #24       print             int               0
+            ar         []=               1             '0'
+           #25         =[]              ar               1
+          rt15        call               0               0
+           #26           +          RET_v0               0
+           #27           +             #25             #26
+           #28           *               1             #27
+           #29           -               0             #28
+           #30           *               4               9
+           #31           -               2             #30
+           #32           +             #29             #31
+           #33           *               2             'm'
+           #34           +             #32             #33
+            aa           +             #34               0
+            aa       print             int               0
+             a           +              aa               0
+            %3          <=               a               0
+            ~2       print               0               0
+            %4           >               x               0
+           #35           /               a               x
+           #36           *             #35               a
+             r           +             #36               0
+            ~3       print               0               0
+            %4       label               0               0
+           #37           +               r              aa
+             r           +             #37               0
+            %3       label               0               0
+            %5          ==               x               0
+            ~4       print               0               0
+           #38           -               0               4
+            %6          !=               a             #38
+           #39           +               r               1
+             r           +             #39               0
+            ~5       print               0               0
+            %6       label               0               0
+            %5       label               0               0
+            %7          >=               a               0
+            ~6       print               0               0
+            %8           <               x               0
+           #40           +               r               a
+             r           +             #40               0
+            ~7       print               0               0
+            %8       label               0               0
+            %9        goto               0               0
+            %7       label               0               0
+           #41           *               r              -1
+             r           +             #41               0
+             r       print             int               0
+            %9       label               0               0
+           #42           -               0               2
+             a           +             #42               0
+           %10       label               0               0
+           #43           +               x               4
+             x           +             #43               0
+             a           +               a               1
+           %10           <               a               3
+           %11       label               0               0
+           %12          <=               x               0
+           #44           -               x               2
+             x           +             #44               0
+           %11        goto               0               0
+           %12       label               0               0
+             x       print             int               0

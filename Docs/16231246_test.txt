@@ -2,7 +2,8 @@ const int zero = 0;
 const int one = 1, minus_two = -0002;
 const char renn = '0';
 const char first_alpha = 'a', first_captical = 'A';
-int yyy[7],xxxx, x;
+int yyy[7],xxxx, x, zzzzzzz;
+char testchar1, testchar2;
 
 int fact(int t)
 {

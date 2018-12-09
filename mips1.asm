@@ -1,4 +1,9 @@
 .data
+char1 : .byte 'a'
+char2 : .byte 'b'
+int1 : .word 757326
+chararray : .space 14
+int2 : .word 757326
 a : .asciiz "fdwsaa12\\n"
 aa : .asciiz "3rr34e"
 x2: .byte 5

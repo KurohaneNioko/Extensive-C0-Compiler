@@ -33,6 +33,9 @@
     <ClCompile Include="SyntacticAnalysis.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="ObjectCode.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="LexerHead.h">
@@ -48,6 +51,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="Intermediate.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectCode.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

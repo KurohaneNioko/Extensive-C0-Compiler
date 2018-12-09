@@ -7,7 +7,7 @@ typedef struct
 	int type;		// type: const var array fun param
 	int length;		// const->value []->length, func->num_of_params
 	int defLine;	// Line No. of def of IDEN
-	int addr;		// addr of IDEN
+	int addr = 0;		// addr of IDEN
 	//记录下这个局部变量在这个函数的每个基本块里的使用情况
 	//bool flag[kMaxBasicBlock];
 	//记录下这个标识符对应的寄存器，仅仅对临时变量和简单变量以及参数变量有效

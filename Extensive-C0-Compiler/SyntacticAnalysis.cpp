@@ -1803,28 +1803,5 @@ void Syn::program()
 }
 
 #if Syn_Out | IMC_Out
-int main(int argc, char** argv)
-{
-	std::string code_path(argv[1]);
-	//../Docs/16231246_test.txt
-	Lex::code_file.open(code_path, std::ifstream::in);
-	std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
-	//int r;
-	if (!Lex::code_file || !f_out)
-	{
-		std::cout << "open failed";
-		return -1;
-	}
-	unsigned long cnt = 0;
-	Syn::program();
-	ST::printSym();
-	std::cout << std::endl;
-	Med::printIMC();
-	if (Lex::code_file.is_open())
-	{
-		Lex::code_file.close();
-	}
-	// system("pause");
-	return 0;  
-}
+
 #endif
