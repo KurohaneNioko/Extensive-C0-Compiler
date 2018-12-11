@@ -28,11 +28,17 @@ varinfo* ST::lookup(const std::string &curFunc, const std::string &name, bool lo
 		return nullptr;
 }
 
-#define SYM_CLS(x)	((x.cls == INT_CLS ? "int" : x.cls == CHA_CLS ? "char" : "void"))
-#define SYM_TYP(x)	((x.type == CONST_TYP ? "const" : \
-						x.type == VAR_TYP ? "var" : \
-						x.type == ARRAY_TYP ? "array" : \
-						x.type == FUN_TYP ? "func" : "para"))
+bool ST::is_global_iden(const std::string &curFunc, std::string &s)
+{
+	if (*(s.begin()) == '#')
+		return false;
+	varinfo* t = lookup(curFunc, s, true);
+	if (t == nullptr)
+		return true;
+	else
+		return false;
+}
+
 
 std::map<std::string, varinfo> ST::lookup_func(const std::string &func_name)
 {
@@ -91,7 +97,11 @@ int ST::addStr(std::string &s)
 	return output_str_sym[s];
 }
 
-
+#define SYM_CLS(x)	((x.cls == INT_CLS ? "int" : x.cls == CHA_CLS ? "char" : "void"))
+#define SYM_TYP(x)	((x.type == CONST_TYP ? "const" : \
+						x.type == VAR_TYP ? "var" : \
+						x.type == ARRAY_TYP ? "array" : \
+						x.type == FUN_TYP ? "func" : "para"))
 void ST::printSym()
 {
 	for (auto iter = output_str_sym.begin(); iter != output_str_sym.end(); iter++)
@@ -153,3 +163,4 @@ void ST::printSym()
 		std::dec << std::setw(5) << it2->second.defLine << '|'
 		  << std::setw(11) << std::hex << it2->second.addr << '|' << std::endl;
 }
+

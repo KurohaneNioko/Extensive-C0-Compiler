@@ -11,9 +11,9 @@ int main(int argc, char** argv)
 	std::string code_path(argv[1]);
 	//../Docs/16231246_test.txt
 	Lex::code_file.open(code_path, std::ifstream::in);
-	std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
+	//std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
 	//int r;
-	if (!Lex::code_file || !f_out)
+	if (!Lex::code_file)// || !f_out)
 	{
 		std::cout << "open failed";
 		return -1;
@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	Med::printIMC();
 	OC::Med2Mips();
 	std::cout << std::endl;
-	ST::printSym();
+	//ST::printSym();
 	if (Lex::code_file.is_open())
 	{
 		Lex::code_file.close();

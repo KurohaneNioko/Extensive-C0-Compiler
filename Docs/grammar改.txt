@@ -135,50 +135,52 @@ $28	$gp	全局指针(Global Pointer)
 $29	$sp	堆栈指针(Stack Pointer)
 $30	$fp	帧指针(Frame Pointer)
 $31	$ra	返回地址(return address)
-string_1 : .asciiz "!@#$%%abcd114514ABCD963287~;: "
-string_2 : .asciiz "1 hit "
-string_3 : .asciiz "2 hit"
-string_4 : .asciiz "3 hit "
-string_5 : .asciiz "4 hit "
-string_6 : .asciiz "5 hit "
-string_7 : .asciiz "6 hit "
+
 global:
-          fact|  int|  func|    1|    7|
-   first_alpha| char| const|   97|    4|
-first_captical| char| const|   65|    4|
-          fun2| char|  func|    6|   21|
-          main| void|  func|    0|   27|
-     minus_two|  int| const|   -2|    2|
-           one|  int| const|    1|    2|
-          renn| char| const|   48|    3|
-          rt15|  int|  func|    0|   16|
-             x|  int|   var|    0|    5|
-          xxxx|  int|   var|    0|    5|
-           yyy|  int| array|    7|    5|
-          zero|  int| const|    0|    1|
+          name|class|  type|  len|  def|       addr
+          fact|  int|  func|    1|    8|          0|
+   first_alpha| char| const|   97|    4|          0|
+first_captical| char| const|   65|    4|          0|
+          fun2| char|  func|    6|   22|          0|
+          main| void|  func|    0|   28|          0|
+     minus_two|  int| const|   -2|    2|          0|
+           one|  int| const|    1|    2|          0|
+          renn| char| const|   48|    3|          0|
+          rt15|  int|  func|    0|   17|          0|
+     testchar1| char|   var|    0|    6|   10010000|
+     testchar2| char|   var|    0|    6|   10010001|
+             x|  int|   var|    0|    5|   10010004|
+          xxxx|  int|   var|    0|    5|   10010008|
+           yyy|  int| array|    7|    5|   1001000c|
+          zero|  int| const|    0|    1|          0|
+       zzzzzzz|  int|   var|    0|    5|   10010028|
 
 fact:
-             t|  int|  para|    0|    7|
+          name|class|  type|  len|  def|       addr
+             t|  int|  para|    0|    8|          0|
 fun2:
-             a|  int|  para|    0|   21|
-             b|  int|  para|    1|   21|
-             c|  int|  para|    2|   21|
-             d|  int|  para|    3|   21|
-             e|  int|  para|    4|   21|
-             f|  int|  para|    5|   21|
+          name|class|  type|  len|  def|       addr
+             a|  int|  para|    0|   22|          0|
+             b|  int|  para|    1|   22|          0|
+             c|  int|  para|    2|   22|          0|
+             d|  int|  para|    3|   22|          0|
+             e|  int|  para|    4|   22|          0|
+             f|  int|  para|    5|   22|          0|
 rt15:
-          zero|  int| const|    1|   17|
+          name|class|  type|  len|  def|       addr
+          zero|  int| const|    1|   18|          0|
 
 main:
-             a|  int|   var|    0|   32|
-            aa|  int|   var|    0|   32|
-            ar| char| array|    2|   30|
-             b|  int| const|    1|   29|
-             c|  int| const|    2|   29|
-             d|  int| const|    3|   29|
-             e|  int| const|    4|   29|
-            m1|  int| array|    8|   31|
-             r|  int|   var|    0|   31|
+          name|class|  type|  len|  def|       addr
+             a|  int|   var|    0|   33|          0|
+            aa|  int|   var|    0|   33|          0|
+            ar| char| array|    2|   31|          0|
+             b|  int| const|    1|   30|          0|
+             c|  int| const|    2|   30|          0|
+             d|  int| const|    3|   30|          0|
+             e|  int| const|    4|   30|          0|
+            m1|  int| array|    8|   32|          0|
+             r|  int|   var|    0|   32|          0|
 
           fact  func_begin               0               0
             %1          >=               t               3

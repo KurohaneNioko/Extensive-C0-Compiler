@@ -39,6 +39,7 @@ namespace OP
 	constexpr auto PUSH_PARA = "push";	// push para into stack --> value_param1 push 0 0
 	constexpr auto CALL = "call";		// push reg into stack
 	constexpr auto RET = "ret";			// save ret_val to $v0, sp+, fp+
+	constexpr auto FUNC_END = "func_end";	//
 	
 	constexpr auto GOTO = "goto";	// j
 	constexpr auto FUNC_BEGIN = "func_begin";	// func label

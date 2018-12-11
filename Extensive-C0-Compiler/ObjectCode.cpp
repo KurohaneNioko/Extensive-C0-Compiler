@@ -1,5 +1,7 @@
 #include"ObjectCode.h"
 #include<stack>
+
+
 #define COMMENT_OUT 1
 std::string SW = "sw";
 std::string LW = "lw";
@@ -25,25 +27,28 @@ std::string LA = "la";
 std::string SLL = "sll";
 std::string MOVE = "move";
 std::string ADDU = "addu";
-std::string SP = "$sp";
-std::string FP = "$fp";
-std::string RA = "$ra";
-std::string GP = "$gp";
-//t9统一作为操作数1使用的默认寄存器
-std::string T9 = "$t9";
-//t8专门作为操作数2使用的默认寄存器
-std::string T8 = "$t8";
-//t7统一作为操作数3使用的默认寄存器
-std::string T7 = "$t7";
+
+std::string ZERO = "$0";
 std::string V0 = "$v0";
 std::string A0 = "$a0";
-std::string ZERO = "$0";
+std::string A1 = "$a1";
+std::string A2 = "$a2";
+std::string A3 = "$a3";
 
+std::string T8 = "$t8";
+std::string T9 = "$t9";
+std::string S8 = "$fp";
+
+std::string SP = "$sp";
+std::string RA = "$ra";
+
+constexpr auto size_of_reg = 4;
 std::vector<std::string> mips;
 #define mpb mips.push_back
 int data_head = data_base;	// next data at
-reguse curReg;
-std::stack<reguse> regstack;
+auto curFunc = "";
+runinfo curRI;
+std::stack<runinfo> regstack;
 
 std::string mark2label(std::string &s)
 {
@@ -62,18 +67,145 @@ std::string mark2string(std::string &s)
 }
 std::string mark2useReg(std::string &s)
 {
-	for (auto i = 0; i < reg_t_max; i++)
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
 	{
-		if (curReg.t_content[i] == s)
+		if (curRI.ts_content[i] == s && i < reg_t_max)
 			return "$t" + std::to_string(i);
-	}
-	for (auto i = 0; i < reg_s_max; i++)
-	{
-		if (curReg.s_content[i] == s)
-			return "$s" + std::to_string(i);
+		else if(curRI.ts_content[i] == s && i >= reg_t_max)
+			return "$s" + std::to_string(i-reg_t_max);
 	}
 	return "0";
 }
+void initCurRI()
+{
+	memset(&curRI, 0, sizeof(curRI));
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
+		curRI.ts_content[i] = "";
+}
+int nextRegIndex(int i)
+{
+	return i + 1 < reg_t_max + reg_s_max ? 
+		i + 1 : 
+		i + 1 - reg_t_max - reg_s_max;
+}
+std::string index2tempReg(int i)
+{
+	auto ret = i < reg_t_max ? "$t" + std::to_string(i) :
+		"$s" + std::to_string(i - reg_t_max);
+	if (ret == "$s8")
+		ret = "$fp";
+	return ret;
+}
+std::string regAppoint()
+{
+	// seek not-use-yet reg
+	auto stop_pos = curRI.CLK_ptr;
+	do
+	{
+		auto i = curRI.CLK_ptr;
+		if (curRI.ts_content[i] == "")
+		{
+			auto ret = index2tempReg(i);
+			curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
+			return ret;
+		}
+		curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
+	} while (curRI.CLK_ptr != stop_pos);
+
+	// seek won't be used reg
+	std::set<int> unuse_reg;
+	stop_pos = curRI.CLK_ptr;
+	do
+	{
+		auto i = curRI.CLK_ptr;
+		if (curRI.ts_use[i] == false)
+		{
+			auto s = curRI.ts_content[i];
+			if (*(s.begin()) == '#')
+			{
+				return index2tempReg(i);
+			}
+			unuse_reg.insert(i);
+		}
+		curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
+	} while (curRI.CLK_ptr != stop_pos);
+	if (!unuse_reg.empty())
+	{
+		auto i = *unuse_reg.begin();
+		curRI.CLK_ptr = nextRegIndex(i);
+		return index2tempReg(i);
+	}
+
+	// use clock algorithm to find a var to change
+	while (curRI.CLK_use[curRI.CLK_ptr] != false)
+	{
+		if (curRI.CLK_use[curRI.CLK_ptr] == true)
+		{
+			curRI.CLK_use[curRI.CLK_ptr] = false;
+		}
+		curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
+	}
+	auto i = curRI.CLK_ptr;
+	curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
+	auto iden = curRI.ts_content[i];
+	varinfo *temp_id = ST::lookup(curFunc, iden, true);
+	if (ST::is_global_iden(curFunc, iden))
+	{
+		// global var, no need to write it back
+		// i've written it when it was assigned.
+	}
+	else
+	{
+		// local var, write in stack
+		varinfo v;
+		v.name = iden;
+		v.cls = ST::INT_CLS;
+		v.type = ST::VAR_TYP;
+		v.length = 0;
+		if (temp_id == nullptr)
+		{	// var not in symtab
+			curRI.symtab.insert(std::pair<std::string, varinfo>(iden, v));
+		}
+		// find a place in stack for iden and modify addr in symtab
+		auto find = false;
+		auto offset = 0;
+		while (find!=false)
+		{
+			auto i = curRI.symtab.begin();
+			for (; i != curRI.symtab.end(); i++)
+				if (i->second.addr == offset)
+				{
+					if (i->second.type == ST::VAR_TYP || i->second.type == ST::PARAM_TYP)
+						offset += 4;
+					else
+					{	//array
+						auto size = i->second.cls == ST::CHA_CLS ? 1 : 4;
+						offset += size * i->second.length;
+						offset += size_of_reg - offset & 0x00000003;
+					}
+					break;
+				}
+			if (i == curRI.symtab.end())
+			{	// look up current offset and find no use
+				find = true;
+				if (offset >= curRI.frame_size)
+					curRI.frame_size += 4;
+			}
+		}
+		curRI.symtab[iden].addr = offset;
+		/* sw index2Reg(i) ( "-"+std::to_string(offset) )$sp */
+		mpb("sw " + index2tempReg(i) + " (-" + std::to_string(offset) + ")" + SP);
+	}
+}
+
+/*	meet IDEN in IMC:
+	check in local
+		if find==null
+			use mark2global_IDEN
+		else find its use reg
+			if reg=="0"
+				find a new reg for it and modify curReg
+*/
 
 /* add _ before every global name to prevent iden like jal*/
 void codeHead()
@@ -94,7 +226,7 @@ void codeHead()
 			data_head += iter->second.length;
 		}
 	}
-	data_head += 4 - data_head & 0x00000003;
+	data_head += size_of_reg - data_head & 0x00000003;
 	for (auto iter = ST::global_sym.begin(); iter != ST::global_sym.end(); iter++)
 	{
 		if (iter->second.type == ST::VAR_TYP && iter->second.cls == ST::INT_CLS)
@@ -171,5 +303,34 @@ void OC::Med2Mips()
 		if (putTab && (*iter) != ".globl main" && (*iter).find(':') == -1)
 			mipsout << '\t';
 		mipsout << *iter << std::endl;
+	}
+}
+
+void reg_appoint()
+{
+	for (auto i = Med::itmd_code.begin(); i != Med::itmd_code.end(); i++)
+	{
+		if (i->op == OP::FUNC_BEGIN)
+			funcbegin(*i);
+		else if (i->op == OP::LABEL)
+			label(*i);
+		else if (i->op == OP::EXIT)
+			exit(*i);
+		else if (i->op == OP::GOTO)
+			_goto(*i);
+	}
+}
+
+void s8_fp()
+{
+	const std::string from = "$8", to = "$fp";
+	for (auto i = mips.begin(); i != mips.end(); i++)
+	{
+		std::size_t start = 0;
+		while ((start = (*i).find(from, start)) != std::string::npos)
+		{
+			(*i).replace(start, from.length(), to);
+			start += to.length();
+		}
 	}
 }

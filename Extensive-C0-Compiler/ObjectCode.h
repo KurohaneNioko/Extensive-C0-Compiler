@@ -3,15 +3,17 @@
 #include"SymbolHead.h"
 #include"Compiler.h"
 
-constexpr auto reg_t_max = 10;
-constexpr auto reg_s_max = 8;
+constexpr auto reg_t_max = 8;
+constexpr auto reg_s_max = 9;
 
-struct reguse
+struct runinfo
 {
-	bool t_use[reg_t_max] = { false };	// t0 ~ t9
-	bool s_use[reg_s_max] = { false };	// s0 ~s7
-	std::string t_content[reg_t_max] = { "" };
-	std::string s_content[reg_s_max] = { "" };
+	bool CLK_use[reg_t_max + reg_s_max] = { false };	// for clock algorithm in page swap (OS)
+	bool ts_use[reg_t_max + reg_s_max] = { false };	// t0 ~ t7, s0 ~ s8
+	std::string ts_content[reg_t_max + reg_s_max] = { "" };
+	int CLK_ptr = 0;
+	int frame_size = 0;	// frame size of this func
+	std::map<std::string, varinfo> symtab;
 };
 
 

@@ -337,7 +337,7 @@ void value_param(const varinfo *func_name)
 		std::string temp_param = std::string();
 		int ret_cls;
 		expression(ret_cls, temp_param);
-		Med::addIMC(temp_param, OP::PUSH_PARA, zero, zero);
+		Med::addIMC(zero, OP::PUSH_PARA, temp_param, zero);
 		//find the info of para
 		auto *para = ST::lookup_para(func_symtab, para_count);
 		if (para == nullptr)
@@ -710,7 +710,6 @@ void scanf_sentence()
 	bool comma_now;
 	do
 	{
-		Lex::getsym();
 		if (is_IDEN)
 		{
 			std::string name = Lex::curElmt;
@@ -727,11 +726,11 @@ void scanf_sentence()
 			}
 			if (temp_iden->cls == ST::INT_CLS)
 			{
-				Med::addIMC(name, OP::SCAN, "int", zero);
+				Med::addIMC("int", OP::SCAN, name, zero);
 			}
 			else if (temp_iden->cls == ST::CHA_CLS)
 			{
-				Med::addIMC(name, OP::SCAN, "char", zero);
+				Med::addIMC("char", OP::SCAN, name, zero);
 			}
 			else
 			{
@@ -786,7 +785,7 @@ void printf_sentence()
 		Lex::getsym();
 		if (is_comma)
 		{
-			Med::addIMC(Med::strhd + std::to_string(str_no), OP::PRINT, zero, zero);
+			Med::addIMC("str", OP::PRINT, Med::strhd + std::to_string(str_no), zero);
 			Lex::getsym();
 		}
 		else
@@ -803,7 +802,7 @@ void printf_sentence()
 			std::cout << "Line: " << Lex::LineCounter
 				<< " printf " << "over" << std::endl;
 #endif
-			Med::addIMC(Med::strhd + std::to_string(str_no), OP::PRINT, zero, zero);
+			Med::addIMC("str", OP::PRINT, Med::strhd + std::to_string(str_no), zero);
 			return;
 		}
 	}
@@ -812,11 +811,11 @@ void printf_sentence()
 	expression(ret_cls, value);
 	if (ret_cls == ST::INT_CLS)
 	{
-		Med::addIMC(value, OP::PRINT, "int", zero);
+		Med::addIMC("int", OP::PRINT, value, zero);
 	}
 	else if (ret_cls == ST::CHA_CLS)
 	{
-		Med::addIMC(value, OP::PRINT, "char", zero);
+		Med::addIMC("char", OP::PRINT, value, zero);
 	}
 	/* print */
 	if (is_R_small)
@@ -1462,6 +1461,7 @@ void param_func_def_piece(const std::string func_name)
 	{
 		/* TODO: no } after func def */
 	}
+	Med::addIMC(zero, OP::FUNC_END, zero, zero);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " param Function " << "def piece" << std::endl;
@@ -1492,6 +1492,7 @@ void no_param_func_def_piece(const std::string func_name)
 	{
 		/* TODO: no } after func def */
 	}
+	Med::addIMC(zero, OP::FUNC_END, zero, zero);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " non-param Function " << "def piece" << std::endl;
