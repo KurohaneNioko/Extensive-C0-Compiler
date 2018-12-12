@@ -24,7 +24,15 @@ la $s1 x1
 sw $t1, -4($sp)
 sw $t1 int2
 seq $t9, $0, $0
-
+lbu $ra 0x10010025
+li $t1 0x38383838
+sw $t1, chararray
+sw $t1, chararray + 4
+sw $t1, chararray + 8
+sw $t1, chararray + 12
+la $a0 chararray
+li $v0 4
+syscall
 li $t1 0xf0000001
 mul $t2 $t1 16
 

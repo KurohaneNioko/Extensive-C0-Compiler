@@ -6,9 +6,11 @@ int temp_order = 0;
 int label_order = 0;
 int str_order = 0;
 
-std::string Med::gen_temp()
+std::string Med::gen_temp(std::string &curFunc, int &lc)
 {
-	return Med::temphd + std::to_string(++temp_order);
+	auto name = Med::temphd + std::to_string(++temp_order);
+	ST::addsym(curFunc, name, ST::INT_CLS, ST::VAR_TYP, 0, lc);
+	return name;
 }
 
 std::string Med::gen_label()

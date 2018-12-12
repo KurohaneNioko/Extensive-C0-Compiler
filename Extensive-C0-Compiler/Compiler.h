@@ -5,6 +5,7 @@
 #include<fstream>
 #include<cassert>
 #include<vector>
+#include<sstream>
 #include<string>
 #include<map>
 #include<set>

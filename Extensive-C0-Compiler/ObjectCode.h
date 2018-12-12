@@ -10,14 +10,12 @@ struct runinfo
 {
 	bool CLK_use[reg_t_max + reg_s_max] = { false };	// for clock algorithm in page swap (OS)
 	bool ts_use[reg_t_max + reg_s_max] = { false };	// t0 ~ t7, s0 ~ s8
-	std::string ts_content[reg_t_max + reg_s_max] = { "" };
 	int CLK_ptr = 0;
 	int frame_size = 0;	// frame size of this func
+	std::string ts_content[reg_t_max + reg_s_max] = { "" };
 	std::map<std::string, varinfo> symtab;
+	//std::string ax_content[4] = { "" };
 };
-
-
-
 
 
 
