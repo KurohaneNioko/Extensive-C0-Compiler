@@ -58,14 +58,12 @@ typedef std::vector<mcode>::iterator ociter;
 
 int data_head = data_base;	// next data at
 std::map<std::string, int> local_var_size;
-
-#define FrameSize (curfunc == "main" ? ST::global_sym[curfunc].length * size_of_reg \
-					: (ST::global_sym[curfunc].length * size_of_reg \
-					+ local_var_size[curfunc] \
+std::string curfunc = "";
+#define FrameSize (curfunc == "main" ? local_var_size[curfunc] \
+					: (local_var_size[curfunc] \
 					+ size_of_reg * (reg_t_max + reg_s_max + 2)))
 // 2 : ra sp
 #define FS FrameSize
-std::string curfunc = "";
 int pushcount = 0;
 
 runinfo curRI;
@@ -108,7 +106,10 @@ std::string index2tempReg(int i)
 		ret = "$fp";
 	return ret;
 }
-
+std::string mark2func(std::string &s)
+{
+	return "func_" + s;
+}
 std::string mark2label(std::string &s)
 {
 	assert(!s.find("%"));
@@ -133,9 +134,16 @@ std::string mark2useReg(std::string &s)
 }
 void initCurRI()
 {
-	memset(&curRI, 0, sizeof(curRI));
+	runinfo t;
 	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
-		curRI.ts_content[i] = "";
+	{
+		t.CLK_use[i] = false;
+		t.ts_use[i] = false;
+		t.ts_content[i] = "";
+	}
+	t.CLK_ptr = 0;
+	t.symtab = ST::func_sym[curfunc];
+	curRI = t;
 }
 int nextRegIndex(int i)
 {
@@ -237,7 +245,7 @@ std::string regAppoint(std::string &var)
 		auto addr = temp_id->addr;
 		SSSS;
 		ss << (temp_id->cls == ST::CHA_CLS ? SB : SW) << " "
-			<< reg << " (-" << addr << ")" << SP;
+			<< reg << " -" << addr << " (" << SP << ")";
 		mpss;
 	}
 	modifyRegInfo(var, i);
@@ -256,7 +264,7 @@ int reg2Index(std::string reg)
 	if (reg[1] == 't')
 		return reg[2] - '0';
 	else if (reg[1] == 's')
-		reg[2] - '0' + reg_t_max;
+		return reg[2] - '0' + reg_t_max;
 	else if (reg == "$fp")
 		return reg_t_max + reg_s_max - 1;
 	assert(false);
@@ -283,16 +291,17 @@ std::string regSeek(std::string &v, bool is_rsrt)
 	{	// local var
 		varinfo t = curRI.symtab[v];
 		SSSS;
-		ss << (t.type == ST::CHA_CLS ? LBU : LW) << " "
-			<< rd << " (-" << std::to_string(t.addr) << ")" << SP;
+		ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
+			<< rd << " -" << (t.addr) << " (" << SP << ")";
 		mpss;
 	}
 	else
 	{	//global var
+		std::cout << v << " " << curfunc << std::endl;
 		assert(ST::global_sym.count(v) > 0);
 		varinfo t = ST::global_sym[v];
 		SSSS;
-		ss << (t.type == ST::CHA_CLS ? LBU : LW) << " "
+		ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
 			<< rd << " " << mark2global_IDEN(v);
 		mpss;
 	}
@@ -371,7 +380,11 @@ void funcbegin(mcode &c)
 {
 	assert(c.op == OP::FUNC_BEGIN);
 	mpb((c.rst == "main" ? "" : "func_")+c.rst + ":");
+	if(curfunc != "")
+		RIstack.push(curRI);
 	curfunc = c.rst;
+	initCurRI();
+
 }
 
 void label(mcode &c)
@@ -397,7 +410,7 @@ void push(mcode &c, ociter o)
 	int offset = FS + pushcount * size_of_reg;
 	auto save_reg = regSeek(c.num1, true);
 	SSSS;
-	ss << SW << " " << save_reg << " (-" << offset << ")" << SP;
+	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
 	mpss;
 	futureUseChk(c.num1, save_reg, o);
 	++pushcount;
@@ -406,8 +419,20 @@ void push(mcode &c, ociter o)
 void call(mcode &c)
 {
 	pushcount = 0;	// ATTENTION
-	int start = 0;
-	
+	int stack_ptr = FS + local_var_size[c.rst];
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
+	{
+		SSSS;
+		ss << SW << " " << index2tempReg(i)
+			<< " -" << stack_ptr << " (" << SP << ")";
+		mpss;
+		stack_ptr += 4;
+	}
+	{ SSSS; ss << SW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	stack_ptr += 4;
+	{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	{ SSSS; ss << ADDI << " " << SP << " " << SP << " " << (-1 * FS); mpss; }
+	{ SSSS; ss << JAL << " " << mark2func(c.rst); mpss; }
 }
 
 void OC::Med2Mips()
@@ -426,6 +451,12 @@ void OC::Med2Mips()
 			exit(*i);
 		else if (i->op == OP::GOTO)
 			_goto(*i);
+		else if (i->op == OP::PUSH_PARA)
+			push(*i, i);
+		else if (i->op == OP::CALL)
+			call(*i);
+		else if (i->op == OP::FUNC_END)
+			break;
 	}
 	mpb("exit:");
 	bool putTab = false;
