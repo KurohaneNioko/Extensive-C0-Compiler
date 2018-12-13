@@ -1,51 +1,54 @@
 #include"ObjectCode.h"
-#include<stack>
 
 #if DEBUG
 #define COMMENT 1
 #else
 #define COMMENT 0
 #endif
-std::string SW = "sw";
-std::string LW = "lw";
-std::string SB = "sb";
-std::string LBU = "lbu";
-std::string LI = "li";
-std::string ADD = "add";
-std::string ADDI = "addi";
-std::string SUBI = "subi";
-std::string SUB = "sub";
-std::string BEQ = "beq";
-std::string BNE = "bne";
-std::string BGEZ = "bgez";
-std::string BGTZ = "bgtz";
-std::string BLEZ = "blez";
-std::string BLTZ = "bltz";
-std::string J = "j";
-std::string JAL = "jal";
-std::string JR = "jr";
-std::string MULOBJ = "mul";
-std::string DIVOBJ = "div";
-std::string MFLO = "mflo";
-std::string SYSCALL = "syscall";
-std::string LA = "la";
-std::string SLL = "sll";
-std::string MOVE = "move";
-std::string ADDU = "addu";
+const std::string SW = "sw";
+const std::string LW = "lw";
+const std::string SB = "sb";
+const std::string LBU = "lbu";
+const std::string LI = "li";
+const std::string ADD = "add";
+const std::string ADDI = "addi";
+const std::string SUBI = "subi";
+const std::string SUB = "sub";
+const std::string BEQ = "beq";
+const std::string BNE = "bne";
+const std::string BGE = "bge";
+const std::string BGEZ = "bgez";
+const std::string BGT = "bgt";
+const std::string BGTZ = "bgtz";
+const std::string BLE = "ble";
+const std::string BLEZ = "blez";
+const std::string BLT = "blt";
+const std::string BLTZ = "bltz";
+const std::string J = "j";
+const std::string JAL = "jal";
+const std::string JR = "jr";
+const std::string MULOBJ = "mul";
+const std::string DIVOBJ = "div";
+const std::string MFLO = "mflo";
+const std::string SYSCALL = "syscall";
+const std::string LA = "la";
+const std::string SLL = "sll";
+const std::string MOVE = "move";
+const std::string ADDU = "addu";
 
-std::string ZERO = "$0";
-std::string V0 = "$v0";
-std::string A0 = "$a0";
-std::string A1 = "$a1";
-std::string A2 = "$a2";
-std::string A3 = "$a3";
+const std::string ZERO = "$0";
+const std::string V0 = "$v0";
+const std::string A0 = "$a0";
+const std::string A1 = "$a1";
+const std::string A2 = "$a2";
+const std::string A3 = "$a3";
 
-std::string T8 = "$t8";
-std::string T9 = "$t9";
-std::string S8 = "$fp";
+const std::string T8 = "$t8";
+const std::string T9 = "$t9";
+const std::string S8 = "$fp";
 
-std::string SP = "$sp";
-std::string RA = "$ra";
+const std::string SP = "$sp";
+const std::string RA = "$ra";
 
 constexpr auto size_of_reg = 4;
 std::vector<std::string> mips;
@@ -62,12 +65,10 @@ std::string curfunc = "";
 #define FrameSize (curfunc == "main" ? local_var_size[curfunc] \
 					: (local_var_size[curfunc] \
 					+ size_of_reg * (reg_t_max + reg_s_max + 2)))
-// 2 : ra sp
+// 2 : ra sp, if main with argv, FS of main should add params
 #define FS FrameSize
 int pushcount = 0;
-
 runinfo curRI;
-std::stack<runinfo> RIstack;
 
 void assignAddr()
 {
@@ -151,13 +152,14 @@ int nextRegIndex(int i)
 		i + 1 : 
 		i + 1 - reg_t_max - reg_s_max;
 }
-
 void modifyRegInfo(std::string &var, int &i)
 {
 	curRI.CLK_use[i] = true;
 	curRI.ts_use[i] = true;
 	curRI.ts_content[i] = var;
+	curRI.CLK_ptr = nextRegIndex(i);
 }
+
 std::string regAppoint(std::string &var)
 {
 	// seek not-use-yet reg
@@ -167,7 +169,6 @@ std::string regAppoint(std::string &var)
 		auto i = curRI.CLK_ptr;
 		if (curRI.ts_content[i] == "")
 		{
-			curRI.CLK_ptr = nextRegIndex(i);
 			modifyRegInfo(var, i);
 #if COMMENT
 			SSSS;
@@ -205,7 +206,6 @@ std::string regAppoint(std::string &var)
 	if (!unuse_reg.empty())
 	{
 		auto i = *unuse_reg.begin();
-		curRI.CLK_ptr = nextRegIndex(i);
 		modifyRegInfo(var, i);
 #if COMMENT
 		SSSS;
@@ -225,32 +225,27 @@ std::string regAppoint(std::string &var)
 		curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
 	}
 	auto i = curRI.CLK_ptr;
-	curRI.CLK_ptr = nextRegIndex(curRI.CLK_ptr);
 	auto iden = curRI.ts_content[i];
-	varinfo *temp_id = ST::lookup(curfunc, iden, true);
-	assert(temp_id != nullptr);
-	auto reg = index2tempReg(i);
-	if (ST::is_global_iden(curfunc, iden))
-	{
-		// global var, write it back (lazy)
-		/// inavctive: i've written it when it was assigned.
-		SSSS;
-		ss << (temp_id->cls == ST::CHA_CLS ? SB : SW) << " " 
-			<< reg << " " << mark2global_IDEN(iden);
-		mpss;
+	auto reg = index2tempReg(i); SSSS;
+	if (curRI.symtab.count(iden) > 0)
+	{	// local var, write in stack
+		varinfo t = curRI.symtab[iden];
+		auto addr = t.addr;
+		ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+			<< reg << " -" << addr << " (" << SP << ")";
 	}
 	else
-	{
-		// local var, write in stack
-		auto addr = temp_id->addr;
-		SSSS;
-		ss << (temp_id->cls == ST::CHA_CLS ? SB : SW) << " "
-			<< reg << " -" << addr << " (" << SP << ")";
-		mpss;
+	{	// global var, write it back (lazy)
+		/// inavctive: i've written it when it was assigned.
+		assert(ST::global_sym.count(iden) > 0);
+		varinfo t = ST::global_sym[iden];
+		ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+			<< reg << " " << mark2global_IDEN(iden);
 	}
+	mpss;
 	modifyRegInfo(var, i);
 #if COMMENT
-	SSSS;
+	ss.str("");
 	ss << "# MemAccess " << index2tempReg(i) << ": "
 		<< curRI.ts_content[i] << " -> " << var;
 	mpss;
@@ -281,34 +276,30 @@ std::string regSeek(std::string &v, bool is_rsrt)
 	}
 	auto rd = regAppoint(v);	// rd is the reg to be used
 #if COMMENT
-	SSSS;
+	{	SSSS;
 	ss << "# now " << rd << " is " << v;
-	mpss;
+	mpss; }
 #endif
 	if (!is_rsrt)
 		return rd;
+	SSSS;
 	if (curRI.symtab.count(v) > 0)
 	{	// local var
 		varinfo t = curRI.symtab[v];
-		SSSS;
 		ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
 			<< rd << " -" << (t.addr) << " (" << SP << ")";
-		mpss;
 	}
 	else
 	{	//global var
 		std::cout << v << " " << curfunc << std::endl;
 		assert(ST::global_sym.count(v) > 0);
 		varinfo t = ST::global_sym[v];
-		SSSS;
 		ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
 			<< rd << " " << mark2global_IDEN(v);
-		mpss;
 	}
+	mpss;
 	return rd;
 }
-
-
 
 void futureUseChk(std::string opr, std::string reg, ociter o)
 {
@@ -325,14 +316,26 @@ void futureUseChk(std::string opr, std::string reg, ociter o)
 	}
 }
 
-/*	meet IDEN in IMC:
-	check in local
-		if find==null
-			use mark2global_IDEN
-		else find its use reg
-			if reg=="0"
-				find a new reg for it and modify curReg
-*/
+bool opr_is_const(std::string opr, int &rst)
+{
+	auto t = opr.begin();
+	if (*(opr.begin()) == '\'')
+	{
+		rst = *(t + 1);
+		return true;
+	}
+	int r = 0;
+	try
+	{
+		r = std::stoi(opr);
+	}
+	catch (const std::exception&)
+	{
+		return false;
+	}
+	rst = r;
+	return true;
+}
 
 /* add _ before every global name to prevent iden like jal*/
 void codeHead()
@@ -380,8 +383,6 @@ void funcbegin(mcode &c)
 {
 	assert(c.op == OP::FUNC_BEGIN);
 	mpb((c.rst == "main" ? "" : "func_")+c.rst + ":");
-	if(curfunc != "")
-		RIstack.push(curRI);
 	curfunc = c.rst;
 	initCurRI();
 
@@ -408,31 +409,247 @@ void _goto(mcode &c)
 void push(mcode &c, ociter o)
 {
 	int offset = FS + pushcount * size_of_reg;
-	auto save_reg = regSeek(c.num1, true);
-	SSSS;
+	int v;
+	bool para_const = opr_is_const(c.num1, v);
+	std::string save_reg; SSSS;
+	if (para_const)
+	{
+		ss << LI << " " << T9 << " " << v;
+		save_reg = T9;
+		mpss;
+		ss.str("");
+	}
+	else
+	{
+		save_reg = regSeek(c.num1, true);
+		futureUseChk(c.num1, save_reg, o);
+	}
 	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
 	mpss;
-	futureUseChk(c.num1, save_reg, o);
 	++pushcount;
 }
 
 void call(mcode &c)
 {
-	pushcount = 0;	// ATTENTION
-	int stack_ptr = FS + local_var_size[c.rst];
+	assert(c.op == OP::CALL);
+	mpb("# save start");
+	int stack_ptr = FS + pushcount * size_of_reg;
 	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
-	{
-		SSSS;
-		ss << SW << " " << index2tempReg(i)
-			<< " -" << stack_ptr << " (" << SP << ")";
-		mpss;
-		stack_ptr += 4;
-	}
+		if(curRI.ts_use[i])
+		{
+			SSSS;
+			ss << SW << " " << index2tempReg(i)
+				<< " -" << stack_ptr << " (" << SP << ")";
+			mpss;
+			stack_ptr += size_of_reg;
+		}
 	{ SSSS; ss << SW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
-	stack_ptr += 4;
+	stack_ptr += size_of_reg;
 	{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
 	{ SSSS; ss << ADDI << " " << SP << " " << SP << " " << (-1 * FS); mpss; }
 	{ SSSS; ss << JAL << " " << mark2func(c.rst); mpss; }
+	mpb("# recover start");
+	{SSSS; ss << ADDI << " " << SP << " " << SP << " " << FS; mpss; }
+	stack_ptr -= size_of_reg;
+	{ SSSS; ss << LW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	stack_ptr -= size_of_reg;
+	for (auto i = reg_t_max + reg_s_max - 1; i >= 0; i--)
+	{
+		if (curRI.ts_use[i])
+		{
+			SSSS;
+			ss << LW << " " << index2tempReg(i)
+				<< " -" << stack_ptr << " (" << SP << ")";
+			mpss;
+			stack_ptr -= size_of_reg;
+		}
+	}
+	mpb("# recover end");
+	pushcount = 0;	// ATTENTION
+}
+
+void func_end_return(mcode &c)
+{
+	if (c.op == OP::FUNC_END) curfunc = "";
+	{SSSS; ss << JR << " " << RA; mpss; }
+}
+
+void save_arr(mcode &c)
+{
+
+}
+
+void read_arr(mcode &c)
+{
+	auto arr = c.num1, 
+		index = c.num2, 
+		dst = c.rst;
+	varinfo arr_iden; bool local = false; int idx;
+	bool const_index = opr_is_const(index, idx);
+	if (curRI.symtab.count(arr) > 0)
+	{
+		arr_iden = curRI.symtab[arr];
+		local = true;
+	}
+	else
+	{
+		assert(ST::global_sym.count(arr) > 0);
+		arr_iden = ST::global_sym[arr];
+	}
+	assert(arr_iden.type == ST::ARRAY_TYP);
+	int elmt_size = 1;
+	if (arr_iden.cls == ST::INT_CLS)
+		elmt_size = size_of_reg;
+	else
+		assert(arr_iden.cls == ST::CHA_CLS);	
+	auto rdreg = regSeek(dst, false);
+	// local int idx-unknown:
+	//		sll $t9 reg_index 2
+	//		addi $t9 $t9 arr_iden.addr
+	//		sub $t9 $sp $t9
+	//		lw rdreg $t9
+	// local char unknown:
+	//		addi $t9 reg_index arr_iden.addr
+	//		sub $t9 $sp $t9
+	//		lbu rdreg $t9
+	// local known:
+	// lw/lbu rdreg -(arr_iden.addr + idx * elmt_size) $sp
+
+	// global int unknown:
+	//		sll $t9 reg_index 2
+	//		lw rdreg arr($t9)
+	// global char unknown:
+	//		lbu rdreg arr(reg_index)
+	// global known:
+	// lw/lbu rdreg arr+ idx*elmt_size
+	if (const_index)
+	{
+
+	}
+	else
+	{
+
+	}
+	// lw rdreg $t9
+}
+
+void calc(mcode &c)
+{
+
+}
+
+void cmp(mcode &c, ociter o)
+{
+	auto cop = c.op;
+	auto r1 = c.num1, r2 = c.num2;
+	int v1, v2;
+	bool r1const = opr_is_const(r1, v1);
+	bool r2const = opr_is_const(r2, v2);
+	std::string r1reg, r2reg; SSSS;
+	if (cop == OP::EQU || cop == OP::NEQ)
+	{
+		bool is_beq = cop == OP::EQU;
+		if (r1const & r2const)
+		{
+			bool eq = v1 == v2;
+			if(is_beq & eq || !is_beq & !eq)
+				ss << J << " " << mark2label(c.rst);
+			/* else do nothing: no jump */
+		}
+		else if (!r1const & r2const)
+		{
+			r1reg = regSeek(r1, true);
+			ss << (is_beq ? BEQ : BNE) << " " << r1reg << " " <<
+				v2 << " " << mark2label(c.rst);
+		}
+		else if (r1const & !r2const)
+		{
+			r2reg = regSeek(r2, true);
+			ss << (is_beq ? BEQ : BNE) << " " << r2reg << " " <<
+				v1 << " " << mark2label(c.rst);
+		}
+		else if (!r1const & !r2const)
+		{
+			r1reg = regSeek(r1, true);
+			r2reg = regSeek(r2, true);
+			ss << (is_beq ? BEQ : BNE) << " " << r1reg << " " <<
+				r2reg << " " << mark2label(c.rst);
+		}
+	}
+	else
+	{
+		if (r1const & r2const)
+		{
+			if((cop == OP::GRT && v1 > v2) ||
+				(cop == OP::GREQ && v1 >= v2) ||
+				(cop == OP::LES && v1 < v2) ||
+				(cop == OP::LESEQ && v1 <= v2))
+				ss << J << " " << mark2label(c.rst);
+			/* else do nothing: no jump */
+		}
+		else if (!r1const & r2const)
+		{
+			r1reg = regSeek(r1, true);
+			if (v2 == 0)
+			{
+				auto o = cop == OP::GRT ? BGTZ :
+					cop == OP::GREQ ? BGEZ :
+					cop == OP::LES ? BLTZ : BLEZ;
+				ss << o << " " << r1reg << " " << mark2label(c.rst);
+			}
+			else
+			{
+				auto o = cop == OP::GRT ? BGT :
+					cop == OP::GREQ ? BGE :
+					cop == OP::LES ? BLT : BLE;
+				ss << o << " " << r1reg << " " <<
+					v2 << " " << mark2label(c.rst);
+			}
+		}
+		else if (r1const & !r2const)
+		{
+			r2reg = regSeek(r2, true);
+			if (v1 == 0)
+			{	// 0 < $t0
+				auto o = cop == OP::GRT ? BLTZ :
+					cop == OP::GREQ ? BLEZ :
+					cop == OP::LES ? BGTZ : BGEZ;
+				ss << o << " " << r2reg << " " << mark2label(c.rst);
+			}
+			else
+			{
+				auto o = cop == OP::GRT ? BLT :
+					cop == OP::GREQ ? BLE :
+					cop == OP::LES ? BGT : BGE;
+				ss << o << " " << r2reg << " " << v1 << mark2label(c.rst);
+			}
+		}
+		else if (!r1const & !r2const)
+		{
+			r1reg = regSeek(r1, true);
+			r2reg = regSeek(r2, true);
+			auto o = cop == OP::GRT ? BGT :
+				cop == OP::GREQ ? BGE :
+				cop == OP::LES ? BLT : BLE;
+			ss << o << " " << r1reg << " " <<
+				r2reg << " " << mark2label(c.rst);
+		}
+	}
+	mpss;
+	if(!r1const)
+		futureUseChk(c.num1, r1reg, o);
+	if(!r2const)
+		futureUseChk(c.num2, r2reg, o);
+}
+
+void scan(mcode &c)
+{
+
+}
+
+void print(mcode &c)
+{
+
 }
 
 void OC::Med2Mips()
@@ -455,8 +672,12 @@ void OC::Med2Mips()
 			push(*i, i);
 		else if (i->op == OP::CALL)
 			call(*i);
-		else if (i->op == OP::FUNC_END)
-			break;
+		else if (i->op == OP::FUNC_END || i->op == OP::RET)
+			func_end_return(*i);
+		else if (i->op == OP::EQU || i->op == OP::NEQ ||
+			i->op == OP::GRT || i->op == OP::GREQ ||
+			i->op == OP::LES || i->op == OP::LESEQ)
+			cmp(*i, i);
 	}
 	mpb("exit:");
 	bool putTab = false;

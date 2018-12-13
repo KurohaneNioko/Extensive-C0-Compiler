@@ -390,8 +390,8 @@ void factor(int &ret_cls, std::string &ret_val)
 			}
 			//expr check val=num, avoid array out of index
 			int array_index;
-			Med::is_operand_num(temp_ret_val, &array_index);
-			if (&array_index != nullptr)		// not nullptr <=> stoi success
+			bool stoiOK = Med::is_operand_num(temp_ret_val, array_index);
+			if (stoiOK)		// true <=> stoi success
 			{
 				if (!(array_index >= 0 && array_index < temp_iden->length))
 				{
@@ -1191,8 +1191,8 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			Lex::getsym();
 			expression(expr_ret_cls, value);
 			int num;
-			Med::is_operand_num(value, &num);
-			if (&num != nullptr)
+			bool stoiOK = Med::is_operand_num(value, num);
+			if (stoiOK)
 			{
 				if (!(num >= 0 && num < temp_iden->length))
 				{

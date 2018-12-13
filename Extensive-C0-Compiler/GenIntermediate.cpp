@@ -33,7 +33,7 @@ void Med::addIMC(std::string rst, const std::string &op, std::string op1, std::s
 	Med::itmd_code.push_back(t);
 }
 
-void Med::is_operand_num(std::string &s, int *value)
+bool Med::is_operand_num(std::string &s, int &value)
 {
 	int num;
 	try
@@ -42,15 +42,15 @@ void Med::is_operand_num(std::string &s, int *value)
 	}
 	catch (const std::out_of_range&)
 	{
-		*value = INT_MAX;
-		return;
+		value = INT_MAX;
+		return false;
 	}
 	catch (const std::invalid_argument&)
 	{
-		value = nullptr;
-		return;
+		return false;
 	}
-	*value = num;
+	value = num;
+	return true;
 }
 
 void Med::printIMC()

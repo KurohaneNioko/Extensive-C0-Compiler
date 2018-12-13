@@ -40,3 +40,5 @@ Browse.VC.*
 /available reference
 ~*.doc
 ~*.docx
+/Debug
+/Extensive-C0-Compiler/Debug/*

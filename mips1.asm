@@ -22,16 +22,17 @@ li $v0 4
 syscall
 la $s1 x1
 sw $t1, -4($sp)
-sw $t1 int2
+sb $t1 int2
 seq $t9, $0, $0
 lbu $ra 0x10010025
 li $t1 0x38383838
-sw $t1, chararray
-sw $t1, chararray + 4
+sw $ra, chararray
+sb $t1, chararray + 2
 sw $t1, chararray + 8
 sw $t1, chararray + 12
 la $a0 chararray
 li $v0 4
+lbu $t8 a+4
 addi $sp $sp -30
 syscall
 li $t1 0xf0000001

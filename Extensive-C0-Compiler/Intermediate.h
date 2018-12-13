@@ -65,7 +65,7 @@ namespace Med
 	std::string gen_label();
 	//std::string gen_str();
 
-	void is_operand_num(std::string &s, int *value);
+	bool is_operand_num(std::string &s, int &value);
 	void addIMC(std::string rst, const std::string &op, std::string op1, std::string op2);
 	void printIMC();
 
