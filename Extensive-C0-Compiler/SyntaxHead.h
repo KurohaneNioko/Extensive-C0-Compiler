@@ -58,7 +58,6 @@
 
 
 namespace Syn {
-	
 	void program();
 }
 void expression(int &ret_class, std::string &value);

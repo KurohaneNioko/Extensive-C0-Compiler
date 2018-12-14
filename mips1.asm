@@ -32,8 +32,9 @@ sw $t1, chararray + 8
 sw $t1, chararray + 12
 la $a0 chararray
 li $v0 4
-lbu $t8 a+4
+div $t1 4  $v0
 addi $sp $sp -30
+mul 
 syscall
 li $t1 0xf0000001
 mul $t2 $t1 16

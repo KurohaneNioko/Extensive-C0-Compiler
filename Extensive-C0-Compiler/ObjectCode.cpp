@@ -27,8 +27,8 @@ const std::string BLTZ = "bltz";
 const std::string J = "j";
 const std::string JAL = "jal";
 const std::string JR = "jr";
-const std::string MULOBJ = "mul";
-const std::string DIVOBJ = "div";
+const std::string MUL = "mul";
+const std::string DIV = "div";
 const std::string MFLO = "mflo";
 const std::string SYSCALL = "syscall";
 const std::string LA = "la";
@@ -50,6 +50,7 @@ const std::string S8 = "$fp";
 const std::string SP = "$sp";
 const std::string RA = "$ra";
 
+const std::string RETV0 = "RET_v0";
 constexpr auto size_of_reg = 4;
 std::vector<std::string> mips;
 #define mpb mips.push_back
@@ -427,6 +428,10 @@ void push(mcode &c, ociter o)
 	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
 	mpss;
 	++pushcount;
+#if COMMENT
+	mpb("# push param: " + c.num1);
+#endif // COMMENT
+
 }
 
 void call(mcode &c)
@@ -475,12 +480,56 @@ void func_end_return(mcode &c)
 }
 
 void save_arr(mcode &c)
-{
+{	// arr IRcode index val
+	auto arr = c.rst,
+		index = c.num1,
+		value = c.num2;
+	varinfo arr_iden; bool local = false; int idx, val;
+	bool const_index = opr_is_const(index, idx);
+	bool const_value = opr_is_const(value, val);
+	if (curRI.symtab.count(arr) > 0)
+	{
+		arr_iden = curRI.symtab[arr];
+		local = true;
+	}
+	else
+	{
+		assert(ST::global_sym.count(arr) > 0);
+		arr_iden = ST::global_sym[arr];
+	}
+	assert(arr_iden.type == ST::ARRAY_TYP);
+	int elmt_size = 1;
+	if (arr_iden.cls == ST::INT_CLS)
+		elmt_size = size_of_reg;
+	else
+		assert(arr_iden.cls == ST::CHA_CLS);
+	
+	// local const_index const_value
+	//	t t t: li $t9 val, sw/sb $t9 -(idx*size+addr)($sp)
+	//  t t f: sw/sb valreg -idx*size+addr($sp)
+	//  t f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb $t9 $t8
+	//  t f f: sll $t8 idxreg log(2)(size), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb valreg $t8
 
+	//  f t t: li $t9 val, sw/sb $t9 mark(arr)+idx*size
+	//  f t f: sw/sb valreg mark(arr)+idx*size
+	//  f f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), sw/sb $t9 mark(arr)($t8)
+	//  f f f: sll $t8 idxreg log(2)(elmtsize) sw/sb valreg mark(arr)($t8)
+	
+	if (local)
+	{
+		
+	}
+	else
+	{
+		
+	}
+#if COMMENT
+	{SSSS; ss << "save array: " << arr << '[' << index << "] = " << value; mpss; }
+#endif
 }
 
 void read_arr(mcode &c)
-{
+{	// dst IRcode arr idx
 	auto arr = c.num1, 
 		index = c.num2, 
 		dst = c.rst;
@@ -503,39 +552,190 @@ void read_arr(mcode &c)
 	else
 		assert(arr_iden.cls == ST::CHA_CLS);	
 	auto rdreg = regSeek(dst, false);
-	// local int idx-unknown:
-	//		sll $t9 reg_index 2
-	//		addi $t9 $t9 arr_iden.addr
-	//		sub $t9 $sp $t9
-	//		lw rdreg $t9
-	// local char unknown:
-	//		addi $t9 reg_index arr_iden.addr
-	//		sub $t9 $sp $t9
-	//		lbu rdreg $t9
-	// local known:
-	// lw/lbu rdreg -(arr_iden.addr + idx * elmt_size) $sp
-
-	// global int unknown:
-	//		sll $t9 reg_index 2
-	//		lw rdreg arr($t9)
-	// global char unknown:
-	//		lbu rdreg arr(reg_index)
-	// global known:
-	// lw/lbu rdreg arr+ idx*elmt_size
-	if (const_index)
+	if (local)
 	{
-
+		/* local int idx-unknown:
+		//		sll $t9 reg_index 2
+		//		addi $t9 $t9 arr_iden.addr
+		//		sub $t9 $sp $t9
+		//		lw rdreg $t9
+		// local char unknown:
+		//		addi $t9 reg_index arr_iden.addr
+		//		sub $t9 $sp $t9
+		//		lbu rdreg $t9
+		// local known:
+		// lw/lbu rdreg -(arr_iden.addr + idx * elmt_size) $sp */
+		SSSS;
+		if (const_index)
+		{
+			ss << (arr_iden.cls == ST::INT_CLS ? LW : LBU)
+				<< " " << rdreg << " -" << arr_iden.addr + idx * elmt_size << "(" << SP << ")";
+			mpss;
+		}
+		else
+		{
+			auto reg_index = regSeek(index, true);
+			if (arr_iden.cls == ST::INT_CLS)
+			{
+				ss << SLL << " " << T9 << " " << reg_index << 2; mpss; ss.str("");
+				ss << ADDI << " " << T9 << " " << T9 << " " << arr_iden.addr; mpss; ss.str("");
+				ss << SUB << ' ' << T9 << ' ' << SP << ' ' << T9; mpss; ss.str("");
+				ss << LW << ' ' << rdreg << ' ' << T9; mpss; ss.str("");
+			}
+			else
+			{
+				ss << ADDI << " " << T9 << " " << reg_index << " " << arr_iden.addr; mpss; ss.str("");
+				ss << SUB << ' ' << T9 << ' ' << SP << ' ' << T9; mpss; ss.str("");
+				ss << LBU << ' ' << rdreg << ' ' << T9; mpss; ss.str("");
+			}
+		}
 	}
 	else
 	{
-
+		/* global int unknown:
+		//		sll $t9 reg_index 2
+		//		lw rdreg arr($t9)
+		// global char unknown:
+		//		lbu rdreg arr(reg_index)
+		// global known:
+		// lw/lbu rdreg arr+ idx*elmt_size */
+		SSSS;
+		if (const_index)
+		{
+			ss << (arr_iden.cls == ST::INT_CLS ? LW : LBU)
+				<< " " << rdreg << " -" << mark2global_IDEN(arr) << '+' << idx * elmt_size;
+			mpss;
+		}
+		else
+		{
+			auto reg_index = regSeek(index, true);
+			if (arr_iden.cls == ST::INT_CLS)
+			{
+				ss << SLL << " " << T9 << " " << reg_index << 2; mpss; ss.str("");
+				ss << LW << ' ' << rdreg << ' ' << mark2global_IDEN(arr) << '(' << T9 << ')'; mpss; ss.str("");
+			}
+			else
+				ss << LBU << ' ' << rdreg << ' ' << mark2global_IDEN(arr) << '(' << reg_index << ')'; mpss;
+		}
 	}
-	// lw rdreg $t9
+#if COMMENT
+	{SSSS; ss << "read array: " << dst << " = " << arr << '[' << index << ']'; mpss; }
+#endif
 }
 
-void calc(mcode &c)
+void calc(mcode &c, ociter o)
 {
-
+	auto r1 = c.num1, r2 = c.num2;
+	int v1, v2;
+	bool r1const = opr_is_const(r1, v1);
+	bool r2const = opr_is_const(r2, v2);
+	std::string r1reg, r2reg; SSSS;
+	if (c.rst == RETV0)		// when optimize, don't touch anything about RETV0, 
+	{
+		if (r1const)	// li $v0 v1
+			ss << LI << ' ' << V0 << ' ' << v1;
+		else
+		{	//move $v0 r1reg
+			r1reg = regSeek(r1, true);
+			ss << MOVE << ' ' << V0 << ' ' << r1reg;
+			futureUseChk(r1, r1reg, o);
+		}
+		mpss;
+		return;
+	}
+	auto rdreg = regSeek(c.rst, false);
+	if (r1 == RETV0)
+	{
+		ss << MOVE << ' ' << rdreg << ' ' << V0;
+		mpss;
+		return;
+	}
+	if (r1const & r2const)
+	{
+		int val =
+			c.op == OP::ADD ? v1 + v2 :
+			c.op == OP::SUB ? v1 - v2 :
+			c.op == OP::MUL ? v1 * v2 :
+			c.op == OP::DIV ? v1 / v2 : 0;
+		if (val == 0)
+			ss << ADD << ' ' << rdreg << ' ' << ZERO << ' ' << ZERO;
+		else
+			ss << LI << ' ' << rdreg << ' ' << val;
+		mpss;
+	}
+	else if (!r1const & !r2const)
+	{
+		
+		r1reg = regSeek(r1, true);
+		r2reg = regSeek(r2, true);
+		auto o =
+			c.op == OP::ADD ? ADD :
+			c.op == OP::SUB ? SUB :
+			c.op == OP::MUL ? MUL : DIV;
+		ss << o << ' ' << rdreg << ' ' << r1reg << ' ' << r2reg; mpss;
+	}
+	else if (r1const & !r2const)
+	{
+		r2reg = regSeek(r2, true);
+		if (v1 == 0)
+		{
+			if (c.op == OP::ADD)
+				ss << MOVE << ' ' << rdreg << ' ' << r2reg;
+			else if (c.op == OP::SUB)
+				ss << SUB << ' ' << rdreg << ' ' << ZERO << ' ' << r2reg;
+			else if (c.op == OP::MUL || c.op == OP::DIV)
+				ss << MOVE << ' ' << rdreg << ' ' << ZERO;
+			else { assert(false); }
+			mpss;
+		}
+		else
+		{
+			if (c.op == OP::ADD)
+				ss << ADD << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
+			else if (c.op == OP::SUB)
+			{
+				ss << SUB << ' ' << T9 << ' ' << r2reg << ' ' << v1; mpss; ss.str("");
+				ss << SUB << ' ' << rdreg << ' ' << ZERO << ' ' << T9;
+			}
+			else if (c.op == OP::MUL)
+			{
+				ss << MUL << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
+			}
+			else if (c.op == OP::DIV)
+			{
+				ss << LI << ' ' << T9 << ' ' << v1; mpss; ss.str("");
+				ss << DIV << ' ' << rdreg << ' ' << T9 << ' ' << r2reg;
+			}
+			else { assert(false); }
+			mpss;
+		}
+	}
+	else if (!r1const & r2const)
+	{
+		r1reg = regSeek(r1, true);
+		if (v2 == 0)
+		{
+			if (c.op == OP::ADD || c.op == OP::SUB)
+				ss << MOVE << ' ' << rdreg << ' ' << r1reg;
+			else if (c.op == OP::MUL || c.op == OP::DIV)
+				ss << MOVE << ' ' << rdreg << ' ' << ZERO;
+			else { assert(false); }
+			mpss;
+		}
+		else
+		{
+			auto o =
+				c.op == OP::ADD ? ADD :
+				c.op == OP::SUB ? SUB :
+				c.op == OP::MUL ? MUL : DIV;
+			ss << o << ' ' << rdreg << ' ' << r1reg << ' ' << v2; mpss;
+		}
+	}
+	else { assert(false); }
+	if (!r1const)
+		futureUseChk(c.num1, r1reg, o);
+	if (!r2const)
+		futureUseChk(c.num2, r2reg, o);
 }
 
 void cmp(mcode &c, ociter o)
@@ -637,9 +837,9 @@ void cmp(mcode &c, ociter o)
 	}
 	mpss;
 	if(!r1const)
-		futureUseChk(c.num1, r1reg, o);
+		futureUseChk(r1, r1reg, o);
 	if(!r2const)
-		futureUseChk(c.num2, r2reg, o);
+		futureUseChk(r2, r2reg, o);
 }
 
 void scan(mcode &c)
@@ -678,6 +878,9 @@ void OC::Med2Mips()
 			i->op == OP::GRT || i->op == OP::GREQ ||
 			i->op == OP::LES || i->op == OP::LESEQ)
 			cmp(*i, i);
+		else if (i->op == OP::ADD || i->op == OP::SUB ||
+			i->op == OP::MUL || i->op == OP::DIV)
+			calc(*i, i);
 	}
 	mpb("exit:");
 	bool putTab = false;
