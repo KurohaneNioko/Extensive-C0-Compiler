@@ -214,6 +214,7 @@ int Lex::getsym()
 			{
 				if (c == '"')
 				{
+					Lex::curElmt += "\\n";
 					Lex::curElmt += c;
 				}
 				break;

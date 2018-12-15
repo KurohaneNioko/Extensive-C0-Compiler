@@ -2,6 +2,7 @@
 
 #if DEBUG
 #define COMMENT 1
+#define MIPS_DEBUG 0
 #else
 #define COMMENT 0
 #endif
@@ -58,8 +59,6 @@ typedef std::vector<mcode>::iterator ociter;
 #define SSSS std::stringstream ss
 // SSSS.Gridman !
 #define mpss mpb(ss.str())
-#define Down_Loop for (auto i = o + 1; i != Med::itmd_code.end(); i++)
-
 int data_head = data_base;	// next data at
 std::map<std::string, int> local_var_size;
 std::string curfunc = "";
@@ -155,9 +154,17 @@ int nextRegIndex(int i)
 }
 void modifyRegInfo(std::string &var, int &i)
 {
-	curRI.CLK_use[i] = true;
-	curRI.ts_use[i] = true;
-	curRI.ts_content[i] = var;
+	if (*(var.begin()) == '#')
+	{
+		curRI.CLK_use[i] = true;
+		curRI.ts_use[i] = true;
+		curRI.ts_content[i] = var;
+	}
+	else
+	{
+		curRI.CLK_use[i] = false;
+		curRI.ts_use[i] = false;
+	}
 	curRI.CLK_ptr = nextRegIndex(i);
 }
 
@@ -207,12 +214,12 @@ std::string regAppoint(std::string &var)
 	if (!unuse_reg.empty())
 	{
 		auto i = *unuse_reg.begin();
-		modifyRegInfo(var, i);
 #if COMMENT
 		SSSS;
 		ss << "# " << index2tempReg(i) << ": " << curRI.ts_content[i] << " -> " << var;
 		mpss;
 #endif
+		modifyRegInfo(var, i);
 		return index2tempReg(i);
 	}
 
@@ -244,13 +251,13 @@ std::string regAppoint(std::string &var)
 			<< reg << " " << mark2global_IDEN(iden);
 	}
 	mpss;
-	modifyRegInfo(var, i);
 #if COMMENT
 	ss.str("");
 	ss << "# MemAccess " << index2tempReg(i) << ": "
 		<< curRI.ts_content[i] << " -> " << var;
 	mpss;
 #endif
+	modifyRegInfo(var, i);
 	return reg;
 }
 
@@ -292,7 +299,7 @@ std::string regSeek(std::string &v, bool is_rsrt)
 	}
 	else
 	{	//global var
-		std::cout << v << " " << curfunc << std::endl;
+		//std::cout << v << " " << curfunc << std::endl;
 		assert(ST::global_sym.count(v) > 0);
 		varinfo t = ST::global_sym[v];
 		ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
@@ -304,7 +311,8 @@ std::string regSeek(std::string &v, bool is_rsrt)
 
 void futureUseChk(std::string opr, std::string reg, ociter o)
 {
-	Down_Loop
+	auto i = o + 1;
+	for (; i != Med::itmd_code.end(); i++)
 	{
 		if ((*i).op == OP::EXIT || (*i).op == OP::FUNC_END || (*i).rst == opr)
 		{
@@ -312,8 +320,14 @@ void futureUseChk(std::string opr, std::string reg, ociter o)
 			curRI.ts_use[idx] = false;
 			return;
 		}
-		if ((*i).num1 == opr || (*i).num2 == opr)
+		if ((*i).num1 == opr || (*i).num2 == opr
+			|| ((*i).op == OP::SCAN && (*i).num1 == opr))
 			return;
+	}
+	if (i == Med::itmd_code.end())
+	{
+		int idx = reg2Index(reg);
+		curRI.ts_use[idx] = false;
 	}
 }
 
@@ -336,6 +350,29 @@ bool opr_is_const(std::string opr, int &rst)
 	}
 	rst = r;
 	return true;
+}
+
+void write2RAM(std::string iden, std::string reg)
+{
+	if (*(iden.begin()) != '#')
+	{
+		SSSS;
+		if (curRI.symtab.count(iden) > 0)
+		{	// local var
+			varinfo t = curRI.symtab[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " -" << (t.addr) << " (" << SP << ")";
+		}
+		else
+		{	//global var
+			//std::cout << v << " " << curfunc << std::endl;
+			assert(ST::global_sym.count(iden) > 0);
+			varinfo t = ST::global_sym[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " " << mark2global_IDEN(iden);
+		}
+		mpss;
+	}
 }
 
 /* add _ before every global name to prevent iden like jal*/
@@ -479,11 +516,11 @@ void func_end_return(mcode &c)
 	{SSSS; ss << JR << " " << RA; mpss; }
 }
 
-void save_arr(mcode &c)
+void save_arr(mcode &c, ociter o)
 {	// arr IRcode index val
 	auto arr = c.rst,
 		index = c.num1,
-		value = c.num2;
+		value = c.num2; SSSS;
 	varinfo arr_iden; bool local = false; int idx, val;
 	bool const_index = opr_is_const(index, idx);
 	bool const_value = opr_is_const(value, val);
@@ -498,43 +535,88 @@ void save_arr(mcode &c)
 		arr_iden = ST::global_sym[arr];
 	}
 	assert(arr_iden.type == ST::ARRAY_TYP);
-	int elmt_size = 1;
+	int elmt_size = 1; std::string SAVEcode = SB;
 	if (arr_iden.cls == ST::INT_CLS)
+	{
 		elmt_size = size_of_reg;
+		SAVEcode = SW;
+	}
 	else
 		assert(arr_iden.cls == ST::CHA_CLS);
-	
-	// local const_index const_value
-	//	t t t: li $t9 val, sw/sb $t9 -(idx*size+addr)($sp)
-	//  t t f: sw/sb valreg -idx*size+addr($sp)
-	//  t f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb $t9 $t8
-	//  t f f: sll $t8 idxreg log(2)(size), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb valreg $t8
 
-	//  f t t: li $t9 val, sw/sb $t9 mark(arr)+idx*size
-	//  f t f: sw/sb valreg mark(arr)+idx*size
-	//  f f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), sw/sb $t9 mark(arr)($t8)
-	//  f f f: sll $t8 idxreg log(2)(elmtsize) sw/sb valreg mark(arr)($t8)
-	
+	int cases = (local ? 4 : 0) + (const_index ? 2 : 0) + (const_value ? 1 : 0);
+	// local const_index const_value
+	std::string valreg, idxreg;
+	if (const_value)
+	{
+		ss << LI << ' ' << T9 << ' ' << val; mpss; ss.str("");
+		valreg = T9;
+	}
+	else
+		valreg = regSeek(value, true);
 	if (local)
 	{
-		
+		//	t t t: li $t9 val, sw/sb $t9 -(idx*size+addr)($sp)
+		//  t t f: sw/sb valreg -idx*size+addr($sp)
+		//  t f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb $t9 $t8
+		//  t f f: sll $t8 idxreg log(2)(size), addi $t8 $t8 addr, sub $t8 $sp $t8, sw/sb valreg ($t8)
+		if (const_index)
+		{
+			ss << SAVEcode << ' ' << valreg << ' ' 
+				<< -1 * (idx*elmt_size + arr_iden.addr) << " (" << SP << ")"; mpss;
+		}
+		else 
+		{
+			idxreg = regSeek(index, true);
+			if (elmt_size > 1)
+			{
+				ss << SLL << ' ' << T8 << ' ' << idxreg << int(log2(elmt_size)); mpss; ss.str("");
+				ss << ADDI << ' ' << T8 << ' ' << T8 << ' ' << arr_iden.addr; mpss; ss.str("");
+			}
+			else
+				ss << ADDI << ' ' << T8 << ' ' << idxreg << ' ' << arr_iden.addr; mpss; ss.str("");
+			ss << SUB << ' ' << T8 << ' ' << SP << ' ' << T8; mpss; ss.str("");
+			ss << SAVEcode << ' ' << valreg << ' ' << '(' << T8 << ')'; mpss; ss.str("");
+		}
 	}
 	else
 	{
-		
+		//  f t t: li $t9 val, sw/sb $t9 mark(arr)+idx*size
+		//  f t f: sw/sb valreg mark(arr)+idx*size
+		//  f f t: li $t9 val, sll $t8 idxreg log(2)(elmtsize), sw/sb $t9 mark(arr)($t8)
+		//  f f f: sll $t8 idxreg log(2)(elmtsize) sw/sb valreg mark(arr)($t8)
+		if (const_index)
+		{
+			ss << SAVEcode << ' ' << valreg << ' ' << mark2global_IDEN(arr) << '+' << idx * elmt_size; mpss;
+		}
+		else
+		{
+			idxreg = regSeek(index, true);
+			if (elmt_size > 1)
+			{
+				ss << SLL << ' ' << T8 << ' ' << idxreg << ' ' << int(log2(elmt_size)); mpss; ss.str("");
+			}
+			ss << SAVEcode << ' ' << valreg << ' ' << mark2global_IDEN(arr)
+				<< " (" << (elmt_size > 1 ? T8 : idxreg) << ")"; mpss; ss.str("");
+		}
 	}
+	if (!const_index)
+		futureUseChk(index, idxreg, o);
+	if (!const_value)
+		futureUseChk(value, valreg, o);
 #if COMMENT
-	{SSSS; ss << "save array: " << arr << '[' << index << "] = " << value; mpss; }
+	{SSSS; ss << "# save array: " << arr << '[' << index << "] = " << value; mpss; }
 #endif
 }
 
-void read_arr(mcode &c)
+void read_arr(mcode &c, ociter o)
 {	// dst IRcode arr idx
 	auto arr = c.num1, 
 		index = c.num2, 
 		dst = c.rst;
 	varinfo arr_iden; bool local = false; int idx;
 	bool const_index = opr_is_const(index, idx);
+	std::string reg_index;
 	if (curRI.symtab.count(arr) > 0)
 	{
 		arr_iden = curRI.symtab[arr];
@@ -558,11 +640,11 @@ void read_arr(mcode &c)
 		//		sll $t9 reg_index 2
 		//		addi $t9 $t9 arr_iden.addr
 		//		sub $t9 $sp $t9
-		//		lw rdreg $t9
+		//		lw rdreg ($t9)
 		// local char unknown:
 		//		addi $t9 reg_index arr_iden.addr
 		//		sub $t9 $sp $t9
-		//		lbu rdreg $t9
+		//		lbu rdreg ($t9)
 		// local known:
 		// lw/lbu rdreg -(arr_iden.addr + idx * elmt_size) $sp */
 		SSSS;
@@ -574,19 +656,19 @@ void read_arr(mcode &c)
 		}
 		else
 		{
-			auto reg_index = regSeek(index, true);
+			reg_index = regSeek(index, true);
 			if (arr_iden.cls == ST::INT_CLS)
 			{
-				ss << SLL << " " << T9 << " " << reg_index << 2; mpss; ss.str("");
+				ss << SLL << " " << T9 << " " << reg_index << ' ' << 2; mpss; ss.str("");
 				ss << ADDI << " " << T9 << " " << T9 << " " << arr_iden.addr; mpss; ss.str("");
 				ss << SUB << ' ' << T9 << ' ' << SP << ' ' << T9; mpss; ss.str("");
-				ss << LW << ' ' << rdreg << ' ' << T9; mpss; ss.str("");
+				ss << LW << ' ' << rdreg << ' ' << '(' << T9 << ')'; mpss; ss.str("");
 			}
 			else
 			{
 				ss << ADDI << " " << T9 << " " << reg_index << " " << arr_iden.addr; mpss; ss.str("");
 				ss << SUB << ' ' << T9 << ' ' << SP << ' ' << T9; mpss; ss.str("");
-				ss << LBU << ' ' << rdreg << ' ' << T9; mpss; ss.str("");
+				ss << LBU << ' ' << rdreg << ' ' << '(' << T9 << ')'; mpss; ss.str("");
 			}
 		}
 	}
@@ -608,7 +690,7 @@ void read_arr(mcode &c)
 		}
 		else
 		{
-			auto reg_index = regSeek(index, true);
+			reg_index = regSeek(index, true);
 			if (arr_iden.cls == ST::INT_CLS)
 			{
 				ss << SLL << " " << T9 << " " << reg_index << 2; mpss; ss.str("");
@@ -618,8 +700,11 @@ void read_arr(mcode &c)
 				ss << LBU << ' ' << rdreg << ' ' << mark2global_IDEN(arr) << '(' << reg_index << ')'; mpss;
 		}
 	}
+	write2RAM(c.rst, rdreg);
+	if (!const_index)
+		futureUseChk(index, reg_index, o);
 #if COMMENT
-	{SSSS; ss << "read array: " << dst << " = " << arr << '[' << index << ']'; mpss; }
+	{SSSS; ss << "# read array: " << dst << " = " << arr << '[' << index << ']'; mpss; }
 #endif
 }
 
@@ -732,6 +817,7 @@ void calc(mcode &c, ociter o)
 		}
 	}
 	else { assert(false); }
+	write2RAM(c.rst, rdreg);
 	if (!r1const)
 		futureUseChk(c.num1, r1reg, o);
 	if (!r2const)
@@ -844,12 +930,52 @@ void cmp(mcode &c, ociter o)
 
 void scan(mcode &c)
 {
-
+	SSSS;
+	if (c.rst == "int")
+		ss << LI << " " << V0 << ' ' << 5; 
+	else
+	{
+		assert(c.rst == "char");
+		ss << LI << " " << V0 << ' ' << 12;
+	}
+	mpss; ss.str("");
+	ss << "syscall"; mpss; ss.str("");
+	auto reg = regSeek(c.num1, false);
+	ss << MOVE << ' ' << reg << ' ' << V0; mpss;
+	write2RAM(c.num1, reg);
+#if COMMENT
+	{SSSS; ss << "# read " << c.rst << " " << c.num1; mpss; }
+#endif // COMMENT
 }
 
-void print(mcode &c)
+void print(mcode &c, ociter o)
 {
-
+	SSSS;
+	if (c.rst == "int" || c.rst == "char")
+	{	
+		int val; bool is_const;
+		ss << LI << " " << V0 << ' ' << (c.rst=="int"?1:11); mpss; ss.str("");
+		is_const = opr_is_const(c.num1, val);
+		if (is_const)
+			ss << LI << ' ' << A0 << ' ' << val;
+		else
+		{
+			auto reg = regSeek(c.num1, true);
+			ss << MOVE << ' ' << A0 << ' ' << reg;
+			futureUseChk(c.num1, reg, o);
+		}
+	}
+	else
+	{
+		assert(c.rst == "str");
+		ss << LI << " " << V0 << ' ' << 4; mpss; ss.str("");
+		ss << LA << ' ' << A0 << ' ' << mark2string(c.num1);
+	}
+	mpss; ss.str("");
+	ss << "syscall"; mpss; ss.str("");
+#if COMMENT
+	{SSSS; ss << "# print " << c.rst << " " << c.num1; mpss; }
+#endif // COMMENT
 }
 
 void OC::Med2Mips()
@@ -858,6 +984,7 @@ void OC::Med2Mips()
 	assignAddr();
 	mpb(".text");
 	mpb(".globl main");
+	auto m = 0;
 	for (auto i = Med::itmd_code.begin(); i != Med::itmd_code.end(); i++)
 	{
 		if (i->op == OP::FUNC_BEGIN)
@@ -881,6 +1008,31 @@ void OC::Med2Mips()
 		else if (i->op == OP::ADD || i->op == OP::SUB ||
 			i->op == OP::MUL || i->op == OP::DIV)
 			calc(*i, i);
+		else if (i->op == OP::SAVE_ARR)
+			save_arr(*i, i);
+		else if (i->op == OP::READ_ARR)
+			read_arr(*i, i);
+		else if (i->op == OP::SCAN)
+			scan(*i);
+		else if (i->op == OP::PRINT)
+			print(*i, i);
+		else
+			assert(false);
+#if MIPS_DEBUG
+		bool putTab = false;
+		for (; m != mips.size(); m++)
+		{
+			if (mips[m] == ".text")
+			{
+				putTab = true;
+				std::cout << mips[m] << std::endl;
+				continue;
+			}
+			if (putTab && mips[m] != ".globl main" && mips[m].find(':') == -1)
+				std::cout << '\t';
+			std::cout << mips[m] << std::endl;
+		}
+#endif
 	}
 	mpb("exit:");
 	bool putTab = false;

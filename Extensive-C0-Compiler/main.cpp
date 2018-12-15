@@ -24,7 +24,7 @@ int main(int argc, char** argv)
 	Med::printIMC();
 	OC::Med2Mips();
 	std::cout << std::endl;
-	ST::printSym();
+	//ST::printSym();
 	if (Lex::code_file.is_open())
 	{
 		Lex::code_file.close();
