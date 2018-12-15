@@ -13,7 +13,7 @@ const std::string LBU = "lbu";
 const std::string LI = "li";
 const std::string ADD = "add";
 const std::string ADDI = "addi";
-const std::string SUBI = "subi";
+//const std::string SUBI = "subi";
 const std::string SUB = "sub";
 const std::string BEQ = "beq";
 const std::string BNE = "bne";
@@ -30,19 +30,19 @@ const std::string JAL = "jal";
 const std::string JR = "jr";
 const std::string MUL = "mul";
 const std::string DIV = "div";
-const std::string MFLO = "mflo";
+//const std::string MFLO = "mflo";
 const std::string SYSCALL = "syscall";
 const std::string LA = "la";
 const std::string SLL = "sll";
 const std::string MOVE = "move";
-const std::string ADDU = "addu";
+//const std::string ADDU = "addu";
 
 const std::string ZERO = "$0";
 const std::string V0 = "$v0";
 const std::string A0 = "$a0";
-const std::string A1 = "$a1";
-const std::string A2 = "$a2";
-const std::string A3 = "$a3";
+//const std::string A1 = "$a1";
+//const std::string A2 = "$a2";
+//const std::string A3 = "$a3";
 
 const std::string T8 = "$t8";
 const std::string T9 = "$t9";
@@ -154,17 +154,9 @@ int nextRegIndex(int i)
 }
 void modifyRegInfo(std::string &var, int &i)
 {
-	if (*(var.begin()) == '#')
-	{
-		curRI.CLK_use[i] = true;
-		curRI.ts_use[i] = true;
-		curRI.ts_content[i] = var;
-	}
-	else
-	{
-		curRI.CLK_use[i] = false;
-		curRI.ts_use[i] = false;
-	}
+	curRI.CLK_use[i] = true;
+	curRI.ts_use[i] = true;
+	curRI.ts_content[i] = var;
 	curRI.CLK_ptr = nextRegIndex(i);
 }
 
@@ -311,6 +303,13 @@ std::string regSeek(std::string &v, bool is_rsrt)
 
 void futureUseChk(std::string opr, std::string reg, ociter o)
 {
+	if (*opr.begin() != '#')
+	{
+		int idx = reg2Index(reg);
+		curRI.ts_use[idx] = false;
+		curRI.ts_content[idx] = "";
+		return;
+	}
 	auto i = o + 1;
 	for (; i != Med::itmd_code.end(); i++)
 	{
@@ -318,6 +317,7 @@ void futureUseChk(std::string opr, std::string reg, ociter o)
 		{
 			int idx = reg2Index(reg);
 			curRI.ts_use[idx] = false;
+			curRI.ts_content[idx] = "";
 			return;
 		}
 		if ((*i).num1 == opr || (*i).num2 == opr
