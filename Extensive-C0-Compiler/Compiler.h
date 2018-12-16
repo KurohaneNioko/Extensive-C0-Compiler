@@ -1,5 +1,5 @@
 #pragma once
-#define DEBUG 1
+
 #include<iostream>
 #include<iomanip>
 #include<fstream>
@@ -9,6 +9,9 @@
 #include<string>
 #include<map>
 #include<set>
+
+#define DEBUG 1
+#define INCLASS 0
 
 constexpr auto data_seg_base = 0x10000000;
 constexpr auto data_base = 0x10010000;		// string .etc starts from here

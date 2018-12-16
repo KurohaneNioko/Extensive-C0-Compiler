@@ -36,7 +36,7 @@ namespace ST {	//Symbol Table
 
 	void addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line);
 	int addStr(std::string &s);
-	void printSym();
+	void printSym(std::ofstream&o);
 
 }
 

@@ -21,6 +21,6 @@ struct runinfo
 
 namespace OC
 {
-	void Med2Mips();
+	void Med2Mips(std::string mipsfile);
 }
 

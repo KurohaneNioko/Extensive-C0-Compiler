@@ -337,7 +337,7 @@ void value_param(const varinfo *func_name)
 		std::string temp_param = std::string();
 		int ret_cls;
 		expression(ret_cls, temp_param);
-		Med::addIMC(zero, OP::PUSH_PARA, temp_param, zero);
+		Med::addIMC(zero, OP::PUSH_PARA, temp_param, std::to_string(para_count));
 		//find the info of para
 		auto *para = ST::lookup_para(func_symtab, para_count);
 		if (para == nullptr)

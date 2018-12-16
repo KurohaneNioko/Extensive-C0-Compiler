@@ -79,42 +79,16 @@ length -> (INT|CHA -> 1) (ARRAY -> 1,2,3,4...)
 字符串如果出现 \ 那么要把它变成 \\
 不要求检查函数的每个分支都有return
 
-【ok】_int
-【ok】_single_char
-【ok】const_def
-【ok】continue_var_def
-【ok】var_def_complex
-
-【ok】value_para
-【ok】factor
-【ok】term
-【ok】expression
-【ok】condition
-【ok】if_sent
-【ok】scanf_sent
-【ok】printf_sent
-【ok】return_sent
-【ok】while_sent
-for_sent
-【ok】sent
-【ok】sent_list
-【ok】complex_sent
-
-【ok】param_list
-【ok】param_func_def
-【ok】no_param_func_def
-【ok】main_piece
-
-
-intermediate code
-
 FUNC_BEGIN <name>
 + - * / rst op1 op2 
-
 
 注意：临时变量移动用的都是add 0 
 优化：基本块内公共子表达式删除（必），定义使用链（选）
 注意func后如有返回值 马上有RET_V0的移动
+坑1：由于分支跳转的存在，不能确定某个真变量的寄存器的确定值
+因此每次都要重新读（基本块内是可以确定的）（所以要染色法啊）
+坑2：函数调用时，参数计数器不能直接搞，要用符号表
+坑3：n=n+1, n = a[n], a[n]=n, 要先获取右边的，再获取左边的
 
 建议：小作业用手工编程做小文法，大作业用工具自动进行词法/语法分析，
 还可以用编译程序的自展性，团队从汇编语言开始做出一个有较多特性的高级语言的编译器。

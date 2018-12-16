@@ -67,6 +67,6 @@ namespace Med
 
 	bool is_operand_num(std::string &s, int &value);
 	void addIMC(std::string rst, const std::string &op, std::string op1, std::string op2);
-	void printIMC();
+	void printIMC(std::ofstream&o);
 
 }

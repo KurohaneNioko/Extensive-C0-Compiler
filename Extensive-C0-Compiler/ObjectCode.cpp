@@ -64,10 +64,11 @@ std::map<std::string, int> local_var_size;
 std::string curfunc = "";
 #define FrameSize (curfunc == "main" ? local_var_size[curfunc] \
 					: (local_var_size[curfunc] \
-					+ size_of_reg * (reg_t_max + reg_s_max + 2)))
+					+ size_of_reg * (reg_t_max + reg_s_max + 1)))
 // 2 : ra sp, if main with argv, FS of main should add params
+// change 2 to 1: no need save SP
 #define FS FrameSize
-int pushcount = 0;
+//int pushcount = 0;
 runinfo curRI;
 
 void assignAddr()
@@ -75,12 +76,15 @@ void assignAddr()
 	for (auto i = ST::func_sym.begin(); i != ST::func_sym.end(); i++)
 	{
 		int addr = 0;
-		for (auto j = i->second.begin(); j != i->second.end(); j++)
-			if (j->second.type == ST::PARAM_TYP)
-			{
-				j->second.addr = addr;
-				addr += size_of_reg;
-			}
+		for (auto param_count = 0; param_count < ST::global_sym[i->first].length; param_count++)
+		{
+			for (auto j = i->second.begin(); j != i->second.end(); j++)
+				if (j->second.type == ST::PARAM_TYP && j->second.length == param_count)
+				{
+					j->second.addr = addr;
+					addr += size_of_reg;
+				}
+		}
 		for (auto j = i->second.begin(); j != i->second.end(); j++)
 			if (j->second.cls == ST::CHA_CLS && j->second.type != ST::PARAM_TYP)
 			{
@@ -372,6 +376,8 @@ void write2RAM(std::string iden, std::string reg)
 				<< reg << " " << mark2global_IDEN(iden);
 		}
 		mpss;
+		curRI.ts_content[reg2Index(reg)] = "";
+		curRI.ts_use[reg2Index(reg)] = false;
 	}
 }
 
@@ -446,7 +452,7 @@ void _goto(mcode &c)
 
 void push(mcode &c, ociter o)
 {
-	int offset = FS + pushcount * size_of_reg;
+	int offset = FS + std::stoi(c.num2) * size_of_reg;
 	int v;
 	bool para_const = opr_is_const(c.num1, v);
 	std::string save_reg; SSSS;
@@ -464,7 +470,7 @@ void push(mcode &c, ociter o)
 	}
 	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
 	mpss;
-	++pushcount;
+	//++pushcount;
 #if COMMENT
 	mpb("# push param: " + c.num1);
 #endif // COMMENT
@@ -475,7 +481,17 @@ void call(mcode &c)
 {
 	assert(c.op == OP::CALL);
 	mpb("# save start");
-	int stack_ptr = FS + pushcount * size_of_reg;
+	int stack_ptr = FS + local_var_size[c.rst];
+	/*	para |	FS = caller Frame size				para + local|	main Frame
+		local|										-------------
+		t0-s8|	current func's caller save them		para
+		ra	 |	caller Frame						local
+		------										t0-s8
+		para |	callee Frame						ra
+		local|										-------------
+		t0-s8|	callee's caller save them			
+		ra   |
+	*/
 	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
 		if(curRI.ts_use[i])
 		{
@@ -485,17 +501,19 @@ void call(mcode &c)
 			mpss;
 			stack_ptr += size_of_reg;
 		}
+
+	stack_ptr = FS + local_var_size[c.rst] + size_of_reg * (reg_t_max + reg_s_max);
 	{ SSSS; ss << SW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
 	stack_ptr += size_of_reg;
-	{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	//{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
 	{ SSSS; ss << ADDI << " " << SP << " " << SP << " " << (-1 * FS); mpss; }
 	{ SSSS; ss << JAL << " " << mark2func(c.rst); mpss; }
 	mpb("# recover start");
 	{SSSS; ss << ADDI << " " << SP << " " << SP << " " << FS; mpss; }
 	stack_ptr -= size_of_reg;
 	{ SSSS; ss << LW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
-	stack_ptr -= size_of_reg;
-	for (auto i = reg_t_max + reg_s_max - 1; i >= 0; i--)
+	stack_ptr = FS + local_var_size[c.rst];
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
 	{
 		if (curRI.ts_use[i])
 		{
@@ -503,11 +521,11 @@ void call(mcode &c)
 			ss << LW << " " << index2tempReg(i)
 				<< " -" << stack_ptr << " (" << SP << ")";
 			mpss;
-			stack_ptr -= size_of_reg;
+			stack_ptr += size_of_reg;
 		}
 	}
 	mpb("# recover end");
-	pushcount = 0;	// ATTENTION
+	//pushcount = 0;	// ATTENTION
 }
 
 void func_end_return(mcode &c)
@@ -570,7 +588,7 @@ void save_arr(mcode &c, ociter o)
 			idxreg = regSeek(index, true);
 			if (elmt_size > 1)
 			{
-				ss << SLL << ' ' << T8 << ' ' << idxreg << int(log2(elmt_size)); mpss; ss.str("");
+				ss << SLL << ' ' << T8 << ' ' << idxreg << ' ' << int(log2(elmt_size)); mpss; ss.str("");
 				ss << ADDI << ' ' << T8 << ' ' << T8 << ' ' << arr_iden.addr; mpss; ss.str("");
 			}
 			else
@@ -633,7 +651,7 @@ void read_arr(mcode &c, ociter o)
 		elmt_size = size_of_reg;
 	else
 		assert(arr_iden.cls == ST::CHA_CLS);	
-	auto rdreg = regSeek(dst, false);
+	std::string rdreg;
 	if (local)
 	{
 		/* local int idx-unknown:
@@ -650,6 +668,7 @@ void read_arr(mcode &c, ociter o)
 		SSSS;
 		if (const_index)
 		{
+			rdreg = regSeek(dst, false);
 			ss << (arr_iden.cls == ST::INT_CLS ? LW : LBU)
 				<< " " << rdreg << " -" << arr_iden.addr + idx * elmt_size << "(" << SP << ")";
 			mpss;
@@ -657,6 +676,7 @@ void read_arr(mcode &c, ociter o)
 		else
 		{
 			reg_index = regSeek(index, true);
+			rdreg = regSeek(dst, false);
 			if (arr_iden.cls == ST::INT_CLS)
 			{
 				ss << SLL << " " << T9 << " " << reg_index << ' ' << 2; mpss; ss.str("");
@@ -684,6 +704,7 @@ void read_arr(mcode &c, ociter o)
 		SSSS;
 		if (const_index)
 		{
+			rdreg = regSeek(dst, false);
 			ss << (arr_iden.cls == ST::INT_CLS ? LW : LBU)
 				<< " " << rdreg << " -" << mark2global_IDEN(arr) << '+' << idx * elmt_size;
 			mpss;
@@ -691,9 +712,10 @@ void read_arr(mcode &c, ociter o)
 		else
 		{
 			reg_index = regSeek(index, true);
+			rdreg = regSeek(dst, false);
 			if (arr_iden.cls == ST::INT_CLS)
 			{
-				ss << SLL << " " << T9 << " " << reg_index << 2; mpss; ss.str("");
+				ss << SLL << " " << T9 << " " << reg_index << ' '<< 2; mpss; ss.str("");
 				ss << LW << ' ' << rdreg << ' ' << mark2global_IDEN(arr) << '(' << T9 << ')'; mpss; ss.str("");
 			}
 			else
@@ -728,9 +750,10 @@ void calc(mcode &c, ociter o)
 		mpss;
 		return;
 	}
-	auto rdreg = regSeek(c.rst, false);
+	std::string rdreg;
 	if (r1 == RETV0)
 	{
+		rdreg = regSeek(c.rst, false);
 		ss << MOVE << ' ' << rdreg << ' ' << V0;
 		mpss;
 		return;
@@ -742,6 +765,7 @@ void calc(mcode &c, ociter o)
 			c.op == OP::SUB ? v1 - v2 :
 			c.op == OP::MUL ? v1 * v2 :
 			c.op == OP::DIV ? v1 / v2 : 0;
+		rdreg = regSeek(c.rst, false);
 		if (val == 0)
 			ss << ADD << ' ' << rdreg << ' ' << ZERO << ' ' << ZERO;
 		else
@@ -753,6 +777,7 @@ void calc(mcode &c, ociter o)
 		
 		r1reg = regSeek(r1, true);
 		r2reg = regSeek(r2, true);
+		rdreg = regSeek(c.rst, false);
 		auto o =
 			c.op == OP::ADD ? ADD :
 			c.op == OP::SUB ? SUB :
@@ -764,6 +789,7 @@ void calc(mcode &c, ociter o)
 		r2reg = regSeek(r2, true);
 		if (v1 == 0)
 		{
+			rdreg = regSeek(c.rst, false);
 			if (c.op == OP::ADD)
 				ss << MOVE << ' ' << rdreg << ' ' << r2reg;
 			else if (c.op == OP::SUB)
@@ -775,6 +801,7 @@ void calc(mcode &c, ociter o)
 		}
 		else
 		{
+			rdreg = regSeek(c.rst, false);
 			if (c.op == OP::ADD)
 				ss << ADD << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
 			else if (c.op == OP::SUB)
@@ -800,6 +827,7 @@ void calc(mcode &c, ociter o)
 		r1reg = regSeek(r1, true);
 		if (v2 == 0)
 		{
+			rdreg = regSeek(c.rst, false);
 			if (c.op == OP::ADD || c.op == OP::SUB)
 				ss << MOVE << ' ' << rdreg << ' ' << r1reg;
 			else if (c.op == OP::MUL || c.op == OP::DIV)
@@ -809,6 +837,7 @@ void calc(mcode &c, ociter o)
 		}
 		else
 		{
+			rdreg = regSeek(c.rst, false);
 			auto o =
 				c.op == OP::ADD ? ADD :
 				c.op == OP::SUB ? SUB :
@@ -978,7 +1007,7 @@ void print(mcode &c, ociter o)
 #endif // COMMENT
 }
 
-void OC::Med2Mips()
+void OC::Med2Mips(std::string mipsfile)
 {
 	codeHead();
 	assignAddr();
@@ -1036,7 +1065,11 @@ void OC::Med2Mips()
 	}
 	mpb("exit:");
 	bool putTab = false;
+#if INCLASS
+	std::ofstream mipsout(mipsfile, std::ios::trunc | std::ofstream::ate);
+#else
 	std::ofstream mipsout("../mipsr.asm", std::ios::trunc | std::ofstream::ate);
+#endif
 	for (auto iter = mips.begin(); iter != mips.end(); iter++)
 	{
 		if ((*iter) == ".text")

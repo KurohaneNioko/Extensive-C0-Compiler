@@ -102,16 +102,16 @@ int ST::addStr(std::string &s)
 						x.type == VAR_TYP ? "var" : \
 						x.type == ARRAY_TYP ? "array" : \
 						x.type == FUN_TYP ? "func" : "para"))
-void ST::printSym()
+void ST::printSym(std::ofstream&o)
 {
 	for (auto iter = output_str_sym.begin(); iter != output_str_sym.end(); iter++)
 	{
-		std::cout << "string_" << std::to_string(iter->second)
+		o << "string_" << std::to_string(iter->second)
 			<< " : .asciiz " << iter->first << '"' << std::endl;
 	}
-	std::cout << std::right;
-	std::cout << "global:" << std::endl;
-	std::cout << std::setw(14) << "name" << '|' <<
+	o << std::right;
+	o << "global:" << std::endl;
+	o << std::setw(14) << "name" << '|' <<
 		std::setw(5) << "class" << '|' <<
 		std::setw(6) << "type" << '|' <<
 		std::setw(5) << "len" << '|' <<
@@ -119,27 +119,27 @@ void ST::printSym()
 		std::setw(11) << "addr" << std::endl;
 	for (auto iter = global_sym.begin(); iter != global_sym.end(); iter++)
 	{
-		std::cout << std::dec << std::setw(14) << iter->first << '|' <<
+		o << std::dec << std::setw(14) << iter->first << '|' <<
 			std::setw(5) << SYM_CLS(iter->second) << '|' <<
 			std::setw(6) << SYM_TYP(iter->second) << '|' <<
 			std::dec << std::setw(5) << iter->second.length << '|' <<
 			std::dec << std::setw(5) << iter->second.defLine << '|'
 			 << std::setw(11) << std::hex << iter->second.addr << '|'  << std::endl;
 	}
-	std::cout << std::endl;
+	o << std::endl;
 	for (auto iter = func_sym.begin(); iter != func_sym.end(); iter++)
 	{
 		if (iter->first != "main")
 		{
-			std::cout << iter->first << ':' << std::endl;
-			std::cout << std::dec << std::setw(14) << "name" << '|' <<
+			o << iter->first << ':' << std::endl;
+			o << std::dec << std::setw(14) << "name" << '|' <<
 				std::setw(5) << "class" << '|' <<
 				std::setw(6) << "type" << '|' <<
 				std::setw(5) << "len" << '|' <<
 				std::setw(5) << "def" << '|' <<
 				std::setw(11) << "addr" << std::endl;
 			for (auto it2 = iter->second.begin(); it2 != iter->second.end(); it2++)
-				std::cout << std::setw(14) << it2->first << '|' <<
+				o << std::setw(14) << it2->first << '|' <<
 				std::setw(5) << SYM_CLS(it2->second) << '|' <<
 				std::setw(6) << SYM_TYP(it2->second) << '|' <<
 				std::dec << std::setw(5) << it2->second.length << '|' <<
@@ -148,15 +148,15 @@ void ST::printSym()
 
 		}
 	}
-	std::cout << std::endl << "main:" << std::endl;
-	std::cout << std::dec << std::setw(14) << "name" << '|' <<
+	o << std::endl << "main:" << std::endl;
+	o << std::dec << std::setw(14) << "name" << '|' <<
 		std::setw(5) << "class" << '|' <<
 		std::setw(6) << "type" << '|' <<
 		std::setw(5) << "len" << '|' <<
 		std::setw(5) << "def" << '|' <<
 		std::setw(11) << "addr" << std::endl;
 	for (auto it2 = func_sym["main"].begin(); it2 != func_sym["main"].end(); it2++)
-		std::cout << std::setw(14) << it2->first << '|' <<
+		o << std::setw(14) << it2->first << '|' <<
 		std::setw(5) << SYM_CLS(it2->second) << '|' <<
 		std::setw(6) << SYM_TYP(it2->second) << '|' <<
 		std::dec << std::setw(5) << it2->second.length << '|' <<

@@ -1,504 +1,752 @@
 .data
-_testchar1 : .byte 0
-_testchar2 : .byte 0
-_x : .word 0
-_xxxx : .word 0
-_yyy : .space 28
-_zzzzzzz : .word 0
-string_1 : .asciiz "!@#$%%abcd114514ABCD963287~;: \n"
-string_2 : .asciiz "1 hit \n"
-string_3 : .asciiz "2 hit\n"
-string_4 : .asciiz "3 hit \n"
-string_5 : .asciiz "4 hit \n"
-string_6 : .asciiz "5 hit \n"
-string_7 : .asciiz "6 hit \n"
+_m : .word 0
+_n : .word 0
+_stack : .space 48
+_sum : .word 0
+_used : .space 48
+string_1 : .asciiz " \n"
+string_4 : .asciiz "You can choose m numbers permutations from n numbers ? \n"
+string_2 : .asciiz "___________\n"
+string_5 : .asciiz "error input: 0 < m <= n <= 10\n"
+string_3 : .asciiz "test for success\n"
 .text
 .globl main
-func_fact:
-# $t0: None -> t
-	# now $t0 is t
-	lw $t0 -0 ($sp)
-	bge $t0 3 label1
-# $t1: None -> t
-	# now $t1 is t
+func_permutations:
+# $t0: None -> i
+	# now $t0 is i
+	add $t0 $0 $0
+	sw $t0 -20 ($sp)
+# $t1: None -> a
+	# now $t1 is a
 	lw $t1 -0 ($sp)
-	move $v0 $t1
-	jr $ra
-	j label2
-label1:
-# $t2: None -> #1
-	# now $t2 is #1
-# $t3: None -> t
-	# now $t3 is t
-	lw $t3 -0 ($sp)
-	sub $t2 $t3 1
-	sw $t2 -92 ($sp)
-# push param: #1
-	# save start
-	sw $ra -96 ($sp)
-	sw $sp -100 ($sp)
-	addi $sp $sp -92
-	jal func_fact
-	# recover start
-	addi $sp $sp 92
-	lw $ra -96 ($sp)
-	# recover end
-# $t4: None -> #2
-	# now $t4 is #2
-	move $t4 $v0
-# $t5: None -> #3
-	# now $t5 is #3
-# $t6: None -> t
-	# now $t6 is t
-	lw $t6 -0 ($sp)
-	mul $t5 $t4 $t6
-	move $v0 $t5
-	jr $ra
+# $t2: None -> m
+	# now $t2 is m
+	lw $t2 _m
+	bne $t1 $t2 label1
 label2:
-	jr $ra
-func_rt15:
-# $t0: None -> #4
-	# now $t0 is #4
-	li $t0 15
-# $t1: None -> #5
-	# now $t1 is #5
-	div $t1 $t0 1
-# $t2: None -> #6
-	# now $t2 is #6
-	add $t2 $t1 1
-# $t3: None -> #7
-	# now $t3 is #7
-	sub $t3 $t2 1
-	move $v0 $t3
-	jr $ra
-	jr $ra
-func_fun2:
-# $t0: None -> #8
-	# now $t0 is #8
-# $t1: None -> b
-	# now $t1 is b
-	lw $t1 -4 ($sp)
-# $t2: None -> c
-	# now $t2 is c
-	lw $t2 -8 ($sp)
-	mul $t0 $t1 $t2
-# $t3: None -> #9
-	# now $t3 is #9
-# $t4: None -> d
-	# now $t4 is d
-	lw $t4 -12 ($sp)
-	mul $t3 $t0 $t4
-# $t5: None -> #10
-	# now $t5 is #10
-# $t6: None -> e
-	# now $t6 is e
-	lw $t6 -16 ($sp)
-	div $t5 $t3 $t6
-# $t7: None -> #11
-	# now $t7 is #11
-# $s0: None -> a
-	# now $s0 is a
-	lw $s0 -0 ($sp)
-	add $t7 $s0 $t5
-# $s1: None -> #12
-	# now $s1 is #12
-# $s2: None -> f
-	# now $s2 is f
-	lw $s2 -20 ($sp)
-	sub $s1 $t7 $s2
-	li $v0 1
-	move $a0 $s1
-	syscall
-	# print int #12
-	li $v0 65
-	jr $ra
-	jr $ra
-main:
-# $t0: None -> x
-	# now $t0 is x
-	li $t0 -1
-	sw $t0 _x
-	li $v0 1
-	move $a0 $t0
-	syscall
-	# print int x
-# $t1: None -> #13
-	# now $t1 is #13
-	li $t1 -4
-# $t2: None -> r
-	# now $t2 is r
-	move $t2 $t1
-	sw $t2 -212 ($sp)
-	li $v0 1
-	move $a0 $t2
-	syscall
-	# print int r
-# $t3: None -> aa
-	# now $t3 is aa
-	li $t3 6
-	sw $t3 -136 ($sp)
+# $t3: None -> i
+	# now $t3 is i
+	lw $t3 -20 ($sp)
+# $t4: None -> m
+	# now $t4 is m
+	lw $t4 _m
+	bge $t3 $t4 label3
 	li $v0 4
 	la $a0 string_1
 	syscall
 	# print str 1
-	sw $t3 -216 ($sp)
-# push param: aa
-	# save start
-	sw $ra -220 ($sp)
-	sw $sp -224 ($sp)
-	addi $sp $sp -216
-	jal func_fact
-	# recover start
-	addi $sp $sp 216
-	lw $ra -220 ($sp)
-	# recover end
-# $t4: None -> #14
-	# now $t4 is #14
-	move $t4 $v0
+# $t5: None -> i
+	# now $t5 is i
+	lw $t5 -20 ($sp)
+# $t6: None -> #1
+	# now $t6 is #1
+	sll $t9 $t5 2
+	lw $t6 _stack($t9)
+	
+# read array: #1 = stack[i]
 	li $v0 1
-	move $a0 $t4
+	move $a0 $t6
 	syscall
-	# print int #14
-# $t5: None -> #15
-	# now $t5 is #15
-	li $t5 12
-# $t6: None -> #16
-	# now $t6 is #16
-	li $t6 -1
-# $t7: None -> #17
-	# now $t7 is #17
-	sub $t7 $t6 1
-# $s0: None -> #18
-	# now $s0 is #18
-	mul $s0 $t7 6
-# $s1: None -> #19
-	# now $s1 is #19
-	add $s1 $t5 $s0
-# $s2: None -> #20
-	# now $s2 is #20
-# $s3: None -> x
-	# now $s3 is x
-	lw $s3 _x
-# $s4: None -> r
-	# now $s4 is r
-	lw $s4 -212 ($sp)
-	sub $s2 $s3 $s4
-	sw $s2 -216 ($sp)
-# push param: #20
-# $s5: None -> aa
-	# now $s5 is aa
-	lw $s5 -136 ($sp)
-	sw $s5 -220 ($sp)
-# push param: aa
-	li $t9 1
-	sw $t9 -224 ($sp)
-# push param: 1
-	li $t9 4
-	sw $t9 -228 ($sp)
-# push param: 4
-	li $t9 2
-	sw $t9 -232 ($sp)
-# push param: 2
-	li $t9 -2
-	sw $t9 -236 ($sp)
-# push param: -2
-	# save start
-	sw $s1 -240 ($sp)
-	sw $ra -244 ($sp)
-	sw $sp -248 ($sp)
-	addi $sp $sp -216
-	jal func_fun2
-	# recover start
-	addi $sp $sp 216
-	lw $ra -244 ($sp)
-	lw $s1 -240 ($sp)
-	# recover end
-# $s6: None -> #21
-	# now $s6 is #21
-	move $s6 $v0
-	addi $t8 $s1 0
-	sub $t8 $sp $t8
-	sb $s6 ($t8)
-# save array: ar[#19] = #21
-	li $t9 4
-	sw $t9 -216 ($sp)
-# push param: 4
-	# save start
-	sw $ra -220 ($sp)
-	sw $sp -224 ($sp)
-	addi $sp $sp -216
-	jal func_fact
-	# recover start
-	addi $sp $sp 216
-	lw $ra -220 ($sp)
-	# recover end
-# $s7: None -> #22
-	# now $s7 is #22
-	move $s7 $v0
-# $fp: None -> #23
-	# now $fp is #23
-	move $fp $0
-# $t0: None -> #24
-	# now $t0 is #24
-	addi $t9 $fp 0
-	sub $t9 $sp $t9
-	lbu $t0 ($t9)
-# read array: #24 = ar[#23]
-	li $v0 1
-	move $a0 $t0
-	syscall
-	# print int #24
-	li $t9 48
-	sb $t9 -1 ($sp)
-# save array: ar[1] = '0'
-# $t2: None -> #25
-	# now $t2 is #25
-	lbu $t2 -1($sp)
-# read array: #25 = ar[1]
-	# save start
-	sw $t2 -216 ($sp)
-	sw $ra -220 ($sp)
-	sw $sp -224 ($sp)
-	addi $sp $sp -216
-	jal func_rt15
-	# recover start
-	addi $sp $sp 216
-	lw $ra -220 ($sp)
-	lw $t2 -216 ($sp)
-	# recover end
-# $t3: None -> #26
-	# now $t3 is #26
-	move $t3 $v0
-# $s3: None -> #27
-	# now $s3 is #27
-	add $s3 $t2 $t3
-# $s4: None -> #28
-	# now $s4 is #28
-	mul $s4 $s3 1
-# $s5: None -> #29
-	# now $s5 is #29
-	sub $s5 $0 $s4
-# $s6: #21 -> #30
-	# now $s6 is #30
-	li $s6 36
-# $s7: #22 -> #31
-	# now $s7 is #31
-	sub $t9 $s6 2
-	sub $s7 $0 $t9
-# $fp: #23 -> #32
-	# now $fp is #32
-	add $fp $s5 $s7
-# $t0: #24 -> #33
-	# now $t0 is #33
-	li $t0 218
-# $t1: #13 -> #34
-	# now $t1 is #34
-	add $t1 $fp $t0
-# $t2: #25 -> aa
-	# now $t2 is aa
-	move $t2 $t1
-	sw $t2 -136 ($sp)
-	li $v0 1
-	move $a0 $t2
-	syscall
-	# print int aa
-# $t2: None -> a
-	# now $t2 is a
-# $t3: #26 -> aa
-	# now $t3 is aa
-	lw $t3 -136 ($sp)
-	move $t2 $t3
-	sw $t2 -132 ($sp)
-	li $v0 5
-	syscall
-	move $t2 $v0
-	sw $t2 -132 ($sp)
-	# read int a
-	li $v0 5
-	syscall
-# $t3: None -> x
-	# now $t3 is x
-	move $t3 $v0
-	sw $t3 _x
-	# read int x
-	blez $t2 label3
+	# print int #1
+# $t7: None -> i
+	# now $t7 is i
+	lw $t7 -20 ($sp)
+# $s0: None -> #2
+	# now $s0 is #2
+	add $s0 $t7 1
+# $s1: None -> i
+	# now $s1 is i
+	move $s1 $s0
+	sw $s1 -20 ($sp)
+	j label2
+label3:
 	li $v0 4
 	la $a0 string_2
 	syscall
 	# print str 2
-	bgtz $t3 label4
-# $t2: None -> #35
-	# now $t2 is #35
+	jr $ra
+label1:
+# $s2: None -> i
+	# now $s2 is i
+	li $s2 1
+	sw $s2 -20 ($sp)
+label4:
+# $s3: None -> i
+	# now $s3 is i
+	lw $s3 -20 ($sp)
+# $s4: None -> #3
+	# now $s4 is #3
+	sll $t9 $s3 2
+	lw $s4 _used($t9)
+	
+# read array: #3 = used[i]
+	beq $s4 0 label5
+	j label6
+label5:
+# $s5: None -> i
+	# now $s5 is i
+	lw $s5 -20 ($sp)
+# $s6: None -> a
+	# now $s6 is a
+	lw $s6 -0 ($sp)
+	sll $t8 $s6 2
+	sw $s5 _stack ($t8)
+# save array: stack[a] = i
+	li $t9 1
+# $s7: None -> i
+	# now $s7 is i
+	lw $s7 -20 ($sp)
+	sll $t8 $s7 2
+	sw $t9 _used ($t8)
+# save array: used[i] = 1
+# $fp: None -> a
+	# now $fp is a
+	lw $fp -0 ($sp)
+# $t0: None -> #4
+	# now $t0 is #4
+	add $t0 $fp 1
+	sw $t0 -96 ($sp)
+# push param: #4
+	# save start
+	sw $ra -188 ($sp)
+	addi $sp $sp -96
+	jal func_permutations
+	# recover start
+	addi $sp $sp 96
+	lw $ra -188 ($sp)
+	# recover end
+	li $t9 0
+# $t1: None -> i
+	# now $t1 is i
+	lw $t1 -20 ($sp)
+	sll $t8 $t1 2
+	sw $t9 _used ($t8)
+# save array: used[i] = 0
+label6:
+# $t2: None -> i
+	# now $t2 is i
+	lw $t2 -20 ($sp)
+	add $t2 $t2 1
+	sw $t2 -20 ($sp)
+# $t3: None -> i
+	# now $t3 is i
+	lw $t3 -20 ($sp)
+# $t4: None -> n
+	# now $t4 is n
+	lw $t4 _n
+	ble $t3 $t4 label4
+	jr $ra
+func_get_max_num_1:
+	li $v0 10
+	jr $ra
+	jr $ra
+func_get_max_num_2:
+# $t0: None -> max_num
+	# now $t0 is max_num
+	li $t0 10
+	sw $t0 -0 ($sp)
+# $t1: None -> max_num
+	# now $t1 is max_num
+	lw $t1 -0 ($sp)
+	move $v0 $t1
+	jr $ra
+	jr $ra
+func_get_2:
+	li $v0 2
+	jr $ra
+	jr $ra
+func_compute:
+# $t0: None -> op
+	# now $t0 is op
+	lbu $t0 -8 ($sp)
+	bne $t0 43 label7
+# $t1: None -> b
+	# now $t1 is b
+	lw $t1 -4 ($sp)
+# $t2: None -> #5
+	# now $t2 is #5
+	mul $t2 $t1 2
 # $t3: None -> a
 	# now $t3 is a
-	lw $t3 -132 ($sp)
-# $t4: #14 -> x
-	# now $t4 is x
-	lw $t4 _x
-	div $t2 $t3 $t4
-# $t3: None -> #36
-	# now $t3 is #36
-# $t4: None -> a
-	# now $t4 is a
-	lw $t4 -132 ($sp)
-	mul $t3 $t2 $t4
-# $t4: None -> r
-	# now $t4 is r
-	move $t4 $t3
-	sw $t4 -212 ($sp)
-	li $v0 1
-	move $a0 $t4
+	lw $t3 -0 ($sp)
+# $t4: None -> #6
+	# now $t4 is #6
+	add $t4 $t3 $t2
+# $t5: None -> b
+	# now $t5 is b
+	lw $t5 -4 ($sp)
+# $t6: None -> #7
+	# now $t6 is #7
+	sub $t6 $t4 $t5
+	move $v0 $t6
+	jr $ra
+	j label8
+label7:
+# $t7: None -> op
+	# now $t7 is op
+	lbu $t7 -8 ($sp)
+	bne $t7 45 label9
+# $s0: None -> b
+	# now $s0 is b
+	lw $s0 -4 ($sp)
+# $s1: None -> #8
+	# now $s1 is #8
+	add $s1 $s0 $s0
+# $s2: None -> #9
+	# now $s2 is #9
+	div $s2 $s1 2
+# $s3: None -> a
+	# now $s3 is a
+	lw $s3 -0 ($sp)
+# $s4: None -> #10
+	# now $s4 is #10
+	sub $s4 $s3 $s2
+	move $v0 $s4
+	jr $ra
+	j label10
+label9:
+# $s5: None -> op
+	# now $s5 is op
+	lbu $s5 -8 ($sp)
+	bne $s5 42 label11
+# $s6: None -> a
+	# now $s6 is a
+	lw $s6 -0 ($sp)
+# $s7: None -> b
+	# now $s7 is b
+	lw $s7 -4 ($sp)
+# $fp: None -> #11
+	# now $fp is #11
+	mul $fp $s6 $s7
+	move $v0 $fp
+	jr $ra
+	j label12
+label11:
+# $t0: None -> b
+	# now $t0 is b
+	lw $t0 -4 ($sp)
+	beq $t0 0 label13
+# $t1: None -> a
+	# now $t1 is a
+	lw $t1 -0 ($sp)
+# $t2: None -> b
+	# now $t2 is b
+	lw $t2 -4 ($sp)
+# $t3: None -> #12
+	# now $t3 is #12
+	div $t3 $t1 $t2
+	move $v0 $t3
+	jr $ra
+	j label14
+label13:
+# $t4: None -> #13
+	# now $t4 is #13
+	li $t4 3
+# $t5: None -> #14
+	# now $t5 is #14
+	mul $t5 $t4 3
+# $t6: None -> #15
+	# now $t6 is #15
+	sub $t6 $t5 4
+# $t7: None -> #16
+	# now $t7 is #16
+	div $t7 $t6 5
+# $s0: None -> #17
+	# now $s0 is #17
+	mul $s0 $t7 6
+# $s1: None -> #18
+	# now $s1 is #18
+	add $s1 $s0 -7
+# $s2: None -> #19
+	# now $s2 is #19
+	add $s2 $s1 1
+	move $v0 $s2
+	jr $ra
+label14:
+label12:
+label10:
+label8:
+	jr $ra
+func_get_permutations_sy:
+	li $v0 84
+	jr $ra
+	jr $ra
+func_judge:
+	li $v0 11
+	li $a0 42
 	syscall
-	# print int r
+	# print char 42
+	# save start
+	sw $ra -200 ($sp)
+	addi $sp $sp -132
+	jal func_get_max_num_1
+	# recover start
+	addi $sp $sp 132
+	lw $ra -200 ($sp)
+	# recover end
+# $t0: None -> #20
+	# now $t0 is #20
+	move $t0 $v0
+# $t1: None -> #21
+	# now $t1 is #21
+	add $t1 $t0 1
+# $t2: None -> n
+	# now $t2 is n
+	lw $t2 -0 ($sp)
+	blt $t2 $t1 label15
+	li $v0 70
+	jr $ra
+label15:
+# $t3: None -> m
+	# now $t3 is m
+	lw $t3 -4 ($sp)
+# $t4: None -> n
+	# now $t4 is n
+	lw $t4 -0 ($sp)
+	ble $t3 $t4 label16
+	li $v0 70
+	jr $ra
+label16:
+# $t5: None -> m
+	# now $t5 is m
+	lw $t5 -4 ($sp)
+	bgtz $t5 label17
+	li $v0 70
+	jr $ra
+label17:
+	li $v0 84
+	jr $ra
+	jr $ra
+func_preparation:
+	# save start
+	sw $ra -264 ($sp)
+	addi $sp $sp -196
+	jal func_get_max_num_1
+	# recover start
+	addi $sp $sp 196
+	lw $ra -264 ($sp)
+	# recover end
+# $t0: None -> #22
+	# now $t0 is #22
+	move $t0 $v0
+	sw $t0 -196 ($sp)
+# push param: #22
+	li $t9 1
+	sw $t9 -200 ($sp)
+# push param: 1
+	li $t9 43
+	sw $t9 -204 ($sp)
+# push param: '+'
+	# save start
+	sw $ra -336 ($sp)
+	addi $sp $sp -196
+	jal func_compute
+	# recover start
+	addi $sp $sp 196
+	lw $ra -336 ($sp)
+	# recover end
+# $t1: None -> #23
+	# now $t1 is #23
+	move $t1 $v0
+# $t2: None -> n
+	# now $t2 is n
+	move $t2 $t1
+	sw $t2 -120 ($sp)
+label18:
+# $t3: None -> n
+	# now $t3 is n
+	lw $t3 -120 ($sp)
+	beq $t3 0 label19
+# $t4: None -> #24
+	# now $t4 is #24
+	li $t4 -1
+# $t5: None -> n
+	# now $t5 is n
+	lw $t5 -120 ($sp)
+# $t6: None -> #25
+	# now $t6 is #25
+	add $t6 $t4 $t5
+# $t7: None -> n
+	# now $t7 is n
+	move $t7 $t6
+	sw $t7 -120 ($sp)
+	li $t9 0
+# $s0: None -> n
+	# now $s0 is n
+	lw $s0 -120 ($sp)
+	sll $t8 $s0 2
+	sw $t9 _used ($t8)
+# save array: used[n] = 0
+	li $t9 10086
+# $s1: None -> n
+	# now $s1 is n
+	lw $s1 -120 ($sp)
+	sll $t8 $s1 2
+	addi $t8 $t8 68
+	
+	sub $t8 $sp $t8
+	sw $t9 ($t8)
+# save array: array[n] = 10086
+	j label18
+label19:
+	li $t9 10
+	sw $t9 -196 ($sp)
+# push param: 10
+	# save start
+	sw $ra -272 ($sp)
+	addi $sp $sp -196
+	jal func_get_2
+	# recover start
+	addi $sp $sp 196
+	lw $ra -272 ($sp)
+	# recover end
+# $s2: None -> #26
+	# now $s2 is #26
+	move $s2 $v0
+	sw $s2 -200 ($sp)
+# push param: #26
+	li $t9 43
+	sw $t9 -204 ($sp)
+# push param: '+'
+	# save start
+	sw $ra -336 ($sp)
+	addi $sp $sp -196
+	jal func_compute
+	# recover start
+	addi $sp $sp 196
+	lw $ra -336 ($sp)
+	# recover end
+# $s3: None -> #27
+	# now $s3 is #27
+	move $s3 $v0
+# $s4: None -> #28
+	# now $s4 is #28
+	sub $s4 $s3 1
+# $s5: None -> n
+	# now $s5 is n
+	move $s5 $s4
+	sw $s5 -120 ($sp)
+label20:
+# $s6: None -> n
+	# now $s6 is n
+	lw $s6 -120 ($sp)
+# $s7: None -> #29
+	# now $s7 is #29
+	sub $s7 $s6 1
+# $fp: None -> #30
+	# now $fp is #30
+	li $fp 1
+# $t0: None -> #31
+	# now $t0 is #31
+	sub $t0 $0 $fp
+# $t1: None -> #32
+	# now $t1 is #32
+	li $t1 6
+# $t2: None -> #33
+	# now $t2 is #33
+	add $t2 $t0 $t1
+# $t3: None -> #34
+	# now $t3 is #34
+	mul $t3 $t2 4
+# $t4: None -> n
+	# now $t4 is n
+	lw $t4 -120 ($sp)
+# $t5: None -> #35
+	# now $t5 is #35
+	add $t5 $t4 $t3
+# $t6: None -> #36
+	# now $t6 is #36
+	sub $t6 $t5 21
+# $t7: None -> #37
+	# now $t7 is #37
+	sll $t9 $t6 2
+	addi $t9 $t9 68
+	sub $t9 $sp $t9
+	lw $t7 ($t9)
+# read array: #37 = array[#36]
+# $s0: None -> #38
+	# now $s0 is #38
+	sub $s0 $t7 10086
+	sll $t8 $s7 2
+	sw $s0 _stack ($t8)
+# save array: stack[#29] = #38
+# $s1: None -> n
+	# now $s1 is n
+	lw $s1 -120 ($sp)
+	sub $s1 $s1 1
+	sw $s1 -120 ($sp)
+# $s2: None -> n
+	# now $s2 is n
+	lw $s2 -120 ($sp)
+	bne $s2 0 label20
+	jr $ra
+	jr $ra
+func_test_for:
+# $t0: None -> i
+	# now $t0 is i
+	li $t0 1
+	sw $t0 -0 ($sp)
+label21:
 	li $v0 4
 	la $a0 string_3
 	syscall
 	# print str 3
-label4:
-# $t4: None -> #37
-	# now $t4 is #37
-# $t5: #15 -> r
-	# now $t5 is r
-	lw $t5 -212 ($sp)
-# $t6: #16 -> aa
-	# now $t6 is aa
-	lw $t6 -136 ($sp)
-	add $t4 $t5 $t6
-# $t5: None -> r
-	# now $t5 is r
-	move $t5 $t4
-	sw $t5 -212 ($sp)
-	li $v0 1
-	move $a0 $t5
+# $t1: None -> i
+	# now $t1 is i
+	lw $t1 -0 ($sp)
+	add $t1 $t1 1
+	sw $t1 -0 ($sp)
+	
+	jr $ra
+func_test_6_para:
+# $t0: None -> a1
+	# now $t0 is a1
+	lw $t0 -0 ($sp)
+# $t1: None -> a2
+	# now $t1 is a2
+	lw $t1 -4 ($sp)
+# $t2: None -> #39
+	# now $t2 is #39
+	add $t2 $t0 $t1
+# $t3: None -> a3
+	# now $t3 is a3
+	lw $t3 -8 ($sp)
+# $t4: None -> #40
+	# now $t4 is #40
+	add $t4 $t2 $t3
+# $t5: None -> a4
+	# now $t5 is a4
+	lw $t5 -12 ($sp)
+# $t6: None -> #41
+	# now $t6 is #41
+	add $t6 $t4 $t5
+# $t7: None -> a5
+	# now $t7 is a5
+	lw $t7 -16 ($sp)
+# $s0: None -> #42
+	# now $s0 is #42
+	add $s0 $t6 $t7
+# $s1: None -> a6
+	# now $s1 is a6
+	lw $s1 -20 ($sp)
+# $s2: None -> #43
+	# now $s2 is #43
+	add $s2 $s0 $s1
+	move $v0 $s2
+	jr $ra
+	jr $ra
+main:
+	# save start
+	sw $ra -100 ($sp)
+	addi $sp $sp -28
+	jal func_test_for
+	# recover start
+	addi $sp $sp 28
+	lw $ra -100 ($sp)
+	# recover end
+	li $v0 5
 	syscall
-	# print int r
-label3:
-# $t6: None -> x
-	# now $t6 is x
-	lw $t6 _x
-	beq $t6 0 label5
+# $t0: None -> a
+	# now $t0 is a
+	move $t0 $v0
+	sw $t0 -20 ($sp)
+	# read int a
+	li $v0 5
+	syscall
+# $t1: None -> b
+	# now $t1 is b
+	move $t1 $v0
+	sw $t1 -24 ($sp)
+	# read int b
+	li $v0 12
+	syscall
+# $t2: None -> op
+	# now $t2 is op
+	move $t2 $v0
+	sb $t2 -1 ($sp)
+	# read char op
+# $t3: None -> a
+	# now $t3 is a
+	lw $t3 -20 ($sp)
+	sw $t3 -28 ($sp)
+# push param: a
+# $t4: None -> b
+	# now $t4 is b
+	lw $t4 -24 ($sp)
+	sw $t4 -32 ($sp)
+# push param: b
+# $t5: None -> op
+	# now $t5 is op
+	lbu $t5 -1 ($sp)
+	sw $t5 -36 ($sp)
+# push param: op
+	# save start
+	sw $ra -168 ($sp)
+	addi $sp $sp -28
+	jal func_compute
+	# recover start
+	addi $sp $sp 28
+	lw $ra -168 ($sp)
+	# recover end
+# $t6: None -> #44
+	# now $t6 is #44
+	move $t6 $v0
+# $t7: None -> n
+	# now $t7 is n
+	move $t7 $t6
+	sw $t7 _n
+	li $v0 11
+	li $a0 95
+	syscall
+	# print char 95
+	li $v0 1
+# $s0: None -> n
+	# now $s0 is n
+	lw $s0 _n
+	move $a0 $s0
+	syscall
+	# print int n
+	li $v0 5
+	syscall
+# $s1: None -> m
+	# now $s1 is m
+	move $s1 $v0
+	sw $s1 _m
+	# read int m
+# $s2: None -> n
+	# now $s2 is n
+	lw $s2 _n
+	sw $s2 -28 ($sp)
+# push param: n
+# $s3: None -> m
+	# now $s3 is m
+	lw $s3 _m
+	sw $s3 -32 ($sp)
+# push param: m
+	# save start
+	sw $ra -156 ($sp)
+	addi $sp $sp -28
+	jal func_judge
+	# recover start
+	addi $sp $sp 28
+	lw $ra -156 ($sp)
+	# recover end
+# $s4: None -> #45
+	# now $s4 is #45
+	move $s4 $v0
+# $s5: None -> sy
+	# now $s5 is sy
+	move $s5 $s4
+	sb $s5 -2 ($sp)
+# $s6: None -> a
+	# now $s6 is a
+	lw $s6 -20 ($sp)
+	sw $s6 -28 ($sp)
+# push param: a
+# $s7: None -> b
+	# now $s7 is b
+	lw $s7 -24 ($sp)
+	sw $s7 -32 ($sp)
+# push param: b
+# $fp: None -> n
+	# now $fp is n
+	lw $fp _n
+	sw $fp -36 ($sp)
+# push param: n
+# $t0: None -> m
+	# now $t0 is m
+	lw $t0 _m
+	sw $t0 -40 ($sp)
+# push param: m
+	li $t9 1
+	sw $t9 -44 ($sp)
+# push param: 1
+	li $t9 2
+	sw $t9 -48 ($sp)
+# push param: 2
+	# save start
+	sw $ra -140 ($sp)
+	addi $sp $sp -28
+	jal func_test_6_para
+	# recover start
+	addi $sp $sp 28
+	lw $ra -140 ($sp)
+	# recover end
+# $t1: None -> #46
+	# now $t1 is #46
+	move $t1 $v0
+# $t2: None -> sum
+	# now $t2 is sum
+	move $t2 $t1
+	sw $t2 _sum
+	li $v0 1
+# $t3: None -> sum
+	# now $t3 is sum
+	lw $t3 _sum
+	move $a0 $t3
+	syscall
+	# print int sum
 	li $v0 4
 	la $a0 string_4
 	syscall
 	# print str 4
-# $t5: None -> #38
-	# now $t5 is #38
-	li $t5 -4
-# $t6: None -> a
-	# now $t6 is a
-	lw $t6 -132 ($sp)
-	bne $t6 $t5 label6
-# $t6: None -> #39
-	# now $t6 is #39
-# $t7: #17 -> r
-	# now $t7 is r
-	lw $t7 -212 ($sp)
-	add $t6 $t7 1
-# $t7: None -> r
-	# now $t7 is r
-	move $t7 $t6
-	sw $t7 -212 ($sp)
-	li $v0 1
-	move $a0 $t7
+	li $v0 11
+# $t4: None -> sy
+	# now $t4 is sy
+	lbu $t4 -2 ($sp)
+	move $a0 $t4
 	syscall
-	# print int r
+	# print char sy
+	li $v0 4
+	la $a0 string_2
+	syscall
+	# print str 2
+	# save start
+	sw $ra -180 ($sp)
+	addi $sp $sp -28
+	jal func_get_permutations_sy
+	# recover start
+	addi $sp $sp 28
+	lw $ra -180 ($sp)
+	# recover end
+# $t5: None -> #47
+	# now $t5 is #47
+	move $t5 $v0
+# $t7: None -> nor_sy
+	# now $t7 is nor_sy
+	move $t7 $t5
+	sb $t7 -0 ($sp)
+# $s0: None -> sy
+	# now $s0 is sy
+	lbu $s0 -2 ($sp)
+# $s1: None -> nor_sy
+	# now $s1 is nor_sy
+	lbu $s1 -0 ($sp)
+	beq $s0 $s1 label22
 	li $v0 4
 	la $a0 string_5
 	syscall
 	# print str 5
-label6:
-label5:
-# $t7: None -> a
-	# now $t7 is a
-	lw $t7 -132 ($sp)
-	bgez $t7 label7
-	li $v0 4
-	la $a0 string_6
-	syscall
-	# print str 6
-# $t7: None -> x
-	# now $t7 is x
-	lw $t7 _x
-	bltz $t7 label8
-# $t7: None -> #40
-	# now $t7 is #40
-# $s0: #18 -> r
-	# now $s0 is r
-	lw $s0 -212 ($sp)
-# $s1: #19 -> a
-	# now $s1 is a
-	lw $s1 -132 ($sp)
-	add $t7 $s0 $s1
-# $s0: None -> r
-	# now $s0 is r
-	move $s0 $t7
-	sw $s0 -212 ($sp)
-	li $v0 1
-	move $a0 $s0
-	syscall
-	# print int r
-	li $v0 4
-	la $a0 string_7
-	syscall
-	# print str 7
-label8:
-	j label9
-label7:
-# $s1: None -> #41
-	# now $s1 is #41
-# $s0: None -> r
-	# now $s0 is r
-	lw $s0 -212 ($sp)
-	mul $s1 $s0 -1
-# $s0: None -> r
-	# now $s0 is r
-	move $s0 $s1
-	sw $s0 -212 ($sp)
-	li $v0 1
-	move $a0 $s0
-	syscall
-	# print int r
-label9:
-# $s0: None -> #42
-	# now $s0 is #42
-	li $s0 -2
-# $s1: #41 -> a
-	# now $s1 is a
-	move $s1 $s0
-	sw $s1 -132 ($sp)
-label10:
-# $s2: #20 -> #43
-	# now $s2 is #43
-# $s3: #27 -> x
-	# now $s3 is x
-	lw $s3 _x
-	add $s2 $s3 4
-# $s3: None -> x
-	# now $s3 is x
-	move $s3 $s2
-	sw $s3 _x
-	add $s1 $s1 1
-	sw $s1 -132 ($sp)
-# $s1: None -> a
-	# now $s1 is a
-	lw $s1 -132 ($sp)
-	blt $s1 3 label10
-label11:
-	blez $s3 label12
-# $s3: None -> #44
-	# now $s3 is #44
-# $s1: None -> x
-	# now $s1 is x
-	lw $s1 _x
-	sub $s3 $s1 2
-# $s1: None -> x
-	# now $s1 is x
-	move $s1 $s3
-	sw $s1 _x
-	j label11
-label12:
-	li $v0 1
-	move $a0 $s1
-	syscall
-	# print int x
+	j label23
+label22:
+	# save start
+	sw $ra -220 ($sp)
+	addi $sp $sp -28
+	jal func_preparation
+	# recover start
+	addi $sp $sp 28
+	lw $ra -220 ($sp)
+	# recover end
+	li $t9 0
+	sw $t9 -28 ($sp)
+# push param: 0
+	# save start
+	sw $ra -120 ($sp)
+	addi $sp $sp -28
+	jal func_permutations
+	# recover start
+	addi $sp $sp 28
+	lw $ra -120 ($sp)
+	# recover end
+label23:
 exit:

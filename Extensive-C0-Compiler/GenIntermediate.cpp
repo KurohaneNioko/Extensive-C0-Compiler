@@ -53,12 +53,12 @@ bool Med::is_operand_num(std::string &s, int &value)
 	return true;
 }
 
-void Med::printIMC()
+void Med::printIMC(std::ofstream&o)
 {
 	for(auto iter = itmd_code.begin(); iter!= itmd_code.end(); iter++)
 	{
-		std::cout << std::right;
-		std::cout << std::setw(14) << iter->rst << "  " << std::setw(10) << iter->op << "  "
+		o << std::right;
+		o << std::setw(14) << iter->rst << "  " << std::setw(10) << iter->op << "  "
 			<< std::setw(14) << iter->num1 << "  " << std::setw(14) << iter->num2 << std::endl;
 	}
 }
