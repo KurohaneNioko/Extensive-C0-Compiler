@@ -1802,7 +1802,3 @@ void Syn::program()
 		<< " main over" << std::endl << std::endl;
 #endif
 }
-
-#if Syn_Out | IMC_Out
-
-#endif

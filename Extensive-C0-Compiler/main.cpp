@@ -33,9 +33,16 @@ int main(int argc, char** argv)
 	std::string symIR_path = code_path.replace(code_path.begin() + code_path.find_last_of('.'), code_path.end(), "-sym+IR.txt");
 	std::ofstream symIRout(symIR_path);
 	Syn::program();
-	Med::printIMC(symIRout);
-	symIRout << std::endl;
-	OC::Med2Mips(asm_path);
+	if (!with_error)
+	{
+		Med::printIMC(symIRout);
+		symIRout << std::endl;
+		OC::Med2Mips(asm_path);
+	}
+	else
+	{
+		ER::writeERR(symIRout);
+	}
 	ST::printSym(symIRout);
 	if (Lex::code_file.is_open())
 	{

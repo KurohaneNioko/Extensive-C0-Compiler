@@ -57,7 +57,7 @@ char readCharFromLine()
 		}
 		else
 		{
-#if DEBUG
+#if Lexical_Out
 			std::cout << "EOF Reached" << std::endl;
 #endif
 			return 0;
@@ -143,7 +143,7 @@ int Lex::getsym()
 				break;
 			}
 		}
-		/* TODO: string(num) -> int num*/
+		/* string(num) -> int num*/
 		if (isPureNum)
 		{
 			int num_from_cur = 0;
@@ -151,11 +151,11 @@ int Lex::getsym()
 				num_from_cur = std::stoi(Lex::curElmt, nullptr);
 			}
 			catch(const std::out_of_range&){
-#if DEBUG
+#if Lexical_Out
 				std::cout << "int Overflow at Line: " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
+				ER::logER(ERT::INT_OVERFLOW);
 				Lex::curNum = 0;		// support for fault
-
 				Lex::curCls = Lex::UNSGN_INT;
 				return Lex::UNSGN_INT;
 			}
@@ -165,9 +165,10 @@ int Lex::getsym()
 		}
 		else
 		{
-#if DEBUG
+#if Lexical_Out
 			std::cout << "Invalid int at Line: " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
+			ER::logER(ERT::UNKNOWN_WORD);
 			Lex::curCls = Lex::UNKNOWN;
 			return Lex::UNKNOWN;
 		}
@@ -185,14 +186,23 @@ int Lex::getsym()
 			}
 			Lex::curElmt += c;
 		}
-		/* TODO: err-> 0 char, 
-					   not 2 char, 
-					   char not '+' '-' '*' '/' '_' alpha digit,
-					   miss right single quote*/
+		/* err-> 0 char,  not 2 char,  
+		   char not '+' '-' '*' '/' '_' alpha digit,
+		   miss right single quote*/
 		/* now curElmt = "'xxx'" */
 		if (Lex::curElmt.size() <= 1 || Lex::curElmt.size() != 3 || 
 			!isSGL_CHAR(Lex::curElmt[1]) || Lex::curElmt[Lex::curElmt.size()-1]!='\'')
 		{
+			if (Lex::curElmt.size() <= 1)
+				ER::logER(ERT::CHAR_TOO_SHORT);
+			else if (Lex::curElmt.size() > 3)
+				ER::logER(ERT::CHAR_TOO_LONG);
+			else if (!isSGL_CHAR(Lex::curElmt[1]))
+				ER::logER(ERT::UNSUPPORTED_CHAR);
+
+			if (Lex::curElmt[Lex::curElmt.size() - 1] != '\'')
+				ER::logER(ERT::MISS_SINGLE_QUOTE);
+
 			Lex::curElmt = '0';
 			Lex::curCls = Lex::SGL_CHARA;
 			return Lex::SGL_CHARA;
@@ -230,18 +240,21 @@ int Lex::getsym()
 		/* now curElmt = ""xxx"" */
 		if (Lex::curElmt[Lex::curElmt.size() - 1] != '"')
 		{
-#if DEBUG
+#if Lexical_Out
 			std::cout << "Miss right double quote: Line " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
+			ER::logER(ERT::MISS_DOUBLE_QUPTE);
 			Lex::curCls = Lex::STRING;
 			return Lex::STRING;
 		}
 		if (!char_in_string)	//with right double quote, but with invalid char
 		{
 			/* TODO: warning*/
-#if DEBUG
+#if Lexical_Out
 			std::cout << "Invalid char in string: Line " << Lex::LineCounter << " Colomn: " << (Lex::linePointer + 1 - Lex::curElmt.size()) << std::endl;
 #endif
+			ER::logER(ERT::UNSUPPORTED_CHAR);
+
 			Lex::curCls = Lex::STRING;
 			Lex::curElmt.pop_back();	//remove last "
 			return Lex::STRING;
@@ -302,9 +315,10 @@ int Lex::getsym()
 			}
 		}
 	}
-#if DEBUG
+#if Lexical_Out
 	std::cout << "UNKNOWN word at Line: " << Lex::LineCounter << " Colomn: "<< (Lex::linePointer+1-Lex::curElmt.size()) << std::endl;
 #endif
+	ER::logER(ERT::UNKNOWN_WORD);
 	Lex::curCls = Lex::UNKNOWN;
 	return Lex::UNKNOWN;
 }

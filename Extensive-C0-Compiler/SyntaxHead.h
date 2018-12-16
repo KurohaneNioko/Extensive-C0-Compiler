@@ -2,6 +2,7 @@
 #include "SymbolHead.h"
 #include "LexerHead.h"
 #include "Intermediate.h"
+#include "Error.h"
 #include "Compiler.h"
 
 #if DEBUG
