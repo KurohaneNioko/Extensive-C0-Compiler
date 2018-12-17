@@ -7,8 +7,8 @@ std::string ret_val_mark = "RET_v0";
 void skipTill(const std::set<std::string> symbols, const std::set<int> wordType)
 {
 	//symbol e.g. "," ";"	wordType e.g. Lex::RSVD_WD
-	int r = -1;
-	while (symbols.count(Lex::curElmt) == 0 && !CODEEOF)
+	int r = Lex::curCls;
+	while (symbols.count(Lex::curElmt) == 0 && wordType.count(r) == 0 && !CODEEOF)
 	{
 		r = Lex::getsym();
 		if (wordType.count(r) == 1)
@@ -32,9 +32,15 @@ int _int()
 	}
 	if (r != Lex::UNSGN_INT)
 	{
-		/* TODO: not int after const int */
-
+		/* not int after const int */
+		ER::logER(ERT::EXPECT_INT_CONSTANT);
+		skipTill(
+			{ "<=",">=","==","!=","<",">","+","-","*","/",",",";",")","]" },
+			{});
+		Lex::curNum = 0;
 	}
+	else
+		Lex::getsym();	//ready for next
 #if Syn_Out
 	std::cout << "int got: " << sign * Lex::curNum << std::endl;
 #endif
@@ -47,10 +53,15 @@ char single_char()
 
 	if (r != Lex::SGL_CHARA)
 	{
-		/* TODO: not int after const int */
-
+		/* not int after const int */
+		ER::logER(ERT::EXPECT_CHAR_CONSTANT);
+		skipTill(
+			{ "<=",">=","==","!=","<",">","+","-","*","/",",",";",")","]" },
+			{});
+		return '0';
 	}
 	else {
+		Lex::getsym();
 #if Syn_Out
 		std::cout << "char got: " << Lex::curElmt[1] << std::endl;
 #endif
@@ -66,12 +77,8 @@ void const_define()
 		const_int = is_intsym;	// define const int, then not allow const char
 		Lex::getsym();
 	}
-	else 
-	{
-		/* TODO: expect int|char after const, default int  */
-		Lex::curElmt = "int";
-	}
-	
+	else  /* expect int|char after const, default int  */
+		ER::logER(ERT::EXPECT_TYPE_NAME);
 	bool comma_now;	// check if , exists and start next const
 	do
 	{
@@ -84,45 +91,36 @@ void const_define()
 			if (is_assign)
 			{
 				if (const_int)
-				{
 					val = _int();
-				}
 				else
-				{
 					val = '\0' + single_char();
-				}
 			}
-			else
-			{
-				/* TODO: miss '=' after "const int|char x" ,use default val 0 */
-			}
+			else  /* miss '=' after "const int|char x" ,use default val 0 */
+				ER::logER(ERT::EXPECT_ASSIGN);
 #if Syn_Out
 			std::cout << "Line: " << Lex::LineCounter
 				<< " const " << (const_int ? "int " : "char ") << "def" << std::endl;
 #endif
-			/* TODO: search in symbolTable
+			/* search in symbolTable
 				-> exist in the same layer(function, var, const) -> err
 				-> not exist -> enSymbolTable
 			*/
 			int _cls = const_int ? ST::INT_CLS : ST::CHA_CLS;
 			int type = ST::CONST_TYP;
 			if (ST::lookup(curFunc, name, true) == nullptr)
-			{
 				ST::addsym(curFunc, name, _cls, type, val, Lex::LineCounter);
-			}
-			else
-			{
-				/* TODO: re def */
-			}
-			Lex::getsym();
-			
+			else  /* re def */
+				ER::logER(ERT::IDEN_REDEFINITION);
+			//Lex::getsym();
 		}
 		else
 		{
-			/* TODO: miss iden after "const int|char" */
-			/* TODO: skip until ; ,
-					if meet reservedwords, then
-					break with err"lack semi"*/
+			/* miss iden after "const int|char" */
+			ER::logER(ERT::NO_IDEN_AFTER_TYPE_NAME);
+			skipTill({ ",",";" }, {Lex::RSVD_WD});
+			/* skip until ; ,*/
+				///if meet reservedwords, then
+				///break with err"lack semi"
 		}
 		comma_now = is_comma;
 		if (comma_now)
@@ -146,13 +144,9 @@ void continuous_var_def(bool inttype)
 			if (is_comma || is_semicolon)
 			{
 				if (ST::lookup(curFunc, key, true) == nullptr)
-				{
 					ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
-				}
-				else
-				{
-					/* TODO: re def */
-				}
+				else  /* re def */
+					ER::logER(ERT::IDEN_REDEFINITION);
 #if Syn_Out
 				std::cout << "Line: " << Lex::LineCounter
 					<< " continuous var " << (inttype ? "int " : "char ") << "def" << std::endl;
@@ -163,25 +157,20 @@ void continuous_var_def(bool inttype)
 				int length = _int();
 				if (length <= 0)
 				{
-					/* TODO: length of array <= 0 */
+					/* length of array <= 0 */
 					length = 1;
+					ER::logER(ERT::INVALID_ARRAY_LENGTH);
 				}
-				Lex::getsym();		// ']'
-				if (!is_R_mid)
-				{
-					/* TODO: miss R_mid */
-					/* skip until ","->continue_var | ";"->continue */
-				}
+				//Lex::getsym();		// ']'
+				if (!is_R_mid)  /* miss R_mid */
+					ER::logER(ERT::EXPECT_RIGHT_BRACKET);
+					/// skip until ","->continue_var | ";"->continue */
 				else
 				{
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::ARRAY_TYP, length, Lex::LineCounter);
-					}
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 #if Syn_Out
 					std::cout << "Line: " << Lex::LineCounter
 						<< " continuous array " << (inttype ? "int " : "char ") << "def" << std::endl;
@@ -190,14 +179,17 @@ void continuous_var_def(bool inttype)
 				}
 			}
 			else
-			{
-				/* TODO: expect , | ; */
+			{  /* expect , | ; */
+				ER::logER(ERT::EXPECT_COMMA);
+				skipTill({ ",",";" }, { Lex::RSVD_WD });
 				/* skip until , | ; */
 			}
 		}
 		else
 		{
-			/* TODO: expect IDEN after ',' */
+			/* expect IDEN after ',' */
+			ER::logER(ERT::NO_IDEN_AFTER_TYPE_NAME);
+			skipTill({ ",",";" }, {Lex::RSVD_WD});
 			/* skip until ',' | ';'*/
 		}
 	} while (is_comma);
@@ -218,13 +210,9 @@ void var_def_complex()
 			if (is_semicolon)
 			{
 				if (ST::lookup(curFunc, key, true) == nullptr)
-				{
 					ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
-				}
-				else
-				{
-					/* re def */
-				}
+				else /* re def */
+					ER::logER(ERT::IDEN_REDEFINITION);
 #if Syn_Out
 				std::cout << "Line: " << Lex::LineCounter
 					<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
@@ -235,56 +223,43 @@ void var_def_complex()
 			else if (is_L_mid)
 			{
 				int length = _int();
-				length = length > 0 ? length : 1;
-				Lex::getsym();		// ']'
-				if (!is_R_mid)
+				if (length <= 0)
 				{
-					/* TODO: miss R_mid */
-					/* skip until ","->continue_var | ";"->continue */
+					/* length of array <= 0 */
+					length = 1;
+					ER::logER(ERT::INVALID_ARRAY_LENGTH);
 				}
+				//Lex::getsym();		// ']'
+				if (!is_R_mid)
+					/* miss R_mid */
+					ER::logER(ERT::EXPECT_RIGHT_BRACKET);
+				///* skip until ","->continue_var | ";"->continue */
 				else
 				{
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::ARRAY_TYP, length, Lex::LineCounter);
-					}
-					else
-					{
-						/* re def */
-					}
-
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 #if Syn_Out
 					std::cout << "Line: " << Lex::LineCounter
 						<< " array " << (ret_int ? "int " : "char ") << "def" << std::endl;
 #endif
 					Lex::getsym();
 					if (is_comma)
-					{
 						//Lex::getsym();
 						continuous_var_def(ret_int);	//after it, ';'
-					}
 					if (is_semicolon)
-					{
 						Lex::getsym();
-
-					}
-					else
-					{
-						/* TODO: lack ; */
-					}
-
+					else  /* lack ; */
+						ER::logER(ERT::EXPECT_SEMICOLON);
 				}
 			}
 			else if (is_comma)
 			{
 				if (ST::lookup(curFunc, key, true) == nullptr)
-				{
 					ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
-				}
-				else
-				{
-					/* re def */
-				}
+				else   /* re def */
+					ER::logER(ERT::IDEN_REDEFINITION);
 #if Syn_Out
 				std::cout << "Line: " << Lex::LineCounter
 					<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
@@ -292,32 +267,23 @@ void var_def_complex()
 				//Lex::getsym();
 				continuous_var_def(ret_int);	//after it, ';'
 				if (is_semicolon)
-				{
 					Lex::getsym();
-
-				}
-				else
-				{
-					/* TODO: lack ; */
-				}
-
+				else /* lack ; */
+					ER::logER(ERT::EXPECT_SEMICOLON);
 			}
-			else
+			else  /* invalid word after int|char IDEN */
 			{
-				/* TODO: invalid word after int|char IDEN */
+				ER::logER(ERT::EXPECT_SEMICOLON);
+				skipTill({ ";" }, {});
 			}
 		}
-		else
+		else  /* IDEN expected */
 		{
-			/* TODO: IDEN expected */
+			ER::logER(ERT::NO_IDEN_AFTER_TYPE_NAME);
+			skipTill({ ";" }, {});
 		}
 	}
-	else
-	{
-		/* TODO: no var def, maybe no error */
-		
-	}
-	
+		/* no var def, maybe no error */
 }
 
 // about sentence
@@ -341,15 +307,19 @@ void value_param(const varinfo *func_name)
 		//find the info of para
 		auto *para = ST::lookup_para(func_symtab, para_count);
 		if (para == nullptr)
-		{
-			/* TODO: too much para*/
-		}
-		if (ret_cls != para->cls)
-		{
+			/* too much para*/
+			ER::logER(ERT::TOO_MANY_FUNCTION_PARAMS);
+		if (ret_cls == ST::INT_CLS && para->cls == ST::CHA_CLS)	
+			//(ret_cls != para->cls) or just not int 2 char ?
 			/* cls not match: expect type(para->cls) get type(ret_cls)*/
-		}
+			ER::logER(ERT::TYPE_DISMATCH);
 		++para_count;
 	} while (is_comma);
+	if (para_count != ST::global_sym[func_name->name].length)
+	{
+		ER::logER(ERT::NOT_ENOUGH_FUNCTION_PARAM);
+		skipTill({ ")" }, {});
+	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " value_param " << "over" << std::endl;
@@ -367,8 +337,8 @@ void factor(int &ret_cls, std::string &ret_val)
 		std::string name = Lex::curElmt;
 		const varinfo *temp_iden = ST::lookup(curFunc, name, false);
 		if (temp_iden == nullptr)
-		{
-			/* TODO: not def, return */
+		{	/* not def, return */
+			ER::logER(ERT::IDEN_NO_DEFINITION);
 			return;
 		}
 		ret_cls = temp_iden->cls;
@@ -376,51 +346,39 @@ void factor(int &ret_cls, std::string &ret_val)
 		if (is_L_mid)
 		{
 			if (temp_iden->type != ST::ARRAY_TYP)
-			{
-				/* TODO: use [ when IDEN is NOT array, escape */
-			}
+				/* use [ when IDEN is NOT array, escape */
+				ER::logER(ERT::EXPECT_ARRAY);
 			Lex::getsym();
 			//expr check type=int
 			int temp_ret_cls;
 			std::string temp_ret_val;
 			expression(temp_ret_cls, temp_ret_val);
 			if (temp_ret_cls != ST::INT_CLS)
-			{
 				/* expr return NOT INT */
-			}
+				ER::logER(ERT::EXPECT_INT);
 			//expr check val=num, avoid array out of index
 			int array_index;
 			bool stoiOK = Med::is_operand_num(temp_ret_val, array_index);
 			if (stoiOK)		// true <=> stoi success
-			{
 				if (!(array_index >= 0 && array_index < temp_iden->length))
-				{
-					/* TODO: index out of range */
-				}
-			}
+					/* index out of range */
+					ER::logER(ERT::INDEX_OUT_OF_RANGE);
 			ret_val = Med::gen_temp(curFunc, Lex::LineCounter);
 			Med::addIMC(ret_val, OP::READ_ARR, name, temp_ret_val);
 			// expect ]
 			if (is_R_mid)
-			{
 				Lex::getsym();
-
-			}
-			else {
-				/* TODO: miss ] */
-			}
+			else  /* miss ] */
+				ER::logER(ERT::EXPECT_RIGHT_BRACKET);
 		}
 		else if (is_L_small) {
 			//func call
 			if (temp_iden->type != ST::FUN_TYP)
-			{
-				/* TODO: use ( when IDEN is NOT Function, return */
-				
-			}
+				/* use ( when IDEN is NOT Function, return */
+				ER::logER(ERT::EXPECT_FUNCTION);
 			if (temp_iden->cls == ST::VOID_CLS)
-			{
-				/* TODO: no ret val */
-			}
+				/* no ret val */
+				ER::logER(ERT::EXPECT_FUNCTION_WITH_RETURN_VALUE);
 			//Lex::getsym();
 			value_param(temp_iden);
 			if (is_R_small)
@@ -431,12 +389,11 @@ void factor(int &ret_cls, std::string &ret_val)
 				Med::addIMC(move_ret_to, OP::ADD, ret_val_mark, zero);
 				ret_val = move_ret_to;
 			}
-			else {
-				/* TODO: miss ) */
-			}
+			else  /* miss ) */
+				ER::logER(ERT::MISS_RIGHT_PARENT);
 		}
 		else {
-			/* TODO: no_param_func / const|var(int / char) */
+			/* no_param_func / const|var(int / char) */
 			switch (temp_iden->type)
 			{
 			case(ST::PARAM_TYP):
@@ -453,19 +410,16 @@ void factor(int &ret_cls, std::string &ret_val)
 			case(ST::FUN_TYP):
 			{
 				if (temp_iden->length != 0)	//must be a no para func
-				{
-					/* TODO: expect no para func*/
-				}
+					/* expect no para func*/
+					ER::logER(ERT::EXPECT_NO_PARA_FUNCTION);
 				Med::addIMC(name, OP::CALL, zero, zero);
 				std::string move_ret_to = Med::gen_temp(curFunc, Lex::LineCounter);
 				Med::addIMC(move_ret_to, OP::ADD, ret_val_mark, zero);
 				ret_val = move_ret_to;
 				break;
 			}
-			default:
-			{
-				/* TODO: what the hell? */
-			}
+			default:	/* what the hell? */
+				ER::logER(ERT::UNKNOWN_WORD);
 			}
 		}
 	}
@@ -475,15 +429,12 @@ void factor(int &ret_cls, std::string &ret_val)
 		expression(ret_cls, ret_val);
 		ret_cls = ST::INT_CLS;
 		if (is_R_small)
-		{
 			Lex::getsym();
-		}
-		else {
-			/* TODO: miss ) */
-		}
+		else  /* miss ) */
+			ER::logER(ERT::MISS_RIGHT_PARENT);
 	}
 	else{
-		/* TODO: int | char ,e.g. 3, '6' */
+		/* int | char ,e.g. 3, '6' */
 		//Lex::getsym();
 		if (is_SGL_CHARA)
 		{
@@ -508,9 +459,10 @@ void factor(int &ret_cls, std::string &ret_val)
 				ret_cls = ST::INT_CLS;
 				Lex::getsym();
 			}
-			else
+			else  /* wrong facor */
 			{
-				/* TODO: wrong facor */
+				ER::logER(ERT::WRONG_FACTOR);
+				skipTill({ "+", "-", "*", "/", ";", ",", ")", "]" }, { Lex::RSVD_WD });
 			}
 		}
 	}
@@ -537,6 +489,10 @@ void term(int &ret_cls, std::string &ret_val)
 		std::string factor2;
 		Lex::getsym();
 		factor(cls, factor2);
+		if (factor2 == zero && !mul)
+		{
+			ER::logER(ERT::DIVIDE_ZERO);
+		}
 		std::string factor3 = Med::gen_temp(curFunc, Lex::LineCounter);
 		Med::addIMC(factor3, mul ? OP::MUL : OP::DIV, factor1, factor2);
 		factor1 = factor3;
@@ -546,7 +502,6 @@ void term(int &ret_cls, std::string &ret_val)
 	std::cout << "Line: " << Lex::LineCounter
 		<< " term " << "over" << std::endl;
 #endif
-
 }
 //先读后进 语句返回类型/值
 void expression(int &ret_class, std::string &value)
@@ -589,7 +544,6 @@ void expression(int &ret_class, std::string &value)
 	std::cout << "Line: " << Lex::LineCounter
 		<< " expression " << "over" << std::endl;
 #endif
-
 }
 //先读后进
 void condition(std::string &label)
@@ -639,7 +593,6 @@ void condition(std::string &label)
 		std::cout << "Line: " << Lex::LineCounter
 		<< " condition " << "end" << std::endl;
 #endif
-
 }
 //先读后进，所在函数返回类型/值
 void if_sentence(bool &value_return, const int &ret_cls, std::string name)
@@ -650,26 +603,18 @@ void if_sentence(bool &value_return, const int &ret_cls, std::string name)
 #endif
 	int r = Lex::getsym();
 	if (is_L_small)
-	{
 		r = Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	// if condi then A <label1> --> if not condi branch label1
 	// if condi then A (goto label2) <label1> else B; <label2> C --> if not condi branch label1,  
 	//		at the end of A GOTO label2
 	std::string label1 = Med::gen_label();
 	condition(label1);
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
 	else
-	{
-
-	}
+		ER::logER(ERT::MISS_RIGHT_PARENT);
 	sentence(value_return, ret_cls, name);
 	if (is_elsesym)
 	{
@@ -681,14 +626,11 @@ void if_sentence(bool &value_return, const int &ret_cls, std::string name)
 		Med::addIMC(label2, OP::LABEL, zero, zero);
 	}
 	else		// no else
-	{
 		Med::addIMC(label1, OP::LABEL, zero, zero);
-	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " if " << "over" << std::endl;
 #endif
-
 }
 //先读后进
 void scanf_sentence()
@@ -697,16 +639,11 @@ void scanf_sentence()
 	std::cout << "Line: " << Lex::LineCounter
 		<< " scanf " << "start" << std::endl;
 #endif
-
 	Lex::getsym();
 	if (is_L_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	bool comma_now;
 	do
 	{
@@ -716,32 +653,29 @@ void scanf_sentence()
 			varinfo *temp_iden = ST::lookup(curFunc, name, false);
 			if (temp_iden == nullptr)	// must def before use
 			{
-				/* TODO: undef iden*/
+				/* undef iden*/
 				Lex::getsym();
+				comma_now = is_comma;
+				if (comma_now)
+					Lex::getsym();
 				continue;
 			}
 			if (temp_iden->type != ST::VAR_TYP && temp_iden->type != ST::PARAM_TYP)
-			{	// var | param can be read
-				/* expect var/param*/
-			}
+				// var | param can be read,		expect var/param
+				ER::logER(ERT::EXPECT_VAR_OR_PARAM);
 			if (temp_iden->cls == ST::INT_CLS)
-			{
 				Med::addIMC("int", OP::SCAN, name, zero);
-			}
 			else if (temp_iden->cls == ST::CHA_CLS)
-			{
 				Med::addIMC("char", OP::SCAN, name, zero);
-			}
 			else
-			{
-				std::cerr << "scanf wtf? " << temp_iden->cls;
-				assert(false);
-			}
+				ER::logER(ERT::INVALID_TYPE);
 			Lex::getsym();
 		}
-		else
+		else  /* lack iden */
 		{
-			/* lack iden */
+			ER::logER(ERT::EXPECT_IDEN);
+			skipTill({ ";" }, {});
+			return;
 		}
 		comma_now = is_comma;
 		if (comma_now)
@@ -749,18 +683,13 @@ void scanf_sentence()
 	} while (comma_now);
 
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* lack ) */
-	}
+	else  /* lack ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
 #if Syn_Out
 		std::cout << "Line: " << Lex::LineCounter
 		<< " scanf " << "over" << std::endl;
 #endif
-
 }
 //先读后进
 void printf_sentence()
@@ -769,16 +698,11 @@ void printf_sentence()
 	std::cout << "Line: " << Lex::LineCounter
 		<< " printf " << "start" << std::endl;
 #endif
-
 	Lex::getsym();
 	if (is_L_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	if (is_STRING)
 	{
 		int str_no = ST::addStr(Lex::curElmt);
@@ -791,13 +715,9 @@ void printf_sentence()
 		else
 		{
 			if (is_R_small)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* miss ) */
-			}
+			else  /* miss ) */
+				ER::logER(ERT::MISS_RIGHT_PARENT);
 #if Syn_Out
 			std::cout << "Line: " << Lex::LineCounter
 				<< " printf " << "over" << std::endl;
@@ -810,27 +730,18 @@ void printf_sentence()
 	std::string value;
 	expression(ret_cls, value);
 	if (ret_cls == ST::INT_CLS)
-	{
 		Med::addIMC("int", OP::PRINT, value, zero);
-	}
 	else if (ret_cls == ST::CHA_CLS)
-	{
 		Med::addIMC("char", OP::PRINT, value, zero);
-	}
 	/* print */
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: lack ) */
-	}
+	else  /* lack ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " printf " << "over" << std::endl;
 #endif
-
 }
 //先读后进，所在函数返回类型/值
 void return_sentence(bool &value_return, const int &ret_cls, std::string func_name)
@@ -839,7 +750,6 @@ void return_sentence(bool &value_return, const int &ret_cls, std::string func_na
 	std::cout << "Line: " << Lex::LineCounter
 		<< " return " << "start" << std::endl;
 #endif
-
 	Lex::getsym();
 	if (is_L_small)
 	{
@@ -848,29 +758,19 @@ void return_sentence(bool &value_return, const int &ret_cls, std::string func_na
 		std::string value;
 		expression(expr_ret_cls, value);
 		if (expr_ret_cls == ST::INT_CLS || expr_ret_cls == ST::CHA_CLS)
-		{
 			value_return = true;
-		}
 		if (ret_cls == ST::VOID_CLS)
-		{
-			/* TODO: return sth when void*/
-		}
+			/* return sth when void*/
+			ER::logER(ERT::RETURN_VALUE_NOT_ALLOW);
 		else if (ret_cls != expr_ret_cls)
-		{
 			/* class(expr) != return class(func) */
-		}
+			ER::logER(ERT::TYPE_DISMATCH);
 		else
-		{
 			Med::addIMC(ret_val_mark, OP::ADD, value, zero);
-		}
 		if (is_R_small)
-		{
 			Lex::getsym();
-		}
-		else
-		{
-			/* TODO: miss ) */
-		}
+		else  /* miss ) */
+			ER::logER(ERT::MISS_RIGHT_PARENT);
 		if (func_name != "main")
 			Med::addIMC(zero, OP::RET, zero, zero);
 		else
@@ -878,9 +778,8 @@ void return_sentence(bool &value_return, const int &ret_cls, std::string func_na
 		return;
 	}
 	if (ret_cls != ST::VOID_CLS)
-	{
-		/* TODO: miss (, need return sth */
-	}
+		/* miss (, need return sth */
+		ER::logER(ERT::NO_RETURN_VALUE);
 	if (func_name != "main")
 		Med::addIMC(zero, OP::RET, zero, zero);
 	else
@@ -890,7 +789,6 @@ void return_sentence(bool &value_return, const int &ret_cls, std::string func_na
 	std::cout << "Line: " << Lex::LineCounter
 		<< " return " << "over" << std::endl;
 #endif
-
 }
 //先读后进，所在函数返回类型/值
 void while_sentence(bool &value_return, const int &ret_cls, std::string func_name)
@@ -906,22 +804,14 @@ void while_sentence(bool &value_return, const int &ret_cls, std::string func_nam
 	std::string label2 = Med::gen_label();
 	Lex::getsym();
 	if (is_L_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	condition(label2);
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ) */
-	}
+	else  /* miss ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
 	sentence(value_return, ret_cls, func_name);
 	Med::addIMC(label1, OP::GOTO, zero, zero);
 	Med::addIMC(label2, OP::LABEL, zero, zero);
@@ -941,13 +831,9 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 	/* init label <sentence> sth++ (if cond goto label)*/
 	Lex::getsym();
 	if (is_L_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	if (is_IDEN)	// not allow array here
 	{
 		std::string name = Lex::curElmt;
@@ -956,42 +842,33 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		{
 			Lex::getsym();
 			if (is_assign)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* miss = */
-			}
+			else  /* miss = */
+				ER::logER(ERT::EXPECT_ASSIGN);
 			int exprt_ret_cls = -1; std::string value;
 			expression(exprt_ret_cls, value);
 			if (exprt_ret_cls == ST::INT_CLS && temp_id->cls == ST::CHA_CLS)
-			{
-				/* TODO: assign char with int */
-			}
+				/* assign char with int */
+				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::ADD, value, zero);
 			if (is_semicolon)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: miss semi */
-			}
+			else  /* miss semi */
+				ER::logER(ERT::EXPECT_SEMICOLON);
 		}
 		else
-		{
-			/* TODO: unsupport iden, skip until ; */
+		{   /* unsupport iden, skip until ; */
+			ER::logER(ERT::EXPECT_VAR_OR_PARAM);
+			skipTill({ ";" }, {});
 		}		
 	}
-	else
+	else  /* miss IDEN */
 	{
-		/* TODO: miss IDEN */
+		ER::logER(ERT::EXPECT_IDEN);
+		skipTill({ ";" }, {});
 	}
-
 	std::string for_label = Med::gen_label();
 	Med::addIMC(for_label, OP::LABEL, zero, zero);
-
 	// if cond goto loop. DO NOT use condition()!!!
 	int cls1; std::string expr1;
 	int cls2; std::string expr2;
@@ -1009,13 +886,9 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		expr2 = zero;
 	}
 	if (is_semicolon)
-	{
 		Lex::getsym();
-	}
-	else 
-	{
-		/* TODO: miss semi */
-	}
+	else  /* miss semi */
+		ER::logER(ERT::EXPECT_SEMICOLON);
 
 	/* iter ++/--*/
 	std::string name1="", name2="", step_direc;
@@ -1025,26 +898,20 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		name1 = Lex::curElmt;
 		auto temp_id = ST::lookup(curFunc, name1, false);
 		if (!(temp_id != nullptr && (temp_id->type == ST::VAR_TYP || temp_id->type == ST::PARAM_TYP)))
-		{
 			/* unsupport IDEN in for*/
-		}
+			ER::logER(ERT::EXPECT_VAR_OR_PARAM);
 		Lex::getsym();
 		if (is_assign)
-		{
 			Lex::getsym();
-		}
-		else
-		{
-			/* miss = */
-		}
+		else  /* miss = */
+			ER::logER(ERT::EXPECT_ASSIGN);
 		if (is_IDEN)
 		{
 			name2 = Lex::curElmt;
 			auto temp_id = ST::lookup(curFunc, name1, false);
 			if (!(temp_id != nullptr && (temp_id->type == ST::VAR_TYP || temp_id->type == ST::PARAM_TYP)))
-			{
-				/* unsupport IDEN in for */
-			}
+				/* unsupport IDEN in for*/
+				ER::logER(ERT::EXPECT_VAR_OR_PARAM);
 			Lex::getsym();
 			step_direc = Lex::curElmt;
 			if (is_add || is_sub)
@@ -1053,8 +920,8 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 				Lex::getsym();
 			}
 			else
-			{
-				/* miss +/-, default +*/
+			{   /* miss +/-, default +*/
+				ER::logER(ERT::EXPECT_ADD_OR_SUB);
 				step_direc = "+";
 			}
 			if (Lex::curCls == Lex::UNSGN_INT)
@@ -1063,34 +930,31 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 				Lex::getsym();
 			}
 			else
-			{
-				/* expect a int */
+			{   /* expect a int */
+				ER::logER(ERT::EXPECT_INT);
 				step = 1;
 			}
 		}
-		else
+		else  /* miss IDEN */
 		{
-			/* TODO: miss IDEN*/
+			ER::logER(ERT::EXPECT_IDEN);
+			skipTill({ ")" }, {});
 		}
 	}
-	else
+	else  /* miss IDEN */
 	{
-		/* TODO: miss IDEN */
+		ER::logER(ERT::EXPECT_IDEN);
+		skipTill({ ")" }, {});
 	}
 
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ) */
-	}
+	else  /* miss ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
 	sentence(value_return, ret_cls, func_name);
 	if (name1 != "" && name2 != "")
-	{
 		Med::addIMC(name1, (step_direc == "+" ? OP::ADD : OP::SUB), name2, std::to_string(step));
-	}
+	
 	Med::addIMC(for_label, (compare_op == "!=" ? OP::NEQ :
 							compare_op == "==" ? OP::EQU : 
 							compare_op == ">" ? OP::GRT : 
@@ -1111,197 +975,141 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		<< " sentence " << "start" << std::endl;
 #endif
 	if (is_ifsym)
-	{
 		if_sentence(value_return, ret_cls, func_name);
-	}
 	else if (is_whilesym)
-	{
 		while_sentence(value_return, ret_cls, func_name);
-	}
 	else if (is_forsym)
-	{
 		for_sentence(value_return, ret_cls, func_name);
-	}
 	else if (is_L_big)
 	{
 		Lex::getsym();
 		sentence_list(value_return, ret_cls, func_name);
 		if (is_R_big)
-		{
 			Lex::getsym();
-		}
-		else
-		{
-			/* TODO: miss } */
-		}
+		else  /* miss } */
+			ER::logER(ERT::EXPECT_RIGHT_BRACE);
 	}
 	else if (is_IDEN)
 	{
 		std::string name = Lex::curElmt;
 		varinfo *temp_iden = ST::lookup(func_name, name, false);
 		if (temp_iden == nullptr)
-		{
-			/* TODO: undef iden*/
+		{   /* undef iden*/
+			ER::logER(ERT::IDEN_NO_DEFINITION);
 			return;
 		}
 		Lex::getsym();
 		if (is_semicolon)
 		{
 			if (!(temp_iden->type == ST::FUN_TYP && temp_iden->length == 0))
-			{
-				/* TODO: expect no para func */
-			}
+				/* expect no para func */
+				ER::logER(ERT::EXPECT_NO_PARA_FUNCTION);
 			Med::addIMC(name, OP::CALL, zero, zero);
 			Lex::getsym();
 		}
 		else if (is_L_small)
 		{
 			if (temp_iden->type != ST::FUN_TYP)
-			{
-				/* TODO: expect param func */
-			}
+				/* expect param func */
+				ER::logER(ERT::EXPECT_PARA_FUNCTION);
 			//Lex::getsym();
 			value_param(temp_iden);
 			Med::addIMC(name, OP::CALL, zero, zero);
 			if (is_R_small)
-			{
 				Lex::getsym();
-			}
 			else 
-			{
-
-			}
+				ER::logER(ERT::MISS_RIGHT_PARENT);
 			if (is_semicolon)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: miss ; */
-			}
+			else  /* miss ; */
+				ER::logER(ERT::EXPECT_SEMICOLON);
 		}
 		else if (is_L_mid)
 		{
 			if (temp_iden->type != ST::ARRAY_TYP)
-			{
-				/* TODO: expect array */
-			}
+				/* expect array */
+				ER::logER(ERT::EXPECT_ARRAY);
 			int expr_ret_cls = -1;
 			std::string value;
 			Lex::getsym();
 			expression(expr_ret_cls, value);
 			int num;
 			bool stoiOK = Med::is_operand_num(value, num);
-			if (stoiOK)
-			{
+			if (stoiOK)		/* index out of range */
 				if (!(num >= 0 && num < temp_iden->length))
-				{
-					/* TODO: index out of range */
-				}
-			}
+					ER::logER(ERT::INDEX_OUT_OF_RANGE);
 			if (is_R_mid)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: miss ]*/
-			}
+			else  /* miss ] */
+				ER::logER(ERT::EXPECT_RIGHT_BRACE);
 			if (is_assign)
-			{
 				Lex::getsym();
-			}
 			else
-			{
-
-			}
+				ER::logER(ERT::EXPECT_ASSIGN);
 			int right_expr_ret_cls = -1;
 			std::string right_value;
 			expression(right_expr_ret_cls, right_value);
 			if (temp_iden->cls == ST::CHA_CLS && right_expr_ret_cls == ST::INT_CLS)
-			{
-				/* TODO: unable to assign int to char */
-			}
+				/* unable to assign int to char */
+				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::SAVE_ARR, value, right_value);
 			if (is_semicolon)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: miss ;*/
-			}
+			else  /* miss ; */
+				ER::logER(ERT::EXPECT_SEMICOLON);
 		}
 		else if (is_assign)
 		{
 			if (temp_iden->type != ST::VAR_TYP && temp_iden->type != ST::PARAM_TYP)
-			{
-				/* TODO: expect var/param*/
-			}
+				/* expect var/param*/
+				ER::logER(ERT::EXPECT_VAR_OR_PARAM);
 			Lex::getsym();
 			int expr_ret_cls = -1;
 			std::string value;
 			expression(expr_ret_cls, value);
 			if (temp_iden->cls == ST::CHA_CLS && expr_ret_cls == ST::INT_CLS)
-			{
-				/* TODO: unable assign char with int */
-			}
+				/* unable to assign int to char */
+				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::ADD, value, zero);
 			if (is_semicolon)
-			{
 				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: miss ; */
-			}
+			else  /* miss ; */
+				ER::logER(ERT::EXPECT_SEMICOLON);
 		}
-		else
-		{
-			/* TODO: miss ; */
-		}
+		else  /* miss ; */
+			ER::logER(ERT::EXPECT_SEMICOLON);
 	}
 	else if (is_scanfsym)
 	{
 		scanf_sentence();
 		if (is_semicolon)
-		{
 			Lex::getsym();
-		}
 		else
-		{
-
-		}
+			ER::logER(ERT::EXPECT_SEMICOLON);
 	}
 	else if (is_printfsym)
 	{
 		printf_sentence();
 		if (is_semicolon)
-		{
 			Lex::getsym();
-		}
 		else
-		{
-
-		}
-
+			ER::logER(ERT::EXPECT_SEMICOLON);
 	}
 	else if (is_semicolon)
-	{
 		Lex::getsym();
-	}
 	else if (is_returnsym)
 	{
 		return_sentence(value_return, ret_cls, func_name);
 		if (is_semicolon)
-		{
 			Lex::getsym();
-		}
 		else
-		{
-
-		}
-
+			ER::logER(ERT::EXPECT_SEMICOLON);
+	}
+	else
+	{
+		ER::logER(ERT::INVALID_SENTENCE);
+		skipTill({ "if", "while", "{", "scanf", "printf", ";", "for", "return" }, { Lex::IDEN });
+		//sentence(value_return, ret_cls, func_name);
 	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1318,9 +1126,7 @@ void sentence_list(bool &value_return, const int &ret_cls, std::string func_name
 		<< " sentence_list " << "start" << std::endl;
 #endif
 	while (sent_head_rsvd || is_IDEN)
-	{
 		sentence(value_return, ret_cls, func_name);
-	}
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " sentence_list " << "end" << std::endl;
@@ -1343,31 +1149,21 @@ void complex_sentence(bool &value_return, const int &ret_cls, std::string func_n
 			const_define();	//after it, curElmt = ";" bad->rsvd_wd
 		}
 		else
-		{
 			break;	
-		}
-		if (!is_semicolon)
-		{
-			/* TODO: lack ; */
-		}
+		if (!is_semicolon)  /* lack ; */
+			ER::logER(ERT::EXPECT_SEMICOLON);
 	} while (is_semicolon && !CODEEOF);
 	if (is_semicolon)
-	{
 		r = Lex::getsym();		// int | char 
-	}
 	do
 	{
 		var_def_complex();
 		if (is_semicolon)
-		{
 			r = Lex::getsym();		// int | char 
-		}
 	} while ((is_intsym || is_charsym) && !CODEEOF);
 	
 	if (is_semicolon)
-	{
 		r = Lex::getsym();		// sentence list start
-	}
 	sentence_list(value_return, ret_cls, func_name);		// before: new word, after: "}"
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1384,42 +1180,35 @@ void param_list(std::string func_name)
 	do
 	{
 		r = Lex::getsym();
+		bool int_para = true;
 		if (is_intsym || is_charsym)
 		{
-			bool int_para = is_intsym;
-			int _cls = int_para ? ST::INT_CLS : ST::CHA_CLS;
+			int_para = is_intsym;
 			r = Lex::getsym();
-			if (r == Lex::IDEN)
-			{
-				std::string IDEN_name = Lex::curElmt;
-#if Syn_Out
-				std::cout << "Line: " << Lex::LineCounter << " Function "
-					<< func_name << " param: " << (int_para ? "int " : "char ") << IDEN_name << std::endl;
-#endif
-				if (ST::lookup(func_name, IDEN_name, true) == nullptr)
-				{
-					varinfo *finfo = ST::lookup("", func_name, false);
-					assert(finfo != nullptr);
-					ST::addsym(func_name, IDEN_name, _cls, ST::PARAM_TYP, finfo->length, Lex::LineCounter);
-					++(finfo->length);		// length of param: i th param, range(0, length_of_func)
-				}
-				else
-				{
-					/* TODO: re def */
-				}
-				Lex::getsym();
-			}
-			else
-			{
-				/* TODO: invalid IDEN after int|char */
-			}
-			
 		}
-		else
+		else  /* invalid param type */
+			ER::logER(ERT::EXPECT_TYPE_NAME);
+		int _cls = int_para ? ST::INT_CLS : ST::CHA_CLS;
+		if (r == Lex::IDEN)
 		{
-			/* TODO: invalid param type */
-
+			std::string IDEN_name = Lex::curElmt;
+#if Syn_Out
+			std::cout << "Line: " << Lex::LineCounter << " Function "
+				<< func_name << " param: " << (int_para ? "int " : "char ") << IDEN_name << std::endl;
+#endif
+			if (ST::lookup(func_name, IDEN_name, true) == nullptr)
+			{
+				varinfo *finfo = ST::lookup("", func_name, false);
+				assert(finfo != nullptr);
+				ST::addsym(func_name, IDEN_name, _cls, ST::PARAM_TYP, finfo->length, Lex::LineCounter);
+				++(finfo->length);		// length of param: i th param, range(0, length_of_func)
+			}
+			else  /* re def */
+				ER::logER(ERT::IDEN_REDEFINITION);
+			Lex::getsym();
 		}
+		else  /* invalid IDEN after int|char */
+			ER::logER(ERT::NO_IDEN_AFTER_TYPE_NAME);
 	} while (is_comma);
 }
 //	先进后读
@@ -1427,17 +1216,11 @@ void param_func_def_piece(const std::string func_name)
 {
 	param_list(func_name);	//after it, curElmt = non-comma word
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: no ) */
-	}
-	if (!is_L_big)
-	{
-		/* TODO: no { */
-	}	
+	else  /* no ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
+	if (!is_L_big)  /* no { */
+		ER::logER(ERT::MISS_LEFT_BRACKET);
 	bool with_return_value = false;
 	auto func_info = ST::lookup("", func_name, false);
 	Med::addIMC(func_name, OP::FUNC_BEGIN, zero, zero);
@@ -1445,22 +1228,15 @@ void param_func_def_piece(const std::string func_name)
 	if (is_R_big)
 	{
 		Lex::getsym();
-		if (func_info->cls != ST::VOID_CLS)
-		{	// need return sth but not
-			/* TDOD: need return sth */
-
-		}
-		else if (func_info->cls == ST::VOID_CLS)
-		{	// mustn't return sth but return sth
-			/* TDOD: mustn't return sth */
-
-		}
-
+		if (func_info->cls != ST::VOID_CLS && !with_return_value)
+			// need return sth but not
+			ER::logER(ERT::NO_RETURN_VALUE);
+		else if (func_info->cls == ST::VOID_CLS && with_return_value)
+			// mustn't return sth but return sth
+			ER::logER(ERT::RETURN_VALUE_NOT_ALLOW);
 	}
-	else
-	{
-		/* TODO: no } after func def */
-	}
+	else  /* no } after func def */
+		ER::logER(ERT::EXPECT_RIGHT_BRACKET);
 	Med::addIMC(zero, OP::FUNC_END, zero, zero);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1478,20 +1254,14 @@ void no_param_func_def_piece(const std::string func_name)
 	{
 		Lex::getsym();
 		if (!with_return_value && func_info->cls != ST::VOID_CLS)
-		{	// need return sth but not
-			/* TDOD: need return sth */
-
-		}
+			// need return sth but not
+			ER::logER(ERT::NO_RETURN_VALUE);
 		else if (with_return_value && func_info->cls == ST::VOID_CLS)
-		{	// mustn't return sth but return sth
-			/* TDOD: mustn't return sth */
-			
-		}
+			// mustn't return sth but return sth
+			ER::logER(ERT::RETURN_VALUE_NOT_ALLOW);
 	}
-	else
-	{
-		/* TODO: no } after func def */
-	}
+	else  /* no } after func def */
+		ER::logER(ERT::EXPECT_RIGHT_BRACKET);
 	Med::addIMC(zero, OP::FUNC_END, zero, zero);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
@@ -1506,31 +1276,19 @@ void main_piece()
 	curFunc = "main";
 	int r = Lex::getsym();
 	if (is_L_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ( */
-	}
+	else  /* miss ( */
+		ER::logER(ERT::MISS_LEFT_PARENT);
 	if (is_R_small)
-	{
 		Lex::getsym();
-	}
-	else
-	{
-		/* TODO: miss ) */
-	}
-	if (!is_L_big)
-	{
-		/* TODO: miss {*/
-	}
+	else  /* miss ) */
+		ER::logER(ERT::MISS_RIGHT_PARENT);
+	if (!is_L_big)  /* miss {*/
+		ER::logER(ERT::EXPECT_RIGHT_BRACKET);
 	bool with_return_value = false;
 	complex_sentence(with_return_value, ST::VOID_CLS, curFunc);
 	if (!is_R_big)
-	{
-
-	}
+		ER::logER(ERT::EXPECT_RIGHT_BRACKET);
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter
 		<< " main piece over" << std::endl;
@@ -1546,22 +1304,13 @@ void Syn::program()
 		Lex::getsym();
 		const_define();		//out: curE = ";" / reserved
 		if (is_semicolon)
-		{
 			Lex::getsym();
-		}
-		else
-		{
-			/*TODO: lack ; */
-		}
-
+		else  /* lack ; */
+			ER::logER(ERT::EXPECT_SEMICOLON);
 		if (is_constsym)
-		{
 			continue;	// miss ;
-		}
 		if (is_reserved)
-		{
 			break;
-		}
 	}
 	//tricky time
 	/* int|char -> IDEN ->  [ -> var array
@@ -1577,7 +1326,6 @@ void Syn::program()
 		if (is_intsym || is_charsym)
 		{
 			bool ret_int = is_intsym;	// func/var type (int|char)
-
 			r = Lex::getsym();
 			if (r == Lex::IDEN)
 			{
@@ -1592,13 +1340,9 @@ void Syn::program()
 						<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
 #endif
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
-					}
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					Lex::getsym();
 					continue;
 				}
@@ -1607,15 +1351,13 @@ void Syn::program()
 					int length = _int();
 					if (length <= 0)
 					{
-						/* TODO: length of array <=0 */
+						/* length of array <=0 */
 						length = 1;
+						ER::logER(ERT::INVALID_ARRAY_LENGTH);
 					}
-					Lex::getsym();		// ']'
-					if (!is_R_mid)
-					{
-						/* TODO: miss R_mid */
-						/* skip until ","->continue_var | ";"->continue */
-					}
+					//Lex::getsym();		// ']'
+					if (!is_R_mid)  /* miss R_mid */
+						ER::logER(ERT::EXPECT_RIGHT_BRACE);
 					else
 					{
 #if Syn_Out
@@ -1623,28 +1365,17 @@ void Syn::program()
 							<< " array " << (ret_int ? "int " : "char ") << "def" << std::endl;
 #endif
 						if (ST::lookup(curFunc, key, true) == nullptr)
-						{
 							ST::addsym(curFunc, key, _cls, ST::ARRAY_TYP, length, Lex::LineCounter);
-						}
-						else
-						{
-							/* TODO: re def */
-						}
-
+						else  /* re def */
+							ER::logER(ERT::IDEN_REDEFINITION);
 						Lex::getsym();	// , | ;
 						if (is_comma)
-						{
 							//Lex::getsym();
 							continuous_var_def(ret_int);	// in it, read word first
-						}
 						if (is_semicolon)
-						{
 							Lex::getsym();
-						}
-						else
-						{
-							/* TODO: lack ; */
-						}
+						else  /* lack ; */
+							ER::logER(ERT::EXPECT_SEMICOLON);
 					}
 				}
 				else if (is_comma)
@@ -1654,24 +1385,15 @@ void Syn::program()
 						<< " var " << (ret_int ? "int " : "char ") << "def" << std::endl;
 #endif
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::VAR_TYP, 0, Lex::LineCounter);
-					}
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					//Lex::getsym();
 					continuous_var_def(ret_int);
 					if (is_semicolon)
-					{
 						Lex::getsym();
-					}
-					else
-					{
-						/* TODO: lack ; */
-					}
-
+					else  /* lack ; */
+						ER::logER(ERT::EXPECT_SEMICOLON);
 				}
 				else if (is_L_small)
 				{
@@ -1679,19 +1401,14 @@ void Syn::program()
 #if Syn_Out
 					std::cout << "Line: " << Lex::LineCounter
 						<< " para-function " << (ret_int ? "int " : "char ") << std::endl;
-#endif
+#endif				// modify length later
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::FUN_TYP, 0, Lex::LineCounter);
-					}		// modify length later
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					curFunc = key;
 					param_func_def_piece(key);
 					curFunc = "";
-
 				}
 				else if (is_L_big)
 				{
@@ -1701,25 +1418,23 @@ void Syn::program()
 						<< " non-para-function " << (ret_int ? "int " : "char ") << std::endl;
 #endif
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, _cls, ST::FUN_TYP, 0, Lex::LineCounter);
-					}
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					curFunc = key;
 					no_param_func_def_piece(key);
 					curFunc = "";
 				}
 				else
-				{
-					/* TODO: invalid word after int|char IDEN */
+				{   /* invalid word after int|char IDEN */
+					ER::logER(ERT::EXPECT_IDEN);
+					skipTill({ ",",";" }, {});
 				}
 			}
-			else
+			else  /* IDEN expected */
 			{
-				/* TODO: IDEN expected */
+				ER::logER(ERT::EXPECT_IDEN);
+				skipTill({ ",",";" }, {Lex::RSVD_WD});
 			}
 		}
 		else if (is_voidsym)
@@ -1736,19 +1451,14 @@ void Syn::program()
 #if Syn_Out
 					std::cout << "Line: " << Lex::LineCounter
 						<< " para-function " << "void" << std::endl;
-#endif
+#endif				// modify length later
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, ST::VOID_CLS, ST::FUN_TYP, 0, Lex::LineCounter);
-					}		// modify length later
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					curFunc = key;
 					param_func_def_piece(key);
 					curFunc = "";
-
 				}
 				else if (is_L_big)
 				{
@@ -1758,44 +1468,43 @@ void Syn::program()
 						<< " non-para-function " << "void" << std::endl;
 #endif
 					if (ST::lookup(curFunc, key, true) == nullptr)
-					{
 						ST::addsym(curFunc, key, ST::VOID_CLS, ST::FUN_TYP, 0, Lex::LineCounter);
-					}
-					else
-					{
-						/* TODO: re def */
-					}
+					else  /* re def */
+						ER::logER(ERT::IDEN_REDEFINITION);
 					curFunc = key;
 					no_param_func_def_piece(key);
 					curFunc = "";
 				}
 				else
 				{
-
+					ER::logER(ERT::MISS_LEFT_PARENT);
+					ER::logER(ERT::MISS_LEFT_BRACKET);
 				}
 			}
-			else if(is_mainsym)
+			else if(Lex::curElmt == "main")//(is_mainsym)
 			{
 #if Syn_Out
 				std::cout << "Line: " << Lex::LineCounter
 					<< " main start" << std::endl;
-#endif
+#endif			std::cout << "invisible";
 				break;		// to main
 			}
-			else
+			else  /* miss main/iden */
 			{
-				/* TODO: miss main/iden */
-				
+				ER::logER(ERT::NO_MAIN_FUNCTION);
 			}
 		}
 		else
-		{
-			/* TODO: int/char/void expected*/
-			skipTill({ "int", "char", "void" }, { Lex::RSVD_WD });
-
+		{   /* int/char/void expected*/
+			ER::logER(ERT::EXPECT_TYPE_NAME);
+			skipTill({ "int", "char", "void" }, {});
 		}
 	}
-	assert(is_mainsym);
+	//assert(is_mainsym);
+	if (CODEEOF || !is_mainsym)
+		ER::logER(ERT::NO_MAIN_FUNCTION);
+	if (CODEEOF)
+		return;
 	main_piece();
 #if Syn_Out
 	std::cout << "Line: " << Lex::LineCounter

@@ -706,7 +706,7 @@ void read_arr(mcode &c, ociter o)
 		{
 			rdreg = regSeek(dst, false);
 			ss << (arr_iden.cls == ST::INT_CLS ? LW : LBU)
-				<< " " << rdreg << " -" << mark2global_IDEN(arr) << '+' << idx * elmt_size;
+				<< " " << rdreg << " " << mark2global_IDEN(arr) << '+' << idx * elmt_size;
 			mpss;
 		}
 		else

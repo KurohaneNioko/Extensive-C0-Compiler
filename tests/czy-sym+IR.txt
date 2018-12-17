@@ -86,11 +86,11 @@
             %8       label               0               0
              0    func_end               0               0
 get_permutations_sy  func_begin               0               0
-        RET_v0           +              84               0
+        RET_v0           +               0               0
              0         ret               0               0
              0    func_end               0               0
          judge  func_begin               0               0
-          char       print              42               0
+          char       print               0               0
  get_max_num_1        call               0               0
            #20           +          RET_v0               0
            #21           +             #20               1
@@ -179,7 +179,7 @@ get_permutations_sy  func_begin               0               0
        compute        call               0               0
            #44           +          RET_v0               0
              n           +             #44               0
-          char       print              95               0
+          char       print               0               0
            int       print               n               0
            int       scanf               m               0
              0        push               n               0
@@ -220,7 +220,7 @@ string_3 : .asciiz "test for success\n"
 global:
           name|class|  type|  len|  def|       addr
        compute|  int|  func|    3|   56|   ffffffff|
-        divide| char| const|   95|    2|   ffffffff|
+        divide| char| const|    0|    2|   ffffffff|
          get_2|  int|  func|    0|   51|   ffffffff|
  get_max_num_1|  int|  func|    0|   39|   ffffffff|
  get_max_num_2|  int|  func|    0|   44|   ffffffff|
@@ -269,12 +269,12 @@ get_max_num_2:
        max_num|  int|   var|    0|   45|          0|
 get_permutations_sy:
           name|class|  type|  len|  def|       addr
-permutations_sy| char| const|   84|   81|          0|
+permutations_sy| char| const|    0|   81|          0|
 judge:
           name|class|  type|  len|  def|       addr
-           #20|  int|   var|    0|   89|         34|
-           #21|  int|   var|    0|   89|         38|
-        divide| char| const|   42|   87|          8|
+           #20|  int|   var|    0|   89|          8|
+           #21|  int|   var|    0|   89|          c|
+        divide| char| const|    0|   87|          8|
              m|  int|  para|    1|   85|          4|
              n|  int|  para|    0|   85|          0|
 permutations:

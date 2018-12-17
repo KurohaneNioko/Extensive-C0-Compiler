@@ -1,7 +1,7 @@
 #include"Error.h"
 
 bool with_error = false;
-
+std::vector<errInfo> err;
 void ER::logER(int ertype)
 {
 	struct errInfo ei;
@@ -21,7 +21,7 @@ std::map<int, std::string> errcode2real =
 
 void ER::writeERR(std::ofstream&o)
 {
-	for (auto i = err.begin(); i != ER::err.end(); i++)
+	for (auto i = err.begin(); i != err.end(); i++)
 		o << "Line " << i->row << ", Column " << i->row
-			<< ", near " << i->word << ": " << errcode2real[i->errtp] << std::endl;
+			<< ", near " << i->word << " : " << errcode2real[i->errtp] << std::endl;
 }

@@ -1,0 +1,58 @@
+Line 28, Column 28, near main : 
+Line 30, Column 30, near = : 
+Line 30, Column 30, near , : 
+Line 31, Column 31, near [ : 
+Line 31, Column 31, near ; : 
+Line 35, Column 35, near x : 
+Line 93, Column 93, near  : 
+global:
+          name|class|  type|  len|  def|       addr
+             a|  int|   var|    0|   33|   ffffffff|
+            aa|  int|   var|    0|   33|   ffffffff|
+          fact|  int|  func|    1|    8|   ffffffff|
+   first_alpha| char| const|    0|    4|   ffffffff|
+first_captical| char| const|    0|    4|   ffffffff|
+          fun2| char|  func|    6|   22|   ffffffff|
+            m1|  int| array|    8|   32|   ffffffff|
+     minus_two|  int| const|   -2|    2|   ffffffff|
+           one|  int| const|    1|    2|   ffffffff|
+             r|  int|   var|    0|   32|   ffffffff|
+          renn| char| const|    0|    3|   ffffffff|
+          rt15|  int|  func|    0|   17|   ffffffff|
+     testchar1| char|   var|    0|    6|   ffffffff|
+     testchar2| char|   var|    0|    6|   ffffffff|
+             x|  int|   var|    0|    5|   ffffffff|
+          xxxx|  int|   var|    0|    5|   ffffffff|
+           yyy|  int| array|    7|    5|   ffffffff|
+          zero|  int| const|    0|    1|   ffffffff|
+       zzzzzzz|  int|   var|    0|    5|   ffffffff|
+
+fact:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   13|   ffffffff|
+            #2|  int|   var|    0|   13|   ffffffff|
+            #3|  int|   var|    0|   13|   ffffffff|
+             t|  int|  para|    0|    8|   ffffffff|
+fun2:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   24|   ffffffff|
+           #11|  int|   var|    0|   24|   ffffffff|
+           #12|  int|   var|    0|   24|   ffffffff|
+            #8|  int|   var|    0|   24|   ffffffff|
+            #9|  int|   var|    0|   24|   ffffffff|
+             a|  int|  para|    0|   22|   ffffffff|
+             b|  int|  para|    1|   22|   ffffffff|
+             c|  int|  para|    2|   22|   ffffffff|
+             d|  int|  para|    3|   22|   ffffffff|
+             e|  int|  para|    4|   22|   ffffffff|
+             f|  int|  para|    5|   22|   ffffffff|
+rt15:
+          name|class|  type|  len|  def|       addr
+            #4|  int|   var|    0|   19|   ffffffff|
+            #5|  int|   var|    0|   19|   ffffffff|
+            #6|  int|   var|    0|   19|   ffffffff|
+            #7|  int|   var|    0|   19|   ffffffff|
+          zero|  int| const|    1|   18|   ffffffff|
+
+main:
+          name|class|  type|  len|  def|       addr

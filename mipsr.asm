@@ -268,21 +268,21 @@ label10:
 label8:
 	jr $ra
 func_get_permutations_sy:
-	li $v0 84
+	li $v0 0
 	jr $ra
 	jr $ra
 func_judge:
 	li $v0 11
-	li $a0 42
+	li $a0 0
 	syscall
-	# print char 42
+	# print char 0
 	# save start
-	sw $ra -200 ($sp)
-	addi $sp $sp -132
+	sw $ra -156 ($sp)
+	addi $sp $sp -88
 	jal func_get_max_num_1
 	# recover start
-	addi $sp $sp 132
-	lw $ra -200 ($sp)
+	addi $sp $sp 88
+	lw $ra -156 ($sp)
 	# recover end
 # $t0: None -> #20
 	# now $t0 is #20
@@ -596,9 +596,9 @@ main:
 	move $t7 $t6
 	sw $t7 _n
 	li $v0 11
-	li $a0 95
+	li $a0 0
 	syscall
-	# print char 95
+	# print char 0
 	li $v0 1
 # $s0: None -> n
 	# now $s0 is n
@@ -624,12 +624,12 @@ main:
 	sw $s3 -32 ($sp)
 # push param: m
 	# save start
-	sw $ra -156 ($sp)
+	sw $ra -112 ($sp)
 	addi $sp $sp -28
 	jal func_judge
 	# recover start
 	addi $sp $sp 28
-	lw $ra -156 ($sp)
+	lw $ra -112 ($sp)
 	# recover end
 # $s4: None -> #45
 	# now $s4 is #45
@@ -702,12 +702,12 @@ main:
 	syscall
 	# print str 2
 	# save start
-	sw $ra -180 ($sp)
+	sw $ra -96 ($sp)
 	addi $sp $sp -28
 	jal func_get_permutations_sy
 	# recover start
 	addi $sp $sp 28
-	lw $ra -180 ($sp)
+	lw $ra -96 ($sp)
 	# recover end
 # $t5: None -> #47
 	# now $t5 is #47
