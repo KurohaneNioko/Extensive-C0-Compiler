@@ -24,6 +24,7 @@ int main(int argc, char** argv)
 	if (!Lex::code_file)// || !f_out)
 	{
 		std::cout << "open failed";
+		system("pause");
 		return -1;
 	}
 	//unsigned long cnt = 0;
