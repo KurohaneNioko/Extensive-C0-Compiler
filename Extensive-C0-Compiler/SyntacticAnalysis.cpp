@@ -568,6 +568,8 @@ void condition(std::string &label)
 		int cls2; std::string expr2;
 		Lex::getsym();
 		expression(cls2, expr2);	// if condi then A <label1> --> if not condi branch label1
+		if (cls1 != ST::INT_CLS || cls2 != ST::INT_CLS)
+			ER::logER(ERT::TYPE_DISMATCH);
 		if (compare_op == "==")		// if condi then A <label1> else B; <label2> C --> if not condi branch label 1,  
 		{							//		at the end of A GOTO label2
 			Med::addIMC(label, OP::NEQ, expr1, expr2);
@@ -595,6 +597,8 @@ void condition(std::string &label)
 	}
 	else
 	{
+		if (cls1 != ST::INT_CLS)
+			ER::logER(ERT::TYPE_DISMATCH);
 		Med::addIMC(label, OP::EQU, expr1, zero);
 	}
 #if Syn_Out
@@ -888,11 +892,15 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		compare_op = Lex::curElmt;
 		Lex::getsym();
 		expression(cls2, expr2);
+		if (cls1 != ST::INT_CLS || cls2 != ST::INT_CLS)
+			ER::logER(ERT::TYPE_DISMATCH);
 	}
 	else	/* bne expr zero label*/
 	{
 		compare_op = "!=";
 		expr2 = zero;
+		if (cls1 != ST::INT_CLS)
+			ER::logER(ERT::TYPE_DISMATCH);
 	}
 	if (is_semicolon)
 		Lex::getsym();
