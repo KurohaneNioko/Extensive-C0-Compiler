@@ -314,8 +314,9 @@ void value_param(const varinfo *func_name)
 		if (para == nullptr)
 			/* too much para*/
 			ER::logER(ERT::TOO_MANY_FUNCTION_PARAMS);
-		if (ret_cls == ST::INT_CLS && para->cls == ST::CHA_CLS)	
-			//(ret_cls != para->cls) or just not int 2 char ?
+		//if (ret_cls == ST::INT_CLS && para->cls == ST::CHA_CLS)	
+		if (ret_cls != para->cls)	
+			//(ret_cls != para->cls) or just not int 2 char ? must the same!
 			/* cls not match: expect type(para->cls) get type(ret_cls)*/
 			ER::logER(ERT::TYPE_DISMATCH);
 		++para_count;
@@ -854,8 +855,9 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 				ER::logER(ERT::EXPECT_ASSIGN);
 			int exprt_ret_cls = -1; std::string value;
 			expression(exprt_ret_cls, value);
-			if (exprt_ret_cls == ST::INT_CLS && temp_id->cls == ST::CHA_CLS)
-				/* assign char with int */
+			//if (exprt_ret_cls == ST::INT_CLS && temp_id->cls == ST::CHA_CLS)
+			if (exprt_ret_cls != temp_id->cls)
+				/* assign char with int -> must the same!!! */
 				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::ADD, value, zero);
 			if (is_semicolon)
@@ -1019,6 +1021,8 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			if (temp_iden->type != ST::FUN_TYP)
 				/* expect param func */
 				ER::logER(ERT::EXPECT_PARA_FUNCTION);
+			if (temp_iden->length == 0)
+				ER::logER(ERT::EXPECT_PARA_FUNCTION);
 			//Lex::getsym();
 			value_param(temp_iden);
 			Med::addIMC(name, OP::CALL, zero, zero);
@@ -1056,7 +1060,8 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			int right_expr_ret_cls = -1;
 			std::string right_value;
 			expression(right_expr_ret_cls, right_value);
-			if (temp_iden->cls == ST::CHA_CLS && right_expr_ret_cls == ST::INT_CLS)
+			//if (temp_iden->cls == ST::CHA_CLS && right_expr_ret_cls == ST::INT_CLS)
+			if (temp_iden->cls != right_expr_ret_cls)
 				/* unable to assign int to char */
 				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::SAVE_ARR, value, right_value);
@@ -1074,7 +1079,8 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			int expr_ret_cls = -1;
 			std::string value;
 			expression(expr_ret_cls, value);
-			if (temp_iden->cls == ST::CHA_CLS && expr_ret_cls == ST::INT_CLS)
+			//if (temp_iden->cls == ST::CHA_CLS && expr_ret_cls == ST::INT_CLS)
+			if (temp_iden->cls != expr_ret_cls)
 				/* unable to assign int to char */
 				ER::logER(ERT::TYPE_DISMATCH);
 			Med::addIMC(name, OP::ADD, value, zero);
