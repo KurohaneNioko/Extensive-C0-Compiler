@@ -1,0 +1,338 @@
+           add  func_begin               0               0
+            #1           +               a               b
+             c           +              #1               0
+            #2           *               c               1
+             c           +              #2               0
+        RET_v0           +               c               0
+             0         ret               0               0
+             0    func_end               0               0
+       fortest  func_begin               0               0
+           str       print              ~1               0
+             i           +               0               0
+            %1       label               0               0
+           int       print               i               0
+             i           +               i               2
+            %1          <=               i              10
+             i           +               0               0
+            %2       label               0               0
+           int       print               i               0
+             i           -               i               5
+            %2          !=               0               0
+             i           +              10               0
+            %3       label               0               0
+           int       print               i               0
+             i           -               i               2
+            %3          >=               i               0
+           str       print              ~2               0
+             0    func_end               0               0
+       exptest  func_begin               0               0
+           str       print              ~3               0
+           int       scanf               a               0
+          char       scanf               b               0
+            #3           -               0              10
+            #4           +              #3              20
+            #5           *               a              #4
+            #6           /              #5               5
+             a           +              #6               0
+            #7           -               0             'a'
+            #8           +              #7               b
+             c           +              #8               0
+           int       print               a               0
+           int       print               c               0
+            #9           +               c               b
+        RET_v0           +              #9               0
+             0         ret               0               0
+             0    func_end               0               0
+     arraytest  func_begin               0               0
+        varray         []=               0               1
+        varray         []=               1               2
+        varray         []=               2               3
+        varray         []=               3               4
+        varray         []=               4               5
+           #10         =[]          varray               0
+           #11         =[]          varray               0
+           #12         =[]          varray             #11
+           #13           +             #10             #12
+           #14         =[]          varray               2
+           #15           +             #13             #14
+           #16         =[]          varray               3
+           #17           +             #15             #16
+           #18         =[]          varray               4
+           #19           *             #17             #18
+        RET_v0           +             #19               0
+             0         ret               0               0
+             0    func_end               0               0
+           fib  func_begin               0               0
+            %4          !=               a               1
+        RET_v0           +               1               0
+             0         ret               0               0
+            %4       label               0               0
+            %5          !=               a               2
+        RET_v0           +               1               0
+             0         ret               0               0
+            %5       label               0               0
+           #20           -               a               1
+             0        push             #20               0
+           fib        call               0               0
+           #21           +          RET_v0               0
+           #22           -               a               2
+             0        push             #22               0
+           fib        call               0               0
+           #23           +          RET_v0               0
+           #24           +             #21             #23
+        RET_v0           +             #24               0
+             0         ret               0               0
+             0    func_end               0               0
+     whiletest  func_begin               0               0
+           str       print              ~4               0
+            %6       label               0               0
+            %7          <=               a               0
+           int       print               a               0
+           #25           -               a               3
+             a           +             #25               0
+            %6        goto               0               0
+            %7       label               0               0
+            %8       label               0               0
+            %9          <=              15               a
+           int       print               a               0
+           #26           +               a               5
+             a           +             #26               0
+            %8        goto               0               0
+            %9       label               0               0
+           str       print              ~5               0
+             0    func_end               0               0
+     calltest3  func_begin               0               0
+          char       print               a               0
+          char       print               b               0
+          char       print               c               0
+          char       print               d               0
+           str       print              ~6               0
+             0    func_end               0               0
+     calltest2  func_begin               0               0
+             0        push              97               0
+             0        push              42               1
+             0        push              43               2
+             0        push              56               3
+     calltest3        call               0               0
+           str       print              ~7               0
+             0    func_end               0               0
+     calltest1  func_begin               0               0
+           str       print              ~8               0
+     calltest2        call               0               0
+        RET_v0           +               0               0
+             0         ret               0               0
+             0    func_end               0               0
+      chartest  func_begin               0               0
+          char       print             'H'               0
+          char       print             'E'               0
+          char       print             'L'               0
+          char       print             'L'               0
+          char       print             'O'               0
+        RET_v0           +             'W'               0
+             0         ret               0               0
+             0    func_end               0               0
+          main  func_begin               0               0
+           str       print              ~9               0
+           str       print             ~10               0
+             0        push              10               0
+             0        push              20               1
+           add        call               0               0
+           #27           +          RET_v0               0
+        result           +             #27               0
+           str       print             ~11               0
+           int       print          result               0
+           str       print             ~12               0
+       exptest        call               0               0
+           #28           +          RET_v0               0
+           int       print             #28               0
+           str       print             ~13               0
+     arraytest        call               0               0
+           #29           +          RET_v0               0
+           #30           +             #29               5
+        result           +             #30               0
+           str       print             ~14               0
+           int       print          result               0
+           str       print             ~15               0
+           int       scanf          fibnum               0
+           %10          <=          fibnum              10
+           str       print             ~16               0
+           %11        goto               0               0
+           %10       label               0               0
+           %12          >=          fibnum               1
+           str       print             ~17               0
+           %13        goto               0               0
+           %12       label               0               0
+           str       print             ~18               0
+             0        push          fibnum               0
+           fib        call               0               0
+           #31           +          RET_v0               0
+           int       print             #31               0
+           %13       label               0               0
+           %11       label               0               0
+           str       print             ~19               0
+             0        push              10               0
+     whiletest        call               0               0
+       fortest        call               0               0
+           str       print             ~20               0
+           str       print             ~21               0
+           %14          ==               0               0
+           str       print             ~22               0
+           %14       label               0               0
+           %15          ==               1               0
+           str       print             ~23               0
+           %15       label               0               0
+           str       print             ~24               0
+          char       scanf              cc               0
+           %16          !=              cc             'a'
+           str       print             ~25               0
+           %17        goto               0               0
+           %16       label               0               0
+           str       print             ~26               0
+           %17       label               0               0
+           str       print             ~27               0
+           str       print             ~28               0
+           str       print             ~29               0
+           str       print             ~30               0
+      chartest        call               0               0
+           #32           +          RET_v0               0
+          char       print             #32               0
+           str       print             ~31               0
+     calltest1        call               0               0
+           str       print             ~32               0
+           str       print             ~33               0
+
+string_28 : .asciiz "! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\\]^_{|}~\n"
+string_33 : .asciiz "TEST IS OVER!\n"
+string_11 : .asciiz "add result: 10+20=\n"
+string_10 : .asciiz "add test:\n"
+string_14 : .asciiz "array test result:\n"
+string_13 : .asciiz "array test\n"
+string_32 : .asciiz "call test finished\n"
+string_31 : .asciiz "call test\n"
+string_30 : .asciiz "char test\n"
+string_23 : .asciiz "correct\n"
+string_26 : .asciiz "error!\n"
+string_22 : .asciiz "error\n"
+string_3 : .asciiz "exptest begin,please input a int and a char\n"
+string_12 : .asciiz "exptest result:\n"
+string_18 : .asciiz "fib result is:\n"
+string_16 : .asciiz "fibnum is too big\n"
+string_17 : .asciiz "fibnum is too small\n"
+string_2 : .asciiz "for test finished\n"
+string_1 : .asciiz "for test\n"
+string_21 : .asciiz "if test begin\n"
+string_19 : .asciiz "loop test beign\n"
+string_20 : .asciiz "loop test finished\n"
+string_24 : .asciiz "please input: 'a'\n"
+string_15 : .asciiz "recursion test,please input a fib number\n"
+string_29 : .asciiz "string test finished\n"
+string_27 : .asciiz "string test\n"
+string_9 : .asciiz "test is starting\n"
+string_8 : .asciiz "this is calltest1\n"
+string_7 : .asciiz "this is calltest2\n"
+string_6 : .asciiz "this is calltest3\n"
+string_5 : .asciiz "while test finished\n"
+string_4 : .asciiz "while test\n"
+string_25 : .asciiz "your input is correct!\n"
+global:
+          name|class|  type|  len|  def|       addr
+           a10|  int| const|   10|    2|   ffffffff|
+           a20|  int| const|   20|    2|   ffffffff|
+           a30|  int| const|  -30|    2|   ffffffff|
+           add|  int|  func|    2|   11|   ffffffff|
+         adder| char| const|   43|    3|   ffffffff|
+     arraytest|  int|  func|    0|   47|   ffffffff|
+     calltest1|  int|  func|    0|   88|   ffffffff|
+     calltest2| void|  func|    0|   83|   ffffffff|
+     calltest3| void|  func|    4|   75|   ffffffff|
+      chartest| char|  func|    0|   94|   ffffffff|
+       exptest|  int|  func|    0|   32|   ffffffff|
+           fib|  int|  func|    1|   56|   ffffffff|
+       fortest| void|  func|    0|   21|   ffffffff|
+        letter| char| const|   97|    4|   ffffffff|
+          main| void|  func|    0|  103|   ffffffff|
+        number| char| const|   56|    4|   ffffffff|
+            pi|  int| const|  314|    1|   ffffffff|
+        pluser| char| const|   42|    4|   ffffffff|
+          var1|  int|   var|    0|    8|   10010018|
+          var2|  int|   var|    0|    6|   1001001c|
+          var3|  int|   var|    0|    6|   10010020|
+          var4| char|   var|    0|    9|   10010000|
+          var5| char|   var|    0|    7|   10010001|
+          var6| char|   var|    0|    7|   10010002|
+        varray|  int| array|   10|    6|   10010024|
+    varraychar| char| array|   20|    7|   10010003|
+     whiletest| void|  func|    1|   62|   ffffffff|
+
+add:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   15|          c|
+            #2|  int|   var|    0|   17|         10|
+             a|  int|  para|    0|   11|          0|
+             b|  int|  para|    1|   11|          4|
+             c|  int|   var|    0|   13|         14|
+          var1|  int| const|    1|   12|   ffffffff|
+arraytest:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   53|          4|
+           #11|  int|   var|    0|   53|          8|
+           #12|  int|   var|    0|   53|          c|
+           #13|  int|   var|    0|   53|         10|
+           #14|  int|   var|    0|   53|         14|
+           #15|  int|   var|    0|   53|         18|
+           #16|  int|   var|    0|   53|         1c|
+           #17|  int|   var|    0|   53|         20|
+           #18|  int|   var|    0|   53|         24|
+           #19|  int|   var|    0|   53|         28|
+calltest1:
+          name|class|  type|  len|  def|       addr
+calltest2:
+          name|class|  type|  len|  def|       addr
+calltest3:
+          name|class|  type|  len|  def|       addr
+             a| char|  para|    0|   75|          0|
+             b| char|  para|    1|   75|          4|
+             c| char|  para|    2|   75|          8|
+             d| char|  para|    3|   75|          c|
+chartest:
+          name|class|  type|  len|  def|       addr
+exptest:
+          name|class|  type|  len|  def|       addr
+            #3|  int|   var|    0|   37|          4|
+            #4|  int|   var|    0|   37|          8|
+            #5|  int|   var|    0|   37|          c|
+            #6|  int|   var|    0|   37|         10|
+            #7|  int|   var|    0|   38|         14|
+            #8|  int|   var|    0|   38|         18|
+            #9|  int|   var|    0|   44|         1c|
+             a|  int|   var|    0|   33|         20|
+             b| char|   var|    0|   34|          0|
+             c|  int|   var|    0|   33|         24|
+fib:
+          name|class|  type|  len|  def|       addr
+           #20|  int|   var|    0|   59|          8|
+           #21|  int|   var|    0|   59|          c|
+           #22|  int|   var|    0|   59|         10|
+           #23|  int|   var|    0|   59|         14|
+           #24|  int|   var|    0|   59|         18|
+             a|  int|  para|    0|   56|          0|
+fortest:
+          name|class|  type|  len|  def|       addr
+             i|  int|   var|    0|   22|          4|
+whiletest:
+          name|class|  type|  len|  def|       addr
+           #25|  int|   var|    0|   66|          8|
+           #26|  int|   var|    0|   70|          c|
+             a|  int|  para|    0|   62|          0|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #27|  int|   var|    0|  111|          4|
+           #28|  int|   var|    0|  114|          8|
+           #29|  int|   var|    0|  117|          c|
+           #30|  int|   var|    0|  117|         10|
+           #31|  int|   var|    0|  127|         14|
+           #32|  int|   var|    0|  148|         18|
+            cc| char|   var|    0|  106|          0|
+        fibnum|  int|   var|    0|  105|         1c|
+        result|  int|   var|    0|  105|         20|

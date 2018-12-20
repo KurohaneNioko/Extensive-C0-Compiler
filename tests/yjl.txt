@@ -1,0 +1,122 @@
+cONSt int num1=10, num2=001, num3=+0010, num4=-0019;
+const char char1='a', char2='b';
+int num5, num6, array1[009];
+char  char3, char4, array2[0010], testresult[10];
+int return1
+{
+    return (1);
+}
+int factorial(int n)
+{
+    if(n==1)return (n);
+    else return(n*factorial(n-1));
+}
+void testvar
+{
+    const int chAr2=-000109;
+    char NUM1;
+    int array2, char1[10];
+    array2=10;
+    num1='a';
+}
+int testfor(int a, char b, int c, char d, int f, char e){
+    int i;
+    a=9;
+    c=0;
+    for(i=100;i<10;i=i-1)a=a+1;
+    for(i=0;i<10;i=i+1)c=c+1;
+    if(a==10){
+        if(c==10){
+            return (1);
+        }
+    }
+    return (0);   
+}
+int testwhile
+{
+    int num1, num2, num3, num4;
+    num1=0;
+    num2=10;
+    num3=-1;
+    num4=0;
+    while(num1!=10){
+        num2=num2-1;
+        num1=num1+1;
+    }
+    while(num3>0){
+        num4=num4+10;
+        num3=num3-10;
+    }
+    if(num2==0){
+        if(num4==0)
+            return (1);
+    }
+    else return (0);
+}
+int testexpression
+{
+    int a,c;
+    char b;
+    a=10;
+    b='a';
+    array1[0]=100;
+    array1[1]=99;
+    c=(a-b+'a')*return1-array1[0]/10+1;
+    ;;;
+    if(array1[c]==99)return (1);
+    return (0);
+}
+int testarray
+{
+    int a,b,c;
+    a=1;
+    b=2;
+    c=3;
+    array1[0]=1;
+    array1[4]=array1[0];
+    array1[c+a*(b+return1)-array1[0]*2]=10;
+    if(array1[4]==10)return (1);
+    return (0);
+}
+void testprintf(int flag)
+{
+    if(flag<=0)printf("this is a string, !#$%&'()*+,-./0123456789:;<=>?@[\]^_`{|}~|");
+    else if(flag>=2){
+            printf('a');
+            printf('2');
+            printf('*');
+         }
+         else printf("this is a string ", num1-5);
+}
+char testfactorial
+{
+    if(factorial(1)==1)
+        if(factorial(3)==6)
+            return ('T');
+    return ('F');
+}
+void main()
+{
+    int i, flag;
+    num5=9;
+    num6=8;
+    char3='a';
+    char4='b';
+    scanf(flag);
+    for(i=0;i<10;i=i+1)testresult[i]='T';
+    for(num5=9;num5>=0;num5=num5-1)array2[num5]=testresult[num5];
+    for(num6=0;num6!=8;num6=num6+1)array1[num6]=0;
+    testvar;
+    if(testfor(num5, char1, num6, chAr2, 10, char4)==1)testresult[0]='T';
+    else testresult[0]='F';
+    if(testwhile)testresult[1]='T';
+    else testresult[1]='F';
+    if(testfactorial=='T')testresult[2]='T';
+    else testresult[2]='F';
+    if(testexpression)testresult[3]='T';
+    else testresult[3]='F';
+    if(testarray)testresult[4]='T';
+    else testresult[4]='F';
+    testprintf(flag);
+    for(i=0;i<5;i=i+1)printf(testresult[i]);
+}

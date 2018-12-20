@@ -38,13 +38,17 @@ int _int()
 			{ "<=",">=","==","!=","<",">","+","-","*","/",",",";",")","]" },
 			{});
 		Lex::curNum = 0;
+		return Lex::curNum;
 	}
 	else
+	{
+		int t = sign * Lex::curNum;
 		Lex::getsym();	//ready for next
 #if Syn_Out
-	std::cout << "int got: " << sign * Lex::curNum << std::endl;
+		std::cout << "int got: " << sign * Lex::curNum << std::endl;
 #endif
-	return sign * Lex::curNum;
+		return t;
+	}
 }
 //	先进后读
 char single_char()		
@@ -61,12 +65,13 @@ char single_char()
 		return '0';
 	}
 	else {
+		char t = Lex::curElmt[1];
 		Lex::getsym();
 #if Syn_Out
 		std::cout << "char got: " << Lex::curElmt[1] << std::endl;
 #endif
+		return t;
 	}
-	return Lex::curElmt[1];
 }
 //先读后进
 void const_define()		
@@ -379,6 +384,8 @@ void factor(int &ret_cls, std::string &ret_val)
 			if (temp_iden->cls == ST::VOID_CLS)
 				/* no ret val */
 				ER::logER(ERT::EXPECT_FUNCTION_WITH_RETURN_VALUE);
+			if (temp_iden->length == 0)
+				ER::logER(ERT::EXPECT_PARA_FUNCTION);
 			//Lex::getsym();
 			value_param(temp_iden);
 			if (is_R_small)

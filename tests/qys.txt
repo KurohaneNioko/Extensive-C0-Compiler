@@ -1,0 +1,155 @@
+const int pi=314;
+const int a10=10,a20=+20,a30=-30;
+const char adder='+';
+const char pluser='*',number='8',letter='a';
+
+int var2,var3,varray[010];
+char var5,var6,varraychar[20];
+int var1;
+char var4;
+
+int add(int a,int b){
+    const int var1=1;
+    int c;
+    {
+    c=a+b;
+    }
+    c=c*var1;
+    return (c);
+}
+
+void fortest{
+    int i;
+    printf("for test");
+    for(i=0;i<=10;i=i+2) printf(i);
+    for(i=0;0;i=i-5){
+        printf(i);
+    }
+    for(i=10;i>=0;i=i-2) printf(i);
+    printf("for test finished");
+}
+
+int exptest{
+    int a,c;
+    char b;
+    printf("exptest begin,please input a int and a char");
+    scanf(a,b);
+    a=+a*(-+10+20)/5;
+    c=-'a'+b;
+    printf(a);
+    printf(c);
+    ;
+    ;
+    ;
+    return (c+b);
+}
+
+int arraytest{
+    varray[0]=1;
+    varray[1]=2;
+    varray[2]=3;
+    varray[3]=4;
+    varray[4]=5;
+    return ((varray[0]+varray[varray[0]]+varray[2]+varray[3])*varray[4]);
+}
+
+int fib(int a){
+    if(a==1) return (1);
+    if(a==2) return (1);
+    return (fib(a-1)+fib(a-2));
+}
+
+void whiletest(int a){
+    printf("while test");
+    while(a>0){
+        printf(a);
+        a=a-3;
+    }
+    while(15>a){
+        printf(a);
+        a=a+5;
+    }
+    printf("while test finished");
+}
+
+void calltest3(char a, char b, char c, char d){
+    printf(a);
+    printf(b);
+    printf(c);
+    printf(d);
+    printf("this is calltest3");
+}
+
+void calltest2{
+    calltest3(letter,pluser,adder,number);
+    printf("this is calltest2");    
+}
+
+int calltest1{
+    printf("this is calltest1");
+    calltest2;
+    return (0);
+}
+
+char chartest{
+    printf('H');
+    printf('E');
+    printf('L');
+    printf('L');
+    printf('O');
+    return ('W');
+}
+
+void main(){
+
+    int result,fibnum;
+    char cc;
+
+    printf("test is starting");
+
+    printf("add test:");
+    result=add(a10,a20);
+    printf("add result: 10+20=",result);
+
+    printf("exptest result:",exptest);
+
+    printf("array test");
+    result=arraytest+5;
+    printf("array test result:",result);
+
+    printf("recursion test,please input a fib number");
+    scanf(fibnum);
+    if(fibnum>10) printf("fibnum is too big");
+    else{
+        if(fibnum<1){
+            printf("fibnum is too small");
+        }
+        else printf("fib result is:",fib(fibnum));    
+    }
+    
+    printf("loop test beign");
+    WHILETEST(10);
+    FORTEST;
+    printf("loop test finished");
+
+    printf("if test begin");
+    if(0) printf("error");
+    if(1) printf("correct");
+    printf("please input: 'a'");
+    scanf(cc);
+    if(cc=='a') printf("your input is correct!");
+    else printf("error!");
+
+    printf("string test");
+    printf("! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~");
+    printf("string test finished");
+
+    printf("char test");
+    printf(chartest);
+
+    printf("call test");
+    calltest1;
+    printf("call test finished");
+    
+    printf("TEST IS OVER!");
+} 

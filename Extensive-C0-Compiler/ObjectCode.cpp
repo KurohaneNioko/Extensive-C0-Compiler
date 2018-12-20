@@ -86,14 +86,14 @@ void assignAddr()
 				}
 		}
 		for (auto j = i->second.begin(); j != i->second.end(); j++)
-			if (j->second.cls == ST::CHA_CLS && j->second.type != ST::PARAM_TYP)
+			if (j->second.cls == ST::CHA_CLS && j->second.type != ST::PARAM_TYP && j->second.type != ST::CONST_TYP)
 			{
 				j->second.addr = addr;
 				addr += (j->second.type == ST::VAR_TYP ? 1 : j->second.length);
 			}
-		addr += size_of_reg - addr & 0x00000003;
+		addr = addr + size_of_reg - (addr & 0x00000003);
 		for (auto j = i->second.begin(); j != i->second.end(); j++)
-			if (j->second.cls == ST::INT_CLS && j->second.type != ST::PARAM_TYP)
+			if (j->second.cls == ST::INT_CLS && j->second.type != ST::PARAM_TYP && j->second.type != ST::CONST_TYP)
 			{
 				j->second.addr = addr;
 				addr += (j->second.type == ST::VAR_TYP ? 
@@ -401,6 +401,7 @@ void codeHead()
 		}
 	}
 	data_head += size_of_reg - data_head & 0x00000003;
+	mpb(".align 2");
 	for (auto iter = ST::global_sym.begin(); iter != ST::global_sym.end(); iter++)
 	{
 		if (iter->second.type == ST::VAR_TYP && iter->second.cls == ST::INT_CLS)
@@ -936,7 +937,7 @@ void cmp(mcode &c, ociter o)
 				auto o = cop == OP::GRT ? BLT :
 					cop == OP::GREQ ? BLE :
 					cop == OP::LES ? BGT : BGE;
-				ss << o << " " << r2reg << " " << v1 << mark2label(c.rst);
+				ss << o << " " << r2reg << " " << v1 << " " << mark2label(c.rst);
 			}
 		}
 		else if (!r1const & !r2const)

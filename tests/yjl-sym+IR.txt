@@ -1,0 +1,350 @@
+       return1  func_begin               0               0
+        RET_v0           +               1               0
+             0         ret               0               0
+             0    func_end               0               0
+     factorial  func_begin               0               0
+            %1          !=               n               1
+        RET_v0           +               n               0
+             0         ret               0               0
+            %2        goto               0               0
+            %1       label               0               0
+            #1           -               n               1
+             0        push              #1               0
+     factorial        call               0               0
+            #2           +          RET_v0               0
+            #3           *               n              #2
+        RET_v0           +              #3               0
+             0         ret               0               0
+            %2       label               0               0
+             0    func_end               0               0
+       testvar  func_begin               0               0
+        array2           +              10               0
+          num1           +             'a'               0
+             0    func_end               0               0
+       testfor  func_begin               0               0
+             a           +               9               0
+             c           +               0               0
+             i           +             100               0
+            %3       label               0               0
+            #4           +               a               1
+             a           +              #4               0
+             i           -               i               1
+            %3           <               i              10
+             i           +               0               0
+            %4       label               0               0
+            #5           +               c               1
+             c           +              #5               0
+             i           +               i               1
+            %4           <               i              10
+            %5          !=               a              10
+            %6          !=               c              10
+        RET_v0           +               1               0
+             0         ret               0               0
+            %6       label               0               0
+            %5       label               0               0
+        RET_v0           +               0               0
+             0         ret               0               0
+             0    func_end               0               0
+     testwhile  func_begin               0               0
+          num1           +               0               0
+          num2           +              10               0
+            #6           -               0               1
+          num3           +              #6               0
+          num4           +               0               0
+            %7       label               0               0
+            %8          ==            num1              10
+            #7           -            num2               1
+          num2           +              #7               0
+            #8           +            num1               1
+          num1           +              #8               0
+            %7        goto               0               0
+            %8       label               0               0
+            %9       label               0               0
+           %10          <=            num3               0
+            #9           +            num4              10
+          num4           +              #9               0
+           #10           -            num3              10
+          num3           +             #10               0
+            %9        goto               0               0
+           %10       label               0               0
+           %11          !=            num2               0
+           %12          !=            num4               0
+        RET_v0           +               1               0
+             0         ret               0               0
+           %12       label               0               0
+           %13        goto               0               0
+           %11       label               0               0
+        RET_v0           +               0               0
+             0         ret               0               0
+           %13       label               0               0
+             0    func_end               0               0
+testexpression  func_begin               0               0
+             a           +              10               0
+             b           +             'a'               0
+        array1         []=               0             100
+        array1         []=               1              99
+           #11           -               a               b
+           #12           +             #11             'a'
+       return1        call               0               0
+           #13           +          RET_v0               0
+           #14           *             #12             #13
+           #15         =[]          array1               0
+           #16           /             #15              10
+           #17           -             #14             #16
+           #18           +             #17               1
+             c           +             #18               0
+           #19         =[]          array1               c
+           %14          !=             #19              99
+        RET_v0           +               1               0
+             0         ret               0               0
+           %14       label               0               0
+        RET_v0           +               0               0
+             0         ret               0               0
+             0    func_end               0               0
+     testarray  func_begin               0               0
+             a           +               1               0
+             b           +               2               0
+             c           +               3               0
+        array1         []=               0               1
+           #20         =[]          array1               0
+        array1         []=               4             #20
+       return1        call               0               0
+           #21           +          RET_v0               0
+           #22           +               b             #21
+           #23           *               a             #22
+           #24           +               c             #23
+           #25         =[]          array1               0
+           #26           *             #25               2
+           #27           -             #24             #26
+        array1         []=             #27              10
+           #28         =[]          array1               4
+           %15          !=             #28              10
+        RET_v0           +               1               0
+             0         ret               0               0
+           %15       label               0               0
+        RET_v0           +               0               0
+             0         ret               0               0
+             0    func_end               0               0
+    testprintf  func_begin               0               0
+           %16           >            flag               0
+           str       print              ~1               0
+           %17        goto               0               0
+           %16       label               0               0
+           %18           <            flag               2
+          char       print             'a'               0
+          char       print             '2'               0
+          char       print             '*'               0
+           %19        goto               0               0
+           %18       label               0               0
+           str       print              ~2               0
+           #29           -              10               5
+           int       print             #29               0
+           %19       label               0               0
+           %17       label               0               0
+             0    func_end               0               0
+ testfactorial  func_begin               0               0
+             0        push               1               0
+     factorial        call               0               0
+           #30           +          RET_v0               0
+           %20          !=             #30               1
+             0        push               3               0
+     factorial        call               0               0
+           #31           +          RET_v0               0
+           %21          !=             #31               6
+        RET_v0           +             'T'               0
+             0         ret               0               0
+           %21       label               0               0
+           %20       label               0               0
+        RET_v0           +             'F'               0
+             0         ret               0               0
+             0    func_end               0               0
+          main  func_begin               0               0
+          num5           +               9               0
+          num6           +               8               0
+         char3           +             'a'               0
+         char4           +             'b'               0
+           int       scanf            flag               0
+             i           +               0               0
+           %22       label               0               0
+    testresult         []=               i             'T'
+             i           +               i               1
+           %22           <               i              10
+          num5           +               9               0
+           %23       label               0               0
+           #32         =[]      testresult            num5
+        array2         []=            num5             #32
+          num5           -            num5               1
+           %23          >=            num5               0
+          num6           +               0               0
+           %24       label               0               0
+        array1         []=            num6               0
+          num6           +            num6               1
+           %24          !=            num6               8
+       testvar        call               0               0
+             0        push            num5               0
+             0        push              97               1
+             0        push            num6               2
+             0        push              98               3
+             0        push              10               4
+             0        push           char4               5
+       testfor        call               0               0
+           #33           +          RET_v0               0
+           %25          !=             #33               1
+    testresult         []=               0             'T'
+           %26        goto               0               0
+           %25       label               0               0
+    testresult         []=               0             'F'
+           %26       label               0               0
+     testwhile        call               0               0
+           #34           +          RET_v0               0
+           %27          ==             #34               0
+    testresult         []=               1             'T'
+           %28        goto               0               0
+           %27       label               0               0
+    testresult         []=               1             'F'
+           %28       label               0               0
+ testfactorial        call               0               0
+           #35           +          RET_v0               0
+           %29          !=             #35             'T'
+    testresult         []=               2             'T'
+           %30        goto               0               0
+           %29       label               0               0
+    testresult         []=               2             'F'
+           %30       label               0               0
+testexpression        call               0               0
+           #36           +          RET_v0               0
+           %31          ==             #36               0
+    testresult         []=               3             'T'
+           %32        goto               0               0
+           %31       label               0               0
+    testresult         []=               3             'F'
+           %32       label               0               0
+     testarray        call               0               0
+           #37           +          RET_v0               0
+           %33          ==             #37               0
+    testresult         []=               4             'T'
+           %34        goto               0               0
+           %33       label               0               0
+    testresult         []=               4             'F'
+           %34       label               0               0
+             0        push            flag               0
+    testprintf        call               0               0
+             i           +               0               0
+           %35       label               0               0
+           #38         =[]      testresult               i
+          char       print             #38               0
+             i           +               i               1
+           %35           <               i               5
+
+string_2 : .asciiz "this is a string \n"
+string_1 : .asciiz "this is a string, !#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~|\n"
+global:
+          name|class|  type|  len|  def|       addr
+        array1|  int| array|    9|    3|   10010018|
+        array2| char| array|   10|    4|   10010000|
+         char1| char| const|   97|    2|   ffffffff|
+         char2| char| const|   98|    2|   ffffffff|
+         char3| char|   var|    0|    4|   1001000a|
+         char4| char|   var|    0|    4|   1001000b|
+     factorial|  int|  func|    1|    9|   ffffffff|
+          main| void|  func|    0|   98|   ffffffff|
+          num1|  int| const|   10|    1|   ffffffff|
+          num2|  int| const|    1|    1|   ffffffff|
+          num3|  int| const|   10|    1|   ffffffff|
+          num4|  int| const|  -19|    1|   ffffffff|
+          num5|  int|   var|    0|    3|   1001003c|
+          num6|  int|   var|    0|    3|   10010040|
+       return1|  int|  func|    0|    6|   ffffffff|
+     testarray|  int|  func|    0|   70|   ffffffff|
+testexpression|  int|  func|    0|   57|   ffffffff|
+ testfactorial| char|  func|    0|   92|   ffffffff|
+       testfor|  int|  func|    6|   22|   ffffffff|
+    testprintf| void|  func|    1|   81|   ffffffff|
+    testresult| char| array|   10|    4|   1001000c|
+       testvar| void|  func|    0|   15|   ffffffff|
+     testwhile|  int|  func|    0|   36|   ffffffff|
+
+factorial:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   12|          8|
+            #2|  int|   var|    0|   12|          c|
+            #3|  int|   var|    0|   12|         10|
+             n|  int|  para|    0|    9|          0|
+return1:
+          name|class|  type|  len|  def|       addr
+testarray:
+          name|class|  type|  len|  def|       addr
+           #20|  int|   var|    0|   76|          4|
+           #21|  int|   var|    0|   77|          8|
+           #22|  int|   var|    0|   77|          c|
+           #23|  int|   var|    0|   77|         10|
+           #24|  int|   var|    0|   77|         14|
+           #25|  int|   var|    0|   77|         18|
+           #26|  int|   var|    0|   77|         1c|
+           #27|  int|   var|    0|   77|         20|
+           #28|  int|   var|    0|   78|         24|
+             a|  int|   var|    0|   71|         28|
+             b|  int|   var|    0|   71|         2c|
+             c|  int|   var|    0|   71|         30|
+testexpression:
+          name|class|  type|  len|  def|       addr
+           #11|  int|   var|    0|   64|          4|
+           #12|  int|   var|    0|   64|          8|
+           #13|  int|   var|    0|   64|          c|
+           #14|  int|   var|    0|   64|         10|
+           #15|  int|   var|    0|   64|         14|
+           #16|  int|   var|    0|   64|         18|
+           #17|  int|   var|    0|   64|         1c|
+           #18|  int|   var|    0|   64|         20|
+           #19|  int|   var|    0|   66|         24|
+             a|  int|   var|    0|   58|         28|
+             b| char|   var|    0|   59|          0|
+             c|  int|   var|    0|   58|         2c|
+testfactorial:
+          name|class|  type|  len|  def|       addr
+           #30|  int|   var|    0|   93|          4|
+           #31|  int|   var|    0|   94|          8|
+testfor:
+          name|class|  type|  len|  def|       addr
+            #4|  int|   var|    0|   26|         1c|
+            #5|  int|   var|    0|   27|         20|
+             a|  int|  para|    0|   22|          0|
+             b| char|  para|    1|   22|          4|
+             c|  int|  para|    2|   22|          8|
+             d| char|  para|    3|   22|          c|
+             e| char|  para|    5|   22|         14|
+             f|  int|  para|    4|   22|         10|
+             i|  int|   var|    0|   23|         24|
+testprintf:
+          name|class|  type|  len|  def|       addr
+           #29|  int|   var|    0|   89|          8|
+          flag|  int|  para|    0|   81|          0|
+testvar:
+          name|class|  type|  len|  def|       addr
+        array2|  int|   var|    0|   18|          4|
+         char1|  int| array|   10|   18|          8|
+         char2|  int| const| -109|   16|   ffffffff|
+          num1| char|   var|    0|   17|          0|
+testwhile:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   48|          4|
+            #6|  int|   var|    0|   40|          8|
+            #7|  int|   var|    0|   43|          c|
+            #8|  int|   var|    0|   44|         10|
+            #9|  int|   var|    0|   47|         14|
+          num1|  int|   var|    0|   37|         18|
+          num2|  int|   var|    0|   37|         1c|
+          num3|  int|   var|    0|   37|         20|
+          num4|  int|   var|    0|   37|         24|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #32|  int|   var|    0|  107|          4|
+           #33|  int|   var|    0|  110|          8|
+           #34|  int|   var|    0|  112|          c|
+           #35|  int|   var|    0|  114|         10|
+           #36|  int|   var|    0|  116|         14|
+           #37|  int|   var|    0|  118|         18|
+           #38|  int|   var|    0|  121|         1c|
+          flag|  int|   var|    0|  100|         20|
+             i|  int|   var|    0|  100|         24|

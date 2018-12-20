@@ -86,11 +86,11 @@
             %8       label               0               0
              0    func_end               0               0
 get_permutations_sy  func_begin               0               0
-        RET_v0           +               0               0
+        RET_v0           +              84               0
              0         ret               0               0
              0    func_end               0               0
          judge  func_begin               0               0
-          char       print               0               0
+          char       print              42               0
  get_max_num_1        call               0               0
            #20           +          RET_v0               0
            #21           +             #20               1
@@ -179,7 +179,7 @@ get_permutations_sy  func_begin               0               0
        compute        call               0               0
            #44           +          RET_v0               0
              n           +             #44               0
-          char       print               0               0
+          char       print              95               0
            int       print               n               0
            int       scanf               m               0
              0        push               n               0
@@ -220,7 +220,7 @@ string_3 : .asciiz "test for success\n"
 global:
           name|class|  type|  len|  def|       addr
        compute|  int|  func|    3|   56|   ffffffff|
-        divide| char| const|    0|    2|   ffffffff|
+        divide| char| const|   95|    2|   ffffffff|
          get_2|  int|  func|    0|   51|   ffffffff|
  get_max_num_1|  int|  func|    0|   39|   ffffffff|
  get_max_num_2|  int|  func|    0|   44|   ffffffff|
@@ -241,80 +241,80 @@ max_choose_num|  int| const|   10|    1|   ffffffff|
 
 compute:
           name|class|  type|  len|  def|       addr
-           #10|  int|   var|    0|   63|          c|
-           #11|  int|   var|    0|   67|         10|
-           #12|  int|   var|    0|   71|         14|
-           #13|  int|   var|    0|   73|         18|
-           #14|  int|   var|    0|   73|         1c|
-           #15|  int|   var|    0|   73|         20|
-           #16|  int|   var|    0|   73|         24|
-           #17|  int|   var|    0|   73|         28|
-           #18|  int|   var|    0|   73|         2c|
-           #19|  int|   var|    0|   73|         30|
-            #5|  int|   var|    0|   59|         34|
-            #6|  int|   var|    0|   59|         38|
-            #7|  int|   var|    0|   59|         3c|
-            #8|  int|   var|    0|   63|         40|
-            #9|  int|   var|    0|   63|         44|
+           #10|  int|   var|    0|   63|         10|
+           #11|  int|   var|    0|   67|         14|
+           #12|  int|   var|    0|   71|         18|
+           #13|  int|   var|    0|   73|         1c|
+           #14|  int|   var|    0|   73|         20|
+           #15|  int|   var|    0|   73|         24|
+           #16|  int|   var|    0|   73|         28|
+           #17|  int|   var|    0|   73|         2c|
+           #18|  int|   var|    0|   73|         30|
+           #19|  int|   var|    0|   73|         34|
+            #5|  int|   var|    0|   59|         38|
+            #6|  int|   var|    0|   59|         3c|
+            #7|  int|   var|    0|   59|         40|
+            #8|  int|   var|    0|   63|         44|
+            #9|  int|   var|    0|   63|         48|
              a|  int|  para|    0|   56|          0|
              b|  int|  para|    1|   56|          4|
             op| char|  para|    2|   56|          8|
 get_2:
           name|class|  type|  len|  def|       addr
-             m|  int| const|    2|   52|          0|
+             m|  int| const|    2|   52|   ffffffff|
 get_max_num_1:
           name|class|  type|  len|  def|       addr
 get_max_num_2:
           name|class|  type|  len|  def|       addr
-       max_num|  int|   var|    0|   45|          0|
+       max_num|  int|   var|    0|   45|          4|
 get_permutations_sy:
           name|class|  type|  len|  def|       addr
-permutations_sy| char| const|    0|   81|          0|
+permutations_sy| char| const|   84|   81|   ffffffff|
 judge:
           name|class|  type|  len|  def|       addr
-           #20|  int|   var|    0|   89|          8|
-           #21|  int|   var|    0|   89|          c|
-        divide| char| const|    0|   87|          8|
+           #20|  int|   var|    0|   89|          c|
+           #21|  int|   var|    0|   89|         10|
+        divide| char| const|   42|   87|   ffffffff|
              m|  int|  para|    1|   85|          4|
              n|  int|  para|    0|   85|          0|
 permutations:
           name|class|  type|  len|  def|       addr
-            #1|  int|   var|    0|   17|          4|
-            #2|  int|   var|    0|   18|          8|
-            #3|  int|   var|    0|   26|          c|
-            #4|  int|   var|    0|   32|         10|
+            #1|  int|   var|    0|   17|          8|
+            #2|  int|   var|    0|   18|          c|
+            #3|  int|   var|    0|   26|         10|
+            #4|  int|   var|    0|   32|         14|
              a|  int|  para|    0|    8|          0|
-             i|  int|   var|    0|   10|         14|
+             i|  int|   var|    0|   10|         18|
 preparation:
           name|class|  type|  len|  def|       addr
-           #22|  int|   var|    0|  105|          0|
-           #23|  int|   var|    0|  105|          4|
-           #24|  int|   var|    0|  109|          8|
-           #25|  int|   var|    0|  109|          c|
-           #26|  int|   var|    0|  114|         10|
-           #27|  int|   var|    0|  114|         14|
-           #28|  int|   var|    0|  114|         18|
-           #29|  int|   var|    0|  115|         1c|
-           #30|  int|   var|    0|  115|         20|
-           #31|  int|   var|    0|  115|         24|
-           #32|  int|   var|    0|  115|         28|
-           #33|  int|   var|    0|  115|         2c|
-           #34|  int|   var|    0|  115|         30|
-           #35|  int|   var|    0|  115|         34|
-           #36|  int|   var|    0|  115|         38|
-           #37|  int|   var|    0|  115|         3c|
-           #38|  int|   var|    0|  115|         40|
-         array|  int| array|   12|  103|         44|
-             i|  int|   var|    0|  102|         74|
-             n|  int|   var|    0|  101|         78|
-          zero|  int| const|    0|  100|         7c|
+           #22|  int|   var|    0|  105|          4|
+           #23|  int|   var|    0|  105|          8|
+           #24|  int|   var|    0|  109|          c|
+           #25|  int|   var|    0|  109|         10|
+           #26|  int|   var|    0|  114|         14|
+           #27|  int|   var|    0|  114|         18|
+           #28|  int|   var|    0|  114|         1c|
+           #29|  int|   var|    0|  115|         20|
+           #30|  int|   var|    0|  115|         24|
+           #31|  int|   var|    0|  115|         28|
+           #32|  int|   var|    0|  115|         2c|
+           #33|  int|   var|    0|  115|         30|
+           #34|  int|   var|    0|  115|         34|
+           #35|  int|   var|    0|  115|         38|
+           #36|  int|   var|    0|  115|         3c|
+           #37|  int|   var|    0|  115|         40|
+           #38|  int|   var|    0|  115|         44|
+         array|  int| array|   12|  103|         48|
+             i|  int|   var|    0|  102|         78|
+             n|  int|   var|    0|  101|         7c|
+          zero|  int| const|    0|  100|   ffffffff|
 test_6_para:
           name|class|  type|  len|  def|       addr
-           #39|  int|   var|    0|  128|         18|
-           #40|  int|   var|    0|  128|         1c|
-           #41|  int|   var|    0|  128|         20|
-           #42|  int|   var|    0|  128|         24|
-           #43|  int|   var|    0|  128|         28|
+           #39|  int|   var|    0|  128|         1c|
+           #40|  int|   var|    0|  128|         20|
+           #41|  int|   var|    0|  128|         24|
+           #42|  int|   var|    0|  128|         28|
+           #43|  int|   var|    0|  128|         2c|
             a1|  int|  para|    0|  126|          0|
             a2|  int|  para|    1|  126|          4|
             a3|  int|  para|    2|  126|          8|
@@ -323,7 +323,7 @@ test_6_para:
             a6|  int|  para|    5|  126|         14|
 test_for:
           name|class|  type|  len|  def|       addr
-             i|  int|   var|    0|  121|          0|
+             i|  int|   var|    0|  121|          4|
 
 main:
           name|class|  type|  len|  def|       addr

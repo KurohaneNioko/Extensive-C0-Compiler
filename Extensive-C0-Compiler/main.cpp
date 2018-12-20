@@ -13,13 +13,11 @@ int main(int argc, char** argv)
 	std::string code_path;
 	std::cout << "source code path: " << std::endl;
 	std::cin >> code_path;
-	std::string asm_path;
-	std::cout << "asm path: " << std::endl;
-	std::cin >> asm_path;
 #else
 	std::string code_path(argv[1]);
-	std::string asm_path("../mipsr.asm");
+	
 #endif
+	std::string asm_path("../mipsr.asm");
 	//../Docs/16231246_test.txt
 	Lex::code_file.open(code_path, std::ifstream::in);
 	//std::ofstream f_out("../Docs/16231246_Syn_out.txt", std::ios::trunc | std::ofstream::ate);
