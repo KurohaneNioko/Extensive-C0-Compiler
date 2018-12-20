@@ -33,7 +33,7 @@ namespace ST {	//Symbol Table
 	varinfo *lookup(const std::string &curFunc, const std::string &name, bool local);
 	bool is_global_iden(const std::string &curFunc, std::string &s);
 	std::map<std::string, varinfo> lookup_func(const std::string &func_name);
-	const varinfo *lookup_para(const std::map<std::string, varinfo> func_symtab, int place);
+	varinfo *lookup_para(std::map<std::string, varinfo> &func_symtab, int place);
 
 	void addsym(std::string curFunc, std::string namae, int _class, int type, int length, int line);
 	int addStr(std::string &s);

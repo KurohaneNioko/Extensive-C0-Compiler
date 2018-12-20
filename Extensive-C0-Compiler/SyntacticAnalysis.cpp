@@ -308,7 +308,7 @@ void value_param(const varinfo *func_name)
 		std::string temp_param = std::string();
 		int ret_cls;
 		expression(ret_cls, temp_param);
-		Med::addIMC(zero, OP::PUSH_PARA, temp_param, std::to_string(para_count));
+		Med::addIMC(func_name->name, OP::PUSH_PARA, temp_param, std::to_string(para_count));
 		//find the info of para
 		auto *para = ST::lookup_para(func_symtab, para_count);
 		if (para == nullptr)
@@ -369,7 +369,7 @@ void factor(int &ret_cls, std::string &ret_val)
 				if (!(array_index >= 0 && array_index < temp_iden->length))
 					/* index out of range */
 					ER::logER(ERT::INDEX_OUT_OF_RANGE);
-			ret_val = Med::gen_temp(curFunc, Lex::LineCounter);
+			ret_val = Med::gen_temp(curFunc, Lex::LineCounter, temp_iden->cls);
 			Med::addIMC(ret_val, OP::READ_ARR, name, temp_ret_val);
 			// expect ]
 			if (is_R_mid)
@@ -393,7 +393,7 @@ void factor(int &ret_cls, std::string &ret_val)
 			{
 				Lex::getsym();
 				Med::addIMC(name, OP::CALL, zero, zero);
-				std::string move_ret_to = Med::gen_temp(curFunc, Lex::LineCounter);
+				std::string move_ret_to = Med::gen_temp(curFunc, Lex::LineCounter, temp_iden->cls);
 				Med::addIMC(move_ret_to, OP::ADD, ret_val_mark, zero);
 				ret_val = move_ret_to;
 			}
@@ -421,7 +421,7 @@ void factor(int &ret_cls, std::string &ret_val)
 					/* expect no para func*/
 					ER::logER(ERT::EXPECT_NO_PARA_FUNCTION);
 				Med::addIMC(name, OP::CALL, zero, zero);
-				std::string move_ret_to = Med::gen_temp(curFunc, Lex::LineCounter);
+				std::string move_ret_to = Med::gen_temp(curFunc, Lex::LineCounter, temp_iden->cls);
 				Med::addIMC(move_ret_to, OP::ADD, ret_val_mark, zero);
 				ret_val = move_ret_to;
 				break;
@@ -501,7 +501,7 @@ void term(int &ret_cls, std::string &ret_val)
 		{
 			ER::logER(ERT::DIVIDE_ZERO);
 		}
-		std::string factor3 = Med::gen_temp(curFunc, Lex::LineCounter);
+		std::string factor3 = Med::gen_temp(curFunc, Lex::LineCounter, ST::INT_CLS);
 		Med::addIMC(factor3, mul ? OP::MUL : OP::DIV, factor1, factor2);
 		factor1 = factor3;
 	}
@@ -532,7 +532,7 @@ void expression(int &ret_class, std::string &value)
 	ret_class = calculate ? ST::INT_CLS : ret_class;
 	if (symbol == -1)
 	{
-		std::string minus_term = Med::gen_temp(curFunc, Lex::LineCounter);
+		std::string minus_term = Med::gen_temp(curFunc, Lex::LineCounter, ST::INT_CLS);
 		Med::addIMC(minus_term, OP::SUB, zero, term1);
 		term1 = minus_term;
 	}
@@ -543,7 +543,7 @@ void expression(int &ret_class, std::string &value)
 		int term_ret_cls; std::string term2;
 		Lex::getsym();
 		term(term_ret_cls, term2);
-		std::string term3 = Med::gen_temp(curFunc, Lex::LineCounter);
+		std::string term3 = Med::gen_temp(curFunc, Lex::LineCounter, ST::INT_CLS);
 		Med::addIMC(term3, symbol == 1 ? OP::ADD : OP::SUB, term1, term2);
 		term1 = term3;
 	}

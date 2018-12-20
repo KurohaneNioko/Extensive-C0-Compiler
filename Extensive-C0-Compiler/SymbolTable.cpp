@@ -46,11 +46,11 @@ std::map<std::string, varinfo> ST::lookup_func(const std::string &func_name)
 	return func_sym[func_name];
 }
 
-const varinfo* ST::lookup_para(const std::map<std::string, varinfo> func_symtab, int place)
+varinfo* ST::lookup_para(std::map<std::string, varinfo> &func_symtab, int place)
 {
 	for (auto iter = func_symtab.begin(); iter != func_symtab.end(); ++iter)
 	{
-		if (iter->second.length == place)
+		if (iter->second.length == place && iter->second.type == ST::PARAM_TYP)
 		{
 			return &(iter->second);
 		}

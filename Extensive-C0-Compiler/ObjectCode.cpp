@@ -451,7 +451,8 @@ void _goto(mcode &c)
 	mpb("j " + mark2label(c.rst));
 }
 
-void push(mcode &c, ociter o)
+//old push & call
+void _push(mcode &c, ociter o)
 {
 	int offset = FS + std::stoi(c.num2) * size_of_reg;
 	int v;
@@ -475,10 +476,8 @@ void push(mcode &c, ociter o)
 #if COMMENT
 	mpb("# push param: " + c.num1);
 #endif // COMMENT
-
 }
-
-void call(mcode &c)
+void _call(mcode &c)
 {
 	assert(c.op == OP::CALL);
 	mpb("# save start");
@@ -527,6 +526,118 @@ void call(mcode &c)
 	}
 	mpb("# recover end");
 	//pushcount = 0;	// ATTENTION
+}
+//old push & call end
+
+//bug fix: handle func_call in val_param
+//update push IR: funcname, push, var/const, i-th-Param
+struct parainfo { int offset; std::string func_name; };
+std::stack<parainfo> param_record;
+void push(mcode &c, ociter o)
+{
+	int offset;
+	if (param_record.empty())
+		offset = FS;
+	else
+		offset = param_record.top().offset + size_of_reg;
+	int v;
+	bool para_const = opr_is_const(c.num1, v);
+	std::string save_reg; SSSS;
+	if (para_const)
+	{
+		ss << LI << " " << T9 << " " << v;
+		save_reg = T9;
+		mpss;
+		ss.str("");
+	}
+	else
+	{
+		save_reg = regSeek(c.num1, true);
+		futureUseChk(c.num1, save_reg, o);
+	}
+	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
+	mpss;
+	struct parainfo t;	t.func_name = c.rst;  t.offset = offset;
+	param_record.push(t);
+	//++pushcount;
+#if COMMENT
+	mpb("# push param: " + c.num1);
+#endif // COMMENT
+}
+//Don't forget calling func with no param!!!!
+void call(mcode &c)
+{
+	assert(c.op == OP::CALL);
+	mpb("# save start");
+	std::string func_name = c.rst;
+	int last_push_offset = 0;
+	if (param_record.empty())
+		last_push_offset = FS - size_of_reg;
+	else
+		last_push_offset = param_record.top().offset;
+	int stack_ptr = last_push_offset + size_of_reg -
+		ST::global_sym[func_name].length * size_of_reg + 
+		local_var_size[func_name];
+	/*	para |	FS = caller Frame size				para + local|	main Frame
+		local|										-------------
+		t0-s8|	current func's caller save them		para
+		ra	 |	caller Frame						local
+		------										t0-s8
+	  f1para |	callee Frame						ra
+	 (f2para)|										-------------
+		local|										
+		t0-s8|	callee's caller save them
+		ra   |
+	*/
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
+		if (curRI.ts_use[i])
+		{
+			SSSS;
+			ss << SW << " " << index2tempReg(i)
+				<< " -" << stack_ptr << " (" << SP << ")";
+			mpss;
+			stack_ptr += size_of_reg;
+		}
+	stack_ptr = last_push_offset + size_of_reg -
+		ST::global_sym[func_name].length * size_of_reg +
+		local_var_size[func_name] + 
+		size_of_reg * (reg_t_max + reg_s_max);
+	//stack_ptr = FS + local_var_size[c.rst] + size_of_reg * (reg_t_max + reg_s_max);
+	{ SSSS; ss << SW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	stack_ptr += size_of_reg;
+	//{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	for (auto i = 0; i < ST::global_sym[func_name].length; i++)
+	{
+		assert(param_record.top().func_name == func_name);
+		param_record.pop();
+	}
+	int sp_change = 0;
+	if (param_record.empty())
+		sp_change = FS;
+	else
+		sp_change =	param_record.top().offset + size_of_reg;
+	{ SSSS; ss << ADDI << " " << SP << " " << SP << " " << (-1 * sp_change); mpss; }
+	{ SSSS; ss << JAL << " " << mark2func(c.rst); mpss; }
+	mpb("# recover start");
+	{SSSS; ss << ADDI << " " << SP << " " << SP << " " << sp_change; mpss; }
+	stack_ptr -= size_of_reg;
+	{ SSSS; ss << LW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
+	//stack_ptr = FS + local_var_size[c.rst];
+	stack_ptr = last_push_offset + size_of_reg -
+		ST::global_sym[func_name].length * size_of_reg +
+		local_var_size[func_name];
+	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
+	{
+		if (curRI.ts_use[i])
+		{
+			SSSS;
+			ss << LW << " " << index2tempReg(i)
+				<< " -" << stack_ptr << " (" << SP << ")";
+			mpss;
+			stack_ptr += size_of_reg;
+		}
+	}
+	mpb("# recover end");
 }
 
 void func_end_return(mcode &c)

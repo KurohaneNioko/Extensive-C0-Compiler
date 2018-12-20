@@ -9,6 +9,7 @@
 #include<string>
 #include<map>
 #include<set>
+#include<stack>
 
 #define DEBUG 1
 #define INCLASS 1

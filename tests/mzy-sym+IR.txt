@@ -35,11 +35,11 @@
             %6        goto               0               0
             %5       label               0               0
             #7           -               n               1
-             0        push              #7               0
+          fibo        push              #7               0
           fibo        call               0               0
             #8           +          RET_v0               0
             #9           -               n               2
-             0        push              #9               0
+          fibo        push              #9               0
           fibo        call               0               0
            #10           +          RET_v0               0
            #11           +              #8             #10
@@ -71,7 +71,7 @@ test_condition  func_begin               0               0
              0    func_end               0               0
      call_fibo  func_begin               0               0
            int       scanf               m               0
-             0        push               m               0
+          fibo        push               m               0
           fibo        call               0               0
            #17           +          RET_v0               0
              t           +             #17               0
@@ -88,13 +88,13 @@ test_arrayassign  func_begin               0               0
              i           +               0               0
             %9       label               0               0
            %10          >=               i              10
-             0        push               0               0
+           add        push               0               0
            #19           -               i               2
-             0        push             #19               1
-             0        push               0               2
-             0        push               1               3
-             0        push               1               4
-             0        push               0               5
+           add        push             #19               1
+           add        push               0               2
+           add        push               1               3
+           add        push               1               4
+           add        push               0               5
            add        call               0               0
            #20           +          RET_v0               0
            #21           +               i               1
@@ -121,7 +121,7 @@ test_bra_statement  func_begin               0               0
              0    func_end               0               0
       call_abs  func_begin               0               0
            int       scanf               m               0
-             0        push               m               0
+        getabs        push               m               0
         getabs        call               0               0
            #26           +          RET_v0               0
              t           +             #26               0
@@ -142,24 +142,24 @@ test_bra_statement  func_begin               0               0
            #33           *             #32               a
            #34           -             #31             #33
              z           +             #34               0
-             0        push             'r'               0
+test_chartypetrans        push             'r'               0
 test_chartypetrans        call               0               0
            #35           +          RET_v0               0
              i           +             #35               0
-             0        push               x               0
-             0        push               y               1
-             0        push               z               2
-             0        push               i               3
-             0        push               x               0
-             0        push               0               1
-             0        push               0               2
-             0        push               y               3
-             0        push               0               4
-             0        push               0               5
+           add        push               x               0
+           add        push               y               1
+           add        push               z               2
+           add        push               i               3
+           add        push               x               0
+           add        push               0               1
+           add        push               0               2
+           add        push               y               3
+           add        push               0               4
+           add        push               0               5
            add        call               0               0
            #36           +          RET_v0               0
-             0        push             #36               4
-             0        push               0               5
+           add        push             #36               4
+           add        push               0               5
            add        call               0               0
            #37           +          RET_v0               0
              t           +             #37               0
@@ -203,7 +203,7 @@ test_arrayassign        call               0               0
           char       print             #44               0
            %19       label               0               0
 test_strelement        call               0               0
-             0        push               n               0
+test_condition        push               n               0
 test_condition        call               0               0
            #45           +          RET_v0               0
            int       print             #45               0
@@ -327,6 +327,6 @@ main:
            #41|  int|   var|    0|   97|         3c|
            #42|  int|   var|    0|  103|         40|
            #43|  int|   var|    0|  111|         44|
-           #44|  int|   var|    0|  113|         48|
-           #45|  int|   var|    0|  115|         4c|
-             a|  int|   var|    0|   83|         50|
+           #44| char|   var|    0|  113|          0|
+           #45|  int|   var|    0|  115|         48|
+             a|  int|   var|    0|   83|         4c|

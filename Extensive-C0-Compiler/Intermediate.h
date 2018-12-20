@@ -61,7 +61,7 @@ namespace Med
 	/* intermediate codes all here */
 	extern std::vector<mcode> itmd_code;
 
-	std::string gen_temp(std::string &curFunc, int &lc);
+	std::string gen_temp(std::string &curFunc, int &lc, int cls);
 	std::string gen_label();
 	//std::string gen_str();
 

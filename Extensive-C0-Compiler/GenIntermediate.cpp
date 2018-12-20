@@ -6,10 +6,11 @@ int temp_order = 0;
 int label_order = 0;
 int str_order = 0;
 
-std::string Med::gen_temp(std::string &curFunc, int &lc)
+std::string Med::gen_temp(std::string &curFunc, int &lc, int cls)
 {
+	assert(cls == ST::INT_CLS || cls == ST::CHA_CLS);
 	auto name = Med::temphd + std::to_string(++temp_order);
-	ST::addsym(curFunc, name, ST::INT_CLS, ST::VAR_TYP, 0, lc);
+	ST::addsym(curFunc, name, cls, ST::VAR_TYP, 0, lc);
 	return name;
 }
 
