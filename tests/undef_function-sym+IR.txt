@@ -1,0 +1,120 @@
+Line 110, Column 34, near , : TYPE_DISMATCH
+Line 110, Column 38, near , : TYPE_DISMATCH
+Line 110, Column 45, near ) : TYPE_DISMATCH
+Line 110, Column 45, near ) : NOT_ENOUGH_FUNCTION_PARAM
+Line 114, Column 26, near ) : TYPE_DISMATCH
+Line 120, Column 16, near ) : WRONG_FACTOR
+Line 120, Column 16, near ) : TYPE_DISMATCH
+Line 121, Column 5, near testre : IDEN_NO_DEFINITION
+string_2 : .asciiz "this is a string \n"
+string_1 : .asciiz "this is a string, !#$%&'()*+,-./0123456789:;<=>?@[\\]^_`{|}~|\n"
+global:
+          name|class|  type|  len|  def|       addr
+        array1|  int| array|    9|    3|   ffffffff|
+        array2| char| array|   10|    4|   ffffffff|
+         char1| char| const|   97|    2|   ffffffff|
+         char2| char| const|   98|    2|   ffffffff|
+         char3| char|   var|    0|    4|   ffffffff|
+         char4| char|   var|    0|    4|   ffffffff|
+     factorial|  int|  func|    1|    9|   ffffffff|
+          main| void|  func|    0|   98|   ffffffff|
+          num1|  int| const|   10|    1|   ffffffff|
+          num2|  int| const|    1|    1|   ffffffff|
+          num3|  int| const|   10|    1|   ffffffff|
+          num4|  int| const|  -19|    1|   ffffffff|
+          num5|  int|   var|    0|    3|   ffffffff|
+          num6|  int|   var|    0|    3|   ffffffff|
+       return1|  int|  func|    0|    6|   ffffffff|
+     testarray|  int|  func|    0|   70|   ffffffff|
+testexpression|  int|  func|    0|   57|   ffffffff|
+ testfactorial| char|  func|    0|   92|   ffffffff|
+       testfor|  int|  func|    6|   22|   ffffffff|
+    testprintf| void|  func|    1|   81|   ffffffff|
+    testresult| char| array|   10|    4|   ffffffff|
+       testvar| void|  func|    0|   15|   ffffffff|
+     testwhile|  int|  func|    0|   36|   ffffffff|
+
+factorial:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   12|   ffffffff|
+            #2|  int|   var|    0|   12|   ffffffff|
+            #3|  int|   var|    0|   12|   ffffffff|
+             n|  int|  para|    0|    9|   ffffffff|
+return1:
+          name|class|  type|  len|  def|       addr
+testarray:
+          name|class|  type|  len|  def|       addr
+           #20|  int|   var|    0|   76|   ffffffff|
+           #21|  int|   var|    0|   77|   ffffffff|
+           #22|  int|   var|    0|   77|   ffffffff|
+           #23|  int|   var|    0|   77|   ffffffff|
+           #24|  int|   var|    0|   77|   ffffffff|
+           #25|  int|   var|    0|   77|   ffffffff|
+           #26|  int|   var|    0|   77|   ffffffff|
+           #27|  int|   var|    0|   77|   ffffffff|
+           #28|  int|   var|    0|   78|   ffffffff|
+             a|  int|   var|    0|   71|   ffffffff|
+             b|  int|   var|    0|   71|   ffffffff|
+             c|  int|   var|    0|   71|   ffffffff|
+testexpression:
+          name|class|  type|  len|  def|       addr
+           #11|  int|   var|    0|   64|   ffffffff|
+           #12|  int|   var|    0|   64|   ffffffff|
+           #13|  int|   var|    0|   64|   ffffffff|
+           #14|  int|   var|    0|   64|   ffffffff|
+           #15|  int|   var|    0|   64|   ffffffff|
+           #16|  int|   var|    0|   64|   ffffffff|
+           #17|  int|   var|    0|   64|   ffffffff|
+           #18|  int|   var|    0|   64|   ffffffff|
+           #19|  int|   var|    0|   66|   ffffffff|
+             a|  int|   var|    0|   58|   ffffffff|
+             b| char|   var|    0|   59|   ffffffff|
+             c|  int|   var|    0|   58|   ffffffff|
+testfactorial:
+          name|class|  type|  len|  def|       addr
+           #30|  int|   var|    0|   93|   ffffffff|
+           #31|  int|   var|    0|   94|   ffffffff|
+testfor:
+          name|class|  type|  len|  def|       addr
+            #4|  int|   var|    0|   26|   ffffffff|
+            #5|  int|   var|    0|   27|   ffffffff|
+             a|  int|  para|    0|   22|   ffffffff|
+             b| char|  para|    1|   22|   ffffffff|
+             c|  int|  para|    2|   22|   ffffffff|
+             d| char|  para|    3|   22|   ffffffff|
+             e| char|  para|    5|   22|   ffffffff|
+             f|  int|  para|    4|   22|   ffffffff|
+             i|  int|   var|    0|   23|   ffffffff|
+testprintf:
+          name|class|  type|  len|  def|       addr
+           #29|  int|   var|    0|   89|   ffffffff|
+          flag|  int|  para|    0|   81|   ffffffff|
+testvar:
+          name|class|  type|  len|  def|       addr
+        array2|  int|   var|    0|   18|   ffffffff|
+         char1|  int| array|   10|   18|   ffffffff|
+         char2|  int| const| -109|   16|   ffffffff|
+          num1| char|   var|    0|   17|   ffffffff|
+testwhile:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   48|   ffffffff|
+            #6|  int|   var|    0|   40|   ffffffff|
+            #7|  int|   var|    0|   43|   ffffffff|
+            #8|  int|   var|    0|   44|   ffffffff|
+            #9|  int|   var|    0|   47|   ffffffff|
+          num1|  int|   var|    0|   37|   ffffffff|
+          num2|  int|   var|    0|   37|   ffffffff|
+          num3|  int|   var|    0|   37|   ffffffff|
+          num4|  int|   var|    0|   37|   ffffffff|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #32| char|   var|    0|  107|   ffffffff|
+           #33|  int|   var|    0|  110|   ffffffff|
+           #34|  int|   var|    0|  112|   ffffffff|
+           #35| char|   var|    0|  114|   ffffffff|
+           #36|  int|   var|    0|  116|   ffffffff|
+           #37|  int|   var|    0|  118|   ffffffff|
+           #38| char|   var|    0|  122|   ffffffff|
+          flag|  int|   var|    0|  100|   ffffffff|
+             i|  int|   var|    0|  100|   ffffffff|

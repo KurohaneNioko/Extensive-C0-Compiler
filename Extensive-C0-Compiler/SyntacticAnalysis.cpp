@@ -315,7 +315,7 @@ void value_param(const varinfo *func_name)
 			/* too much para*/
 			ER::logER(ERT::TOO_MANY_FUNCTION_PARAMS);
 		//if (ret_cls == ST::INT_CLS && para->cls == ST::CHA_CLS)	
-		if (ret_cls != para->cls)	
+		else if (ret_cls != para->cls)	
 			//(ret_cls != para->cls) or just not int 2 char ? must the same!
 			/* cls not match: expect type(para->cls) get type(ret_cls)*/
 			ER::logER(ERT::TYPE_DISMATCH);
@@ -1013,6 +1013,7 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 		if (temp_iden == nullptr)
 		{   /* undef iden*/
 			ER::logER(ERT::IDEN_NO_DEFINITION);
+			Lex::getsym();
 			return;
 		}
 		Lex::getsym();
