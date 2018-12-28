@@ -6,15 +6,17 @@
 #else
 #define COMMENT 0
 #endif
+
+#define is2power(x)	((x&(x-1))==0)
+
 const std::string SW = "sw";
 const std::string LW = "lw";
 const std::string SB = "sb";
 const std::string LBU = "lbu";
 const std::string LI = "li";
-const std::string ADD = "add";
+const std::string ADD = "addu";
 const std::string ADDI = "addi";
-//const std::string SUBI = "subi";
-const std::string SUB = "sub";
+const std::string SUB = "subu";
 const std::string BEQ = "beq";
 const std::string BNE = "bne";
 const std::string BGE = "bge";
@@ -29,11 +31,12 @@ const std::string J = "j";
 const std::string JAL = "jal";
 const std::string JR = "jr";
 const std::string MUL = "mul";
-const std::string DIV = "div";
+const std::string DIV = "divu";
 //const std::string MFLO = "mflo";
 const std::string SYSCALL = "syscall";
 const std::string LA = "la";
 const std::string SLL = "sll";
+const std::string SRA = "sra";
 const std::string MOVE = "move";
 //const std::string ADDU = "addu";
 
@@ -451,84 +454,6 @@ void _goto(mcode &c)
 	mpb("j " + mark2label(c.rst));
 }
 
-//old push & call
-void _push(mcode &c, ociter o)
-{
-	int offset = FS + std::stoi(c.num2) * size_of_reg;
-	int v;
-	bool para_const = opr_is_const(c.num1, v);
-	std::string save_reg; SSSS;
-	if (para_const)
-	{
-		ss << LI << " " << T9 << " " << v;
-		save_reg = T9;
-		mpss;
-		ss.str("");
-	}
-	else
-	{
-		save_reg = regSeek(c.num1, true);
-		futureUseChk(c.num1, save_reg, o);
-	}
-	ss << SW << " " << save_reg << " -" << offset << " (" << SP << ")";
-	mpss;
-	//++pushcount;
-#if COMMENT
-	mpb("# push param: " + c.num1);
-#endif // COMMENT
-}
-void _call(mcode &c)
-{
-	assert(c.op == OP::CALL);
-	mpb("# save start");
-	int stack_ptr = FS + local_var_size[c.rst];
-	/*	para |	FS = caller Frame size				para + local|	main Frame
-		local|										-------------
-		t0-s8|	current func's caller save them		para
-		ra	 |	caller Frame						local
-		------										t0-s8
-		para |	callee Frame						ra
-		local|										-------------
-		t0-s8|	callee's caller save them			
-		ra   |
-	*/
-	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
-		if(curRI.ts_use[i])
-		{
-			SSSS;
-			ss << SW << " " << index2tempReg(i)
-				<< " -" << stack_ptr << " (" << SP << ")";
-			mpss;
-			stack_ptr += size_of_reg;
-		}
-
-	stack_ptr = FS + local_var_size[c.rst] + size_of_reg * (reg_t_max + reg_s_max);
-	{ SSSS; ss << SW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
-	stack_ptr += size_of_reg;
-	//{ SSSS; ss << SW << " " << SP << " -" << stack_ptr << " (" << SP << ")"; mpss; }
-	{ SSSS; ss << ADDI << " " << SP << " " << SP << " " << (-1 * FS); mpss; }
-	{ SSSS; ss << JAL << " " << mark2func(c.rst); mpss; }
-	mpb("# recover start");
-	{SSSS; ss << ADDI << " " << SP << " " << SP << " " << FS; mpss; }
-	stack_ptr -= size_of_reg;
-	{ SSSS; ss << LW << " " << RA << " -" << stack_ptr << " (" << SP << ")"; mpss; }
-	stack_ptr = FS + local_var_size[c.rst];
-	for (auto i = 0; i < reg_t_max + reg_s_max; i++)
-	{
-		if (curRI.ts_use[i])
-		{
-			SSSS;
-			ss << LW << " " << index2tempReg(i)
-				<< " -" << stack_ptr << " (" << SP << ")";
-			mpss;
-			stack_ptr += size_of_reg;
-		}
-	}
-	mpb("# recover end");
-	//pushcount = 0;	// ATTENTION
-}
-//old push & call end
-
 //bug fix: handle func_call in val_param
 //update push IR: funcname, push, var/const, i-th-Param
 struct parainfo { int offset; std::string func_name; };
@@ -915,15 +840,18 @@ void calc(mcode &c, ociter o)
 		{
 			rdreg = regSeek(c.rst, false);
 			if (c.op == OP::ADD)
-				ss << ADD << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
+				ss << ADDI << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
 			else if (c.op == OP::SUB)
 			{
-				ss << SUB << ' ' << T9 << ' ' << r2reg << ' ' << v1; mpss; ss.str("");
+				ss << ADDI << ' ' << T9 << ' ' << r2reg << ' ' << (-v1); mpss; ss.str("");
 				ss << SUB << ' ' << rdreg << ' ' << ZERO << ' ' << T9;
 			}
 			else if (c.op == OP::MUL)
 			{
-				ss << MUL << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
+				if (is2power(v1) && v1 > 0)
+					ss << SLL << ' ' << rdreg << ' ' << r2reg << ' ' << int(log2(v1));
+				else
+					ss << MUL << ' ' << rdreg << ' ' << r2reg << ' ' << v1;
 			}
 			else if (c.op == OP::DIV)
 			{
@@ -954,7 +882,17 @@ void calc(mcode &c, ociter o)
 				c.op == OP::ADD ? ADD :
 				c.op == OP::SUB ? SUB :
 				c.op == OP::MUL ? MUL : DIV;
-			ss << o << ' ' << rdreg << ' ' << r1reg << ' ' << v2; mpss;
+			if (o == MUL && is2power(v2) && v2 > 0)
+				ss << SLL << ' ' << rdreg << ' ' << r1reg << ' ' << int(log2(v2));
+			else if (o == DIV && is2power(v2) && v2 > 0)
+				ss << SRA << ' ' << rdreg << ' ' << r1reg << ' ' << int(log2(v2));
+			else if (o == ADD)
+				ss << ADDI << ' ' << rdreg << ' ' << r1reg << ' ' << v2;
+			else if (o == SUB)
+				ss << ADDI << ' ' << rdreg << ' ' << r1reg << ' ' << -v2;
+			else
+				ss << o << ' ' << rdreg << ' ' << r1reg << ' ' << v2;
+			mpss;
 		}
 	}
 	else { assert(false); }

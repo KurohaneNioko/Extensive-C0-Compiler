@@ -1,0 +1,201 @@
+          fact  func_begin               0               0   1
+            %1          >=               t               3   2
+        RET_v0           +               t               0   2
+             0         ret               0               0   3
+            %2        goto               0               0   4
+            %1       label               0               0   5
+            #1           -               t               1   5
+          fact        push              #1               0   5
+          fact        call               0               0   6
+            #2           +          RET_v0               0   6
+        RET_v0           *              #2               t   6
+             0         ret               0               0   7
+            %2       label               0               0   8
+             0    func_end               0               0   8
+          rt15  func_begin               0               0   9
+            #3           *               3               5   9
+            #4           /              #3               1   9
+            #5           +              #4               1   9
+        RET_v0           -              #5               1   9
+             0         ret               0               0  10
+             0    func_end               0               0  10
+          fun2  func_begin               0               0  11
+            #6           *               b               c  11
+            #7           *              #6               d  11
+            #8           /              #7               e  11
+            #9           +               a              #8  11
+           #10           -              #9               f  11
+           int       print             #10               0  11
+        RET_v0           +             'A'               0  11
+             0         ret               0               0  12
+             0    func_end               0               0  12
+          main  func_begin               0               0  13
+             x           +              -1               0  13
+           int       print               x               0  13
+             r           -               0               4  13
+           int       print               r               0  13
+            aa           +               6               0  13
+           str       print              ~1               0  13
+          fact        push              aa               0  13
+          fact        call               0               0  14
+           #11           +          RET_v0               0  14
+           int       print             #11               0  14
+           #12           *               3               4  14
+           #13           +              -2               1  14
+           #14           -             #13               1  14
+           #15           *               6             #14  14
+           #16           +             #12             #15  14
+           #17           -               x               r  14
+          fun2        push             #17               0  14
+          fun2        push              aa               1  14
+          fun2        push               1               2  14
+          fun2        push               4               3  14
+          fun2        push               2               4  14
+          fun2        push              -2               5  14
+          fun2        call               0               0  15
+           #18           +          RET_v0               0  15
+            ar         []=             #16             #18  15
+          fact        push               4               0  15
+          fact        call               0               0  16
+           #19           +          RET_v0               0  16
+           #20           /               0             #19  16
+           #21         =[]              ar             #20  16
+           int       print             #21               0  16
+            ar         []=               1             '0'  16
+           #22         =[]              ar               1  16
+          rt15        call               0               0  17
+           #23           +          RET_v0               0  17
+           #24           +             #22             #23  17
+           #25           *               1             #24  17
+           #26           -               0             #25  17
+           #27           *               4               9  17
+           #28           -               2             #27  17
+           #29           +             #26             #28  17
+           #30           *               2             'm'  17
+            aa           +             #29             #30  17
+           int       print              aa               0  17
+             a           +              aa               0  17
+           int       scanf               a               0  17
+           int       scanf               x               0  17
+            %3          <=               a               0  18
+           str       print              ~2               0  18
+            %4           >               x               0  19
+           #31           /               a               x  19
+             r           *             #31               a  19
+           int       print               r               0  19
+           str       print              ~3               0  19
+            %4       label               0               0  20
+             r           +               r              aa  20
+           int       print               r               0  20
+            %3       label               0               0  21
+            %5          ==               x               0  22
+           str       print              ~4               0  22
+           #32           -               0               4  22
+            %6          !=               a             #32  23
+             r           +               r               1  23
+           int       print               r               0  23
+           str       print              ~5               0  23
+            %6       label               0               0  24
+            %5       label               0               0  25
+            %7          >=               a               0  26
+           str       print              ~6               0  26
+            %8           <               x               0  27
+             r           +               r               a  27
+           int       print               r               0  27
+           str       print              ~7               0  27
+            %8       label               0               0  28
+            %9        goto               0               0  29
+            %7       label               0               0  30
+             r           *               r              -1  30
+           int       print               r               0  30
+            %9       label               0               0  31
+             a           -               0               2  31
+           %10       label               0               0  32
+             x           +               x               4  32
+             a           +               a               1  32
+           %10           <               a               3  32
+
+string_1 : .asciiz "!@#$%%abcd114514ABCD963287~;: \n"
+string_2 : .asciiz "1 hit \n"
+string_3 : .asciiz "2 hit\n"
+string_4 : .asciiz "3 hit \n"
+string_5 : .asciiz "4 hit \n"
+string_6 : .asciiz "5 hit \n"
+string_7 : .asciiz "6 hit \n"
+global:
+          name|class|  type|  len|  def|       addr
+          fact|  int|  func|    1|    8|   ffffffff|
+   first_alpha| char| const|   97|    4|   ffffffff|
+first_captical| char| const|   65|    4|   ffffffff|
+          fun2| char|  func|    6|   22|   ffffffff|
+          main| void|  func|    0|   28|   ffffffff|
+     minus_two|  int| const|   -2|    2|   ffffffff|
+           one|  int| const|    1|    2|   ffffffff|
+          renn| char| const|   48|    3|   ffffffff|
+          rt15|  int|  func|    0|   17|   ffffffff|
+     testchar1| char|   var|    0|    6|   10010000|
+     testchar2| char|   var|    0|    6|   10010001|
+             x|  int|   var|    0|    5|   10010004|
+          xxxx|  int|   var|    0|    5|   10010008|
+           yyy|  int| array|    7|    5|   1001000c|
+          zero|  int| const|    0|    1|   ffffffff|
+       zzzzzzz|  int|   var|    0|    5|   10010028|
+
+fact:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   13|          8|
+            #2|  int|   var|    0|   13|          c|
+             t|  int|  para|    0|    8|          0|
+fun2:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   24|         1c|
+            #6|  int|   var|    0|   24|         20|
+            #7|  int|   var|    0|   24|         24|
+            #8|  int|   var|    0|   24|         28|
+            #9|  int|   var|    0|   24|         2c|
+             a|  int|  para|    0|   22|          0|
+             b|  int|  para|    1|   22|          4|
+             c|  int|  para|    2|   22|          8|
+             d|  int|  para|    3|   22|          c|
+             e|  int|  para|    4|   22|         10|
+             f|  int|  para|    5|   22|         14|
+rt15:
+          name|class|  type|  len|  def|       addr
+            #3|  int|   var|    0|   19|          4|
+            #4|  int|   var|    0|   19|          8|
+            #5|  int|   var|    0|   19|          c|
+          zero|  int| const|    1|   18|   ffffffff|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #11|  int|   var|    0|   40|          8|
+           #12|  int|   var|    0|   41|          c|
+           #13|  int|   var|    0|   41|         10|
+           #14|  int|   var|    0|   41|         14|
+           #15|  int|   var|    0|   41|         18|
+           #16|  int|   var|    0|   41|         1c|
+           #17|  int|   var|    0|   41|         20|
+           #18| char|   var|    0|   41|          0|
+           #19|  int|   var|    0|   42|         24|
+           #20|  int|   var|    0|   42|         28|
+           #21| char|   var|    0|   42|          1|
+           #22| char|   var|    0|   44|          2|
+           #23|  int|   var|    0|   44|         2c|
+           #24|  int|   var|    0|   44|         30|
+           #25|  int|   var|    0|   44|         34|
+           #26|  int|   var|    0|   44|         38|
+           #27|  int|   var|    0|   44|         3c|
+           #28|  int|   var|    0|   44|         40|
+           #29|  int|   var|    0|   44|         44|
+           #30|  int|   var|    0|   44|         48|
+           #31|  int|   var|    0|   52|         4c|
+           #32|  int|   var|    0|   62|         50|
+             a|  int|   var|    0|   33|         54|
+            aa|  int|   var|    0|   33|         58|
+            ar| char| array|    2|   31|          3|
+             b|  int| const|    1|   30|   ffffffff|
+             c|  int| const|    2|   30|   ffffffff|
+             d|  int| const|    3|   30|   ffffffff|
+             e|  int| const|    4|   30|   ffffffff|
+            m1|  int| array|    8|   32|         5c|
+             r|  int|   var|    0|   32|         7c|

@@ -1,0 +1,28 @@
+int x;
+
+void add(int a, int b, int c) {
+    int i;
+	for(i=0;i<10;i=i+1)
+	{
+		x = x + a+i*b-c;
+	}
+}
+
+void t(int a)
+{
+	if (a>3)
+		printf(a-3);
+}
+
+void main() {
+    x = 2;
+	printf(x);
+    x = 0 - x;
+	printf(x);
+	x = -x;
+	printf(x);
+	x = x - -30;
+	printf(x);
+	x = x + 2;
+    printf(x);
+}

@@ -1,0 +1,272 @@
+     factorial  func_begin               0               0
+            %1           >               n               1
+        RET_v0           +               1               0
+             0         ret               0               0
+            %1       label               0               0
+            #1           -               n               1
+     factorial        push              #1               0
+     factorial        call               0               0
+            #2           +          RET_v0               0
+            #3           *               n              #2
+        RET_v0           +              #3               0
+             0         ret               0               0
+             0    func_end               0               0
+           mod  func_begin               0               0
+            #4           /               x               y
+            #5           *              #4               y
+            #6           -               x              #5
+             x           +              #6               0
+        RET_v0           +               x               0
+             0         ret               0               0
+             0    func_end               0               0
+          swap  func_begin               0               0
+           str       print              ~1               0
+           int       print               x               0
+           str       print              ~2               0
+           int       print               y               0
+          temp           +               x               0
+             x           +               y               0
+             y           +            temp               0
+           str       print              ~3               0
+           int       print               x               0
+           str       print              ~4               0
+           int       print               y               0
+             0    func_end               0               0
+  complete_num  func_begin               0               0
+             j           +             val               0
+            %2       label               0               0
+            %3          >=               j            1024
+            #7           -               0               1
+             n           +              #7               0
+             s           +               j               0
+             i           +               1               0
+            %4       label               0               0
+            %5          >=               i               j
+            #8           /               j               i
+            #9           *              #8               i
+            x1           +              #9               0
+           mod        push               j               0
+           mod        push               i               1
+           mod        call               0               0
+           #10           +          RET_v0               0
+            %6          !=             #10               0
+           #11           +               n               1
+             n           +             #11               0
+           #12           -               s               i
+             s           +             #12               0
+            %7           <               n             128
+           str       print              ~5               0
+            %7       label               0               0
+            %8          >=               n             128
+             k         []=               n               i
+            %8       label               0               0
+            %6       label               0               0
+           #13           +               i               1
+             i           +             #13               0
+            %4        goto               0               0
+            %5       label               0               0
+            %9          !=               s               0
+           str       print              ~6               0
+           int       print               j               0
+             i           +               0               0
+           %10       label               0               0
+           %11           >               i               n
+           str       print              ~7               0
+           #14         =[]               k               i
+           int       print             #14               0
+           #15           +               i               1
+             i           +             #15               0
+           %10        goto               0               0
+           %11       label               0               0
+           str       print              ~8               0
+            %9       label               0               0
+           #16           +               j               1
+             j           +             #16               0
+            %2        goto               0               0
+            %3       label               0               0
+           str       print              ~9               0
+             a           +               0               0
+             i           +               0               0
+           str       print             ~10               0
+           int       print               n               0
+           %12       label               0               0
+           %13          >=               i            1024
+           #17           *               a               i
+             b           +             #17               0
+           #18           *               j               n
+             c           +             #18               0
+           #19           *               a               i
+             a           +             #19               0
+           #20           +               a               b
+           #21           +             #20               c
+             a           +             #21               0
+           #22           +               i               1
+             i           +             #22               0
+           str       print             ~11               0
+           int       print               a               0
+           str       print             ~12               0
+           int       print               b               0
+           %12        goto               0               0
+           %13       label               0               0
+             b           +               a               0
+             i           +               0               0
+           %14       label               0               0
+           %15          >=               i            1024
+           #23           +               b               i
+             b           +             #23               0
+           #24           +               i               1
+             i           +             #24               0
+           %14        goto               0               0
+           %15       label               0               0
+           str       print             ~13               0
+           int       print               b               0
+           str       print              ~9               0
+             h           +               0               0
+          leap           +               1               0
+             m           +               2               0
+           %16       label               0               0
+           %17           >               m            1024
+           #25           /               m               2
+            k2           +             #25               0
+             i           +               2               0
+           %18       label               0               0
+           %19           >               i              k2
+           #26           /               m               i
+           #27           *             #26               i
+            x2           +             #27               0
+           mod        push               m               0
+           mod        push               i               1
+           mod        call               0               0
+           #28           +          RET_v0               0
+           %20          !=             #28               0
+          leap           +               0               0
+           %20       label               0               0
+           #29           +               i               1
+             i           +             #29               0
+           %18        goto               0               0
+           %19       label               0               0
+           %21          !=            leap               1
+           str       print             ~14               0
+           int       print               m               0
+           #30           +               h               1
+             h           +             #30               0
+           #31           /               h              10
+           #32           *             #31              10
+            x2           +             #32               0
+           %22          !=              x2               h
+           str       print              ~8               0
+           %22       label               0               0
+           %21       label               0               0
+          leap           +               1               0
+           #33           +               m               1
+             m           +             #33               0
+           %16        goto               0               0
+           %17       label               0               0
+           str       print             ~15               0
+           int       print               h               0
+             0    func_end               0               0
+          main  func_begin               0               0
+     factorial        push              10               0
+     factorial        call               0               0
+           #34           +          RET_v0               0
+             n           +             #34               0
+           str       print             ~16               0
+           int       print               n               0
+          swap        push               5               0
+          swap        push              10               1
+          swap        call               0               0
+  complete_num        push               2               0
+  complete_num        call               0               0
+
+string_15 : .asciiz "          The total is \n"
+string_8 : .asciiz "          \n"
+string_7 : .asciiz "  \n"
+string_9 : .asciiz " ---------------------------------------------------------------          \n"
+string_16 : .asciiz " 10! = \n"
+string_5 : .asciiz " OVERFLOW!          \n"
+string_3 : .asciiz " SWAP x = \n"
+string_4 : .asciiz " SWAP y = \n"
+string_14 : .asciiz " \n"
+string_13 : .asciiz " b = \n"
+string_6 : .asciiz " complete number: \n"
+string_1 : .asciiz " x = \n"
+string_2 : .asciiz " y = \n"
+string_11 : .asciiz "a=\n"
+string_12 : .asciiz "b=\n"
+string_10 : .asciiz "n=\n"
+global:
+          name|class|  type|  len|  def|       addr
+  complete_num| void|  func|    1|   28|   ffffffff|
+     factorial|  int|  func|    1|    3|   ffffffff|
+          main| void|  func|    0|  129|   ffffffff|
+       max_num|  int| const| 1024|    1|   ffffffff|
+           mod|  int|  func|    2|    9|   ffffffff|
+          swap| void|  func|    2|   15|   ffffffff|
+
+complete_num:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   44|          8|
+           #11|  int|   var|    0|   46|          c|
+           #12|  int|   var|    0|   47|         10|
+           #13|  int|   var|    0|   53|         14|
+           #14|  int|   var|    0|   62|         18|
+           #15|  int|   var|    0|   63|         1c|
+           #16|  int|   var|    0|   67|         20|
+           #17|  int|   var|    0|   75|         24|
+           #18|  int|   var|    0|   76|         28|
+           #19|  int|   var|    0|   77|         2c|
+           #20|  int|   var|    0|   78|         30|
+           #21|  int|   var|    0|   78|         34|
+           #22|  int|   var|    0|   79|         38|
+           #23|  int|   var|    0|   87|         3c|
+           #24|  int|   var|    0|   88|         40|
+           #25|  int|   var|    0|  101|         44|
+           #26|  int|   var|    0|  104|         48|
+           #27|  int|   var|    0|  104|         4c|
+           #28|  int|   var|    0|  105|         50|
+           #29|  int|   var|    0|  109|         54|
+           #30|  int|   var|    0|  114|         58|
+           #31|  int|   var|    0|  116|         5c|
+           #32|  int|   var|    0|  116|         60|
+           #33|  int|   var|    0|  121|         64|
+            #7|  int|   var|    0|   38|         68|
+            #8|  int|   var|    0|   43|         6c|
+            #9|  int|   var|    0|   43|         70|
+             a|  int|   var|    0|   33|         74|
+             b|  int|   var|    0|   33|         78|
+             c|  int|   var|    0|   33|         7c|
+             h|  int|   var|    0|   32|         80|
+             i|  int|   var|    0|   31|         84|
+             j|  int|   var|    0|   31|         88|
+             k|  int| array|  128|   30|         8c|
+            k2|  int|   var|    0|   32|        28c|
+          leap|  int|   var|    0|   32|        290|
+             m|  int|   var|    0|   32|        294|
+             n|  int|   var|    0|   31|        298|
+             s|  int|   var|    0|   31|        29c|
+           val|  int|  para|    0|   28|          0|
+            x1|  int|   var|    0|   31|        2a0|
+            x2|  int|   var|    0|   32|        2a4|
+factorial:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|    6|          8|
+            #2|  int|   var|    0|    6|          c|
+            #3|  int|   var|    0|    6|         10|
+             n|  int|  para|    0|    3|          0|
+mod:
+          name|class|  type|  len|  def|       addr
+            #4|  int|   var|    0|   10|          c|
+            #5|  int|   var|    0|   10|         10|
+            #6|  int|   var|    0|   10|         14|
+             x|  int|  para|    0|    9|          0|
+             y|  int|  para|    1|    9|          4|
+swap:
+          name|class|  type|  len|  def|       addr
+          temp|  int|   var|    0|   16|          c|
+             x|  int|  para|    0|   15|          0|
+             y|  int|  para|    1|   15|          4|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #34|  int|   var|    0|  133|          4|
+             n|  int|   var|    0|  131|          8|

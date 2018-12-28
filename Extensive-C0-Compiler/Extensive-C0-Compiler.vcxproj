@@ -127,6 +127,7 @@
     <ClCompile Include="LexicalAnalyzer.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="ObjectCode.cpp" />
+    <ClCompile Include="Optimizer.cpp" />
     <ClCompile Include="SymbolTable.cpp" />
     <ClCompile Include="SyntacticAnalysis.cpp" />
   </ItemGroup>
@@ -136,6 +137,7 @@
     <ClInclude Include="Intermediate.h" />
     <ClInclude Include="LexerHead.h" />
     <ClInclude Include="ObjectCode.h" />
+    <ClInclude Include="OptimzeHead.h" />
     <ClInclude Include="SymbolHead.h" />
     <ClInclude Include="SyntaxHead.h" />
   </ItemGroup>

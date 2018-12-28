@@ -11,6 +11,7 @@
 
 typedef struct
 {
+	int BBno=0;
 	std::string rst;
 	std::string op;
 	std::string num1;
@@ -63,6 +64,7 @@ namespace Med
 
 	std::string gen_temp(std::string &curFunc, int &lc, int cls);
 	std::string gen_label();
+	extern int temp_order;
 	//std::string gen_str();
 
 	bool is_operand_num(std::string &s, int &value);

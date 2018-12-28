@@ -1,11 +1,12 @@
-
 #include"LexerHead.h"
 #include"SymbolHead.h"
 #include"SyntaxHead.h"
 //#include"Intermediate.h"
 #include"ObjectCode.h"
 
-
+#if OPTIMIZE
+#include"OptimzeHead.h"
+#endif // OPT
 
 int main(int argc, char** argv)
 {
@@ -27,27 +28,30 @@ int main(int argc, char** argv)
 		system("pause");
 		return -1;
 	}
-	//unsigned long cnt = 0;
-	//std::string a("main\0");
-	//std::cout << std::to_string(a == ("main"));
+	std::string cp = code_path;
 	std::string symIR_path = code_path.replace(code_path.begin() + code_path.find_last_of('.'), code_path.end(), "-sym+IR.txt");
 	Syn::program();
 	std::ofstream symIRout(symIR_path);
 	if (!with_error)
 	{
+#if OPTIMIZE
+		std::string cp_ = cp;
+		OPT::optinfofile = cp_.replace(cp_.begin() + cp_.find_last_of('.'), cp_.end(), "-optInfo.txt");
+		OPT::allOptimize();
+#endif
 		Med::printIMC(symIRout);
 		symIRout << std::endl;
 		OC::Med2Mips(asm_path);
+		ST::printSym(symIRout);
 	}
 	else
 	{
 		ER::writeERR(symIRout);
 		std::cout << "Compile ERROR!" << std::endl;
+		ST::printSym(symIRout);
 		system("pause");
 	}
-	ST::printSym(symIRout);
 	if (Lex::code_file.is_open())
 		Lex::code_file.close();
-	//system("pause");
 	return 0;
 }

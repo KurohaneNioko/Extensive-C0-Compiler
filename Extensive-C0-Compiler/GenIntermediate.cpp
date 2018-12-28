@@ -2,7 +2,7 @@
 
 std::vector<mcode> Med::itmd_code;
 
-int temp_order = 0;
+int Med::temp_order = 0;
 int label_order = 0;
 int str_order = 0;
 
@@ -60,6 +60,10 @@ void Med::printIMC(std::ofstream&o)
 	{
 		o << std::right;
 		o << std::setw(14) << iter->rst << "  " << std::setw(10) << iter->op << "  "
-			<< std::setw(14) << iter->num1 << "  " << std::setw(14) << iter->num2 << std::endl;
+			<< std::setw(14) << iter->num1 << "  " << std::setw(14) << iter->num2 
+#if OPTIMIZE
+			<< std::setw(4) << iter->BBno
+#endif
+			<< std::endl;
 	}
 }
