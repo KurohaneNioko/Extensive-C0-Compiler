@@ -1,0 +1,917 @@
+const	pi	=	1_int314
+const	a10	=	1_int10
+const	a20	=	1_int20
+const	a30	=	1_int-30
+const	adder	=	+
+const	pluser	=	+
+const	number	=	h
+const	letter	=	a
+var	var2
+array_int	varray[10]
+var	var4
+array_char	varraychar[20]
+var	var1
+const	var1	=	1_int1
+var	c
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	0_varb
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+0_varc	=	v0
+v0	=	0_varc
+t0	=	v0
+v0	=	0_varvar1
+t0	=	t0	*	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varc	=	v0
+v0	=	0_varc
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+var	i
+set_label	fortest_for_init
+v0	=	1_int0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_vari	=	v0
+jump	fortest_for_statement
+set_label	fortest_for_condition
+v0	=	0_vari
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int10
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	<=?	v0
+jump_ifz	v0	fortest_for_end
+jump	fortest_for_statement
+set_label	fortest_for_step
+i	=	i	+	1_int2
+jump	fortest_for_condition
+set_label	fortest_for_sentences
+set_label	fortest_startif
+v0	=	0_vari
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int7
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	fortest_ifelse
+v0	=	0_vari
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+set_label	fortest_else
+set_label	fortest_startif
+v0	=	0_vari
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int8
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	fortest_ifelse
+v0	=	0_vari
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+jump	fortest_ifend
+set_label	fortest_ifelse
+set_label	fortest_ifend
+set_label	fortest_end
+jump	fortest_for_steps
+set_label	fortest_for_end
+set_label	fortest_for_init
+v0	=	1_int0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_vari	=	v0
+jump	fortest_for_statement
+set_label	fortest_for_condition
+v0	=	1_int6
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	1_int5
+t2	=	v0
+v0	=	t2
+t1	=	t1	-	v0
+v0	=	1_int2
+t2	=	v0
+v0	=	t2
+t1	=	t1	+	v0
+v0	=	t1
+t0	=	v0
+t0	=	v0
+v0	=	1_int2
+t0	=	t0	*	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int6
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	t0
+jump_ifz	v0	fortest_for_end
+jump	fortest_for_statement
+set_label	fortest_for_step
+i	=	i	-	1_int5
+jump	fortest_for_condition
+set_label	fortest_for_sentences
+set_label	fortest_for_init
+v0	=	1_int10
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varvar1	=	v0
+jump	fortest_for_statement
+set_label	fortest_for_condition
+v0	=	0_varvar1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int0
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	>=?v0
+jump_ifz	v0	fortest_for_end
+jump	fortest_for_statement
+set_label	fortest_for_step
+var1	=	var1	-	1_int8
+jump	fortest_for_condition
+set_label	fortest_for_sentences
+jump	fortest_for_steps
+set_label	fortest_for_end
+jump	fortest_for_steps
+set_label	fortest_for_end
+v0	=	0_varvar1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+jump_backto	ra
+jump_backto	ra
+var	a
+var	c
+var	b
+read_int	a
+read_char	b
+v0	=	0_vara
+t0	=	v0
+v0	=	1_int10
+t2	=	v0
+v0	=	t2
+t2	=	0	-	v0
+v0	=	1_int20
+t3	=	v0
+v0	=	t3
+t2	=	t2	+	v0
+v0	=	t2
+t1	=	v0
+t0	=	t0	*	v0
+v0	=	1_int5
+t0	=	t0	/v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_vara	=	v0
+v0	=	1_int97
+t0	=	v0
+v0	=	t0
+t0	=	0	-	v0
+v0	=	0_varb
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+0_varc	=	v0
+v0	=	0_varc
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	0_varb
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+jump_backto	ra
+v0	=	1_int0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+t8	&=	varray	+	t0
+v0	=	1_int1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t8	*=	v0
+v0	=	1_int1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+t8	&=	varray	+	t0
+v0	=	1_int2
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t8	*=	v0
+v0	=	1_int2
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+t8	&=	varray	+	t0
+v0	=	1_int3
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t8	*=	v0
+v0	=	1_int3
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+t8	&=	varray	+	t0
+v0	=	1_int4
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t8	*=	v0
+v0	=	1_int4
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+t8	&=	varray	+	t0
+v0	=	1_int5
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t8	*=	v0
+v0	=	1_int0
+t2	=	v0
+v0	=	t2
+t2	=	v0
+v0	=	t2
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	1_int0
+t4	=	v0
+v0	=	t4
+t4	=	v0
+v0	=	t4
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t3	=	v0
+v0	=	t3
+t3	=	v0
+v0	=	t3
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t2	=	v0
+v0	=	t2
+t1	=	t1	+	v0
+v0	=	1_int2
+t3	=	v0
+v0	=	t3
+t3	=	v0
+v0	=	t3
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t2	=	v0
+v0	=	t2
+t1	=	t1	+	v0
+v0	=	1_int3
+t3	=	v0
+v0	=	t3
+t3	=	v0
+v0	=	t3
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t2	=	v0
+v0	=	t2
+t1	=	t1	+	v0
+v0	=	t1
+t0	=	v0
+t0	=	v0
+v0	=	1_int4
+t2	=	v0
+v0	=	t2
+t2	=	v0
+v0	=	t2
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t0	=	t0	*	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+set_label	fib_startif
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int1
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	fib_ifelse
+v0	=	1_int1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+jump	fib_ifend
+set_label	fib_ifelse
+set_label	fib_ifend
+set_label	fib_startif
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int2
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	fib_ifelse
+v0	=	1_int1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+jump	fib_ifend
+set_label	fib_ifelse
+set_label	fib_ifend
+save_temp
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int1
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	fib
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+save_temp
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int2
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	fib
+reload_temp
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+jump_backto	ra
+set_label	whiletest_while
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int0
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	>?v0
+jump_ifz	v0	whiletest_endwhile
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int3
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	t0
+0_vara	=	v0
+jump	whiletest_while
+set_label	whiletest_endwhile
+set_label	whiletest_startif
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int2
+t1	=	v0
+v0	=	t1
+t1	=	0	-	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	whiletest_ifelse
+set_label	whiletest_while
+v0	=	1_int15
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	0_vara
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	>?v0
+jump_ifz	v0	whiletest_endwhile
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int5
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+0_vara	=	v0
+set_label	whiletest_startif
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int13
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	whiletest_ifelse
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int2
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+0_vara	=	v0
+jump	whiletest_ifend
+set_label	whiletest_ifelse
+set_label	whiletest_ifend
+jump	whiletest_while
+set_label	whiletest_endwhile
+jump	whiletest_ifend
+set_label	whiletest_ifelse
+set_label	whiletest_ifend
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+jump_backto	ra
+set_label	calltest3_startif
+v0	=	0_varvar2
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int100
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	1_int3
+t2	=	v0
+v0	=	t2
+t2	=	v0
+v0	=	t2
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+jump_ifz	v0	calltest3_ifelse
+set_label	calltest3_startif
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	0_varletter
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	calltest3_ifelse
+v0	=	0_vara
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	0_varb
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	0_varc
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	0_vard
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	1_int0
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+jump	calltest3_ifend
+set_label	calltest3_ifelse
+set_label	calltest3_ifend
+jump	calltest3_ifend
+set_label	calltest3_ifelse
+set_label	calltest3_ifend
+jump_backto	ra
+v0	=	1_int100
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varvar2	=	v0
+save_temp
+v0	=	0_varletter
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+v0	=	0_varpluser
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+v0	=	0_varadder
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+v0	=	0_varnumber
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	calltest3
+reload_temp
+v0	=	1_int30
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varvar2	=	v0
+jump_backto	ra
+save_temp
+jump_link	calltest2
+reload_temp
+v0	=	1_int50
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varvar2	=	v0
+v0	=	1_int0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+v0	=	1_int104
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+set_label	chara_startif
+v0	=	0_varx
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int97
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	chara_ifelse
+v0	=	1_int97
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+set_label	chara_else
+v0	=	1_int122
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_backto	ra
+set_label	chara_end
+var	result
+var	fibnum
+save_temp
+v0	=	0_vara10
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+v0	=	0_vara20
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	add
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+0_varresult	=	v0
+v0	=	0_varresult
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+save_temp
+jump_link	exptest
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+save_temp
+jump_link	arraytest
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int5
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+0_varresult	=	v0
+v0	=	0_varresult
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+read_int	fibnum
+set_label	main_startif
+v0	=	0_varfibnum
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int10
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	>?v0
+jump_ifz	v0	main_ifelse
+write string	fibnum is too big
+set_label	main_else
+set_label	main_startif
+v0	=	0_varfibnum
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int1
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	<?	v0
+jump_ifz	v0	main_ifelse
+write string	fibnum is too small
+set_label	main_else
+write string	fib number is:
+save_temp
+v0	=	0_varfibnum
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	fib
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+set_label	main_end
+set_label	main_end
+save_temp
+v0	=	1_int10
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	whiletest
+reload_temp
+save_temp
+jump_link	fortest
+reload_temp
+read_char	var4
+set_label	main_startif
+v0	=	0_varpi
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int314
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	1_int0
+t2	=	v0
+v0	=	t2
+t2	=	v0
+v0	=	t2
+t8	&=	varray	+	v0
+v0	=&	t8	+	1_int0
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	1_int1
+t1	=	v0
+v0	=	t1
+t0	=	t0	-	v0
+v0	=	t0
+jump_ifz	v0	main_ifelse
+write string	error
+jump	main_ifend
+set_label	main_ifelse
+set_label	main_ifend
+set_label	main_startif
+v0	=	1_int1
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+jump_ifz	v0	main_ifelse
+set_label	main_startif
+save_temp
+v0	=	0_varvar4
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int0
+t1	=	v0
+v0	=	t1
+t0	=	t0	+	v0
+v0	=	t0
+sp	*=	v0
+sp	=	sp	+	1_int4
+jump_link	chara
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	1_int97
+t1	=	v0
+v0	=	t1
+t1	=	v0
+v0	=	t1
+v0	=	t0	==?v0
+jump_ifz	v0	main_ifelse
+write string	your input is correct!
+set_label	main_else
+write string	error!
+set_label	main_end
+jump	main_ifend
+set_label	main_ifelse
+set_label	main_ifend
+write string	! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~
+save_temp
+jump_link	chartest
+reload_temp
+t0	=	v0
+v0	=	t0
+t0	=	v0
+v0	=	t0
+t1	=	v0
+write_int	t0
+save_temp
+jump_link	calltest1
+reload_temp

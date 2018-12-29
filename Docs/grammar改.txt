@@ -104,10 +104,13 @@ FUNC_BEGIN <name>
 	强度削弱：乘除变移位
 	代数化简：x = x +-0 | */1
 基本块划分
-dag
 
+dag
 定义使用链 图染色分reg                    
-全局变量不分reg，这样可以忽略函数调用的影响
+全局变量 数组内容 不分reg
+写回RAM判定：当前指令def了#x或y
+	写回#x 若这里的def 会被当前块的后继块use
+	写回y  若这里的def 会被当前块的后继块use  
 scanf当做def push和print当做use
 
 

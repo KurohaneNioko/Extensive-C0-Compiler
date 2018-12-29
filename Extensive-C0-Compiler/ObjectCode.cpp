@@ -259,7 +259,6 @@ std::string regAppoint(std::string &var)
 	modifyRegInfo(var, i);
 	return reg;
 }
-
 int reg2Index(std::string reg)
 {
 	assert(reg.length() >= 3 && *(reg.begin())=='$');
@@ -272,7 +271,6 @@ int reg2Index(std::string reg)
 	assert(false);
 	return -1;
 }
-
 std::string regSeek(std::string &v, bool is_rsrt)
 {	// if reg_t/s_max changed, modify here.
 	auto lookup_ts = mark2useReg(v);
@@ -307,7 +305,6 @@ std::string regSeek(std::string &v, bool is_rsrt)
 	mpss;
 	return rd;
 }
-
 void futureUseChk(std::string opr, std::string reg, ociter o)
 {
 	if (*opr.begin() != '#')
@@ -776,7 +773,9 @@ void calc(mcode &c, ociter o)
 	std::string r1reg, r2reg; SSSS;
 	if (c.rst == RETV0)		// when optimize, don't touch anything about RETV0, 
 	{
-		if (r1const)	// li $v0 v1
+		if (v1 == 0)
+			ss << MOVE << ' ' << V0 << ' ' << ZERO;
+		else if (r1const)	// li $v0 v1
 			ss << LI << ' ' << V0 << ' ' << v1;
 		else
 		{	//move $v0 r1reg
@@ -1057,6 +1056,24 @@ void print(mcode &c, ociter o)
 #endif // COMMENT
 }
 
+
+void spilt4mips(const std::string &code, std::vector<std::string> &r)
+{
+	for (auto i = code.begin(); i != code.end(); i++)
+	{
+		auto first_place = i;
+		auto last_place = i;
+		auto j = i + 1;
+		for (; j != code.end(); j++)
+			if (*j == ' ')
+				last_place = j;
+		std::string elmt = code.substr(
+			std::distance(i, code.begin()), std::distance(last_place, code.begin()));
+		r.push_back(elmt);
+		i = j;
+	}
+}
+
 void OC::Med2Mips(std::string mipsfile)
 {
 	codeHead();
@@ -1114,12 +1131,50 @@ void OC::Med2Mips(std::string mipsfile)
 #endif
 	}
 	mpb("exit:");
-	bool putTab = false;
+	
 #if INCLASS
 	std::ofstream mipsout(mipsfile, std::ios::trunc | std::ofstream::ate);
 #else
 	std::ofstream mipsout("../mipsr.asm", std::ios::trunc | std::ofstream::ate);
 #endif
+
+#if 0 //OPTIMIZE
+	// try to optimize sw x xx xxx; lw x' xx xxx
+	bool aftertext = false;
+	for (auto iter = mips.begin(); iter != mips.end(); iter++)
+	{
+		if (!aftertext && (*iter) != ".text")
+			continue;
+		else if (!aftertext && (*iter) == ".text")
+			aftertext = true;
+		if ((*iter) == "exit:") break;
+		if (aftertext)
+		{
+			if ((*iter)[0] == '#') continue;
+			auto op = (*iter).substr(0, 2);
+			if (op == "sw" || op == "sb")
+			{
+				std::vector<std::string> code1;
+				spilt4mips(*iter, code1);
+							   
+				auto j = iter + 1;
+				for (; j != mips.end(); j++)
+					if ((*j)[0] != '#')
+						break;
+				if (j == mips.end()) continue;
+				if ((*j).size() >= 3)
+				{
+					std::vector<std::string> code2;
+					spilt4mips(*j, code2);
+					auto op2 = code2[0];
+					if(op=="sw" && op2=="lw" &&)
+				}
+			}
+		}
+		
+	}
+#endif
+	bool putTab = false;
 	for (auto iter = mips.begin(); iter != mips.end(); iter++)
 	{
 		if ((*iter) == ".text")

@@ -1,0 +1,125 @@
+const int pi=314;
+const int a10=10,a20=+20,a30=-30;
+const char adder='+';
+const char pluser='*',number='8',letter='a';
+
+int var2,varray[010];
+char var4,varraychar[20];
+int var1;
+
+int add(int a,int b){
+    const int var1=1;
+    int c;
+    {
+    c=a+b;
+    }
+    c=c*var1;
+    return (c);
+}
+
+void fortest{
+    int i;
+    for(i=0;i<=10;i=i+2) if(i==7) printf(i); else if(i==8) printf(i);
+    for(i=0;(6-5+2)*2-6;i=i-5) for(var1=10;var1>=0;var1=var1-8);
+    printf(var1);
+    return;
+}
+
+int exptest{
+    int a,c;
+    char b;
+    scanf(a,b);
+    a=+a*(-+10+20)/5;
+    c=-'a'+b;
+    ;
+    ;
+    ;
+    return (c+b);
+}
+
+int arraytest{
+    varray[0]=1;
+    varray[1]=2;
+    varray[2]=3;
+    varray[3]=4;
+    varray[4]=5;
+    return ((varray[0]+varray[varray[0]]+varray[2]+varray[3])*varray[4]);
+}
+
+int fib(int a){
+    if(a==1) return (1);
+    if(a==2) return (1);
+    return (fib(a-1)+fib(a-2));
+}
+
+void whiletest(int a){
+    while(a>0){
+        a=a-3;
+    }
+    if(a==-2)
+    while(15>a){
+        a=a+5;
+        if(a==13) a=a+2;    
+    }
+    printf(a);
+}
+
+void calltest3(char a, char b, char c, char d){
+    if(var2-100+varray[3]) if((a)==(letter)) printf(a+b+c+d+0);
+}
+
+void calltest2{
+    var2=100;
+    calltest3(letter,pluser,adder,number);    
+    var2=30;
+}
+
+int calltest1{
+    calltest2;
+    var2=50;
+    return (0);
+}
+
+char chartest{
+    return ('H');
+}
+
+char chara(int x){
+    if(x==97) return ('a');
+    else return('z');
+}
+
+void main(){
+
+    int result,fibnum;
+
+    result=add(a10,a20);
+    printf(result);
+    printf(exptest);
+
+    result=arraytest+5;
+    printf(result);
+
+    scanf(fibnum);
+    if(fibnum>10) printf("fibnum is too big");
+    else{
+        if(fibnum<1){
+            printf("fibnum is too small");
+        }
+        else printf("fib number is:",fib(fibnum));    
+    }
+    
+    WHILETEST(10);
+    FORTEST;
+
+    scanf(var4);
+    if(pi-+0314+varray[0]-1) printf("error");
+    if(1)
+    if((chara(var4+0))==('a')) printf("your input is correct!");
+    else printf("error!");
+
+    printf("! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~");
+
+    printf(chartest);
+    calltest1;
+}

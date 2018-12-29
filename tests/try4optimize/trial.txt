@@ -15,14 +15,19 @@ void t(int a)
 }
 
 void main() {
-    x = 2;
-	printf(x);
-    x = 0 - x;
-	printf(x);
-	x = -x;
-	printf(x);
-	x = x - -30;
-	printf(x);
-	x = x + 2;
-    printf(x);
+    int a, b, c, d;
+	char ch;
+	ch = 'a';
+	
+	a = ch + 1;
+	
+	a = 5 - 0;
+	b = 4/1;
+	
+	x = 1*3;
+	d = a*a-b*b-x*x+25;
+	
+	c = 78 + 56;
+	c = d*d - 24*24 + c - c *1;
+	printf(c);
 }

@@ -34,12 +34,12 @@ int main(int argc, char** argv)
 	std::ofstream symIRout(symIR_path);
 	if (!with_error)
 	{
+		Med::printIMC(symIRout);
 #if OPTIMIZE
 		std::string cp_ = cp;
 		OPT::optinfofile = cp_.replace(cp_.begin() + cp_.find_last_of('.'), cp_.end(), "-optInfo.txt");
 		OPT::allOptimize();
 #endif
-		Med::printIMC(symIRout);
 		symIRout << std::endl;
 		OC::Med2Mips(asm_path);
 		ST::printSym(symIRout);

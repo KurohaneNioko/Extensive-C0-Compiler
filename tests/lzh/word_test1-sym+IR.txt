@@ -1,0 +1,320 @@
+           add  func_begin               0               0   0
+             c           +               a               b   0
+             c           *               c               1   0
+        RET_v0           +               c               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+       fortest  func_begin               0               0   0
+             i           +               0               0   0
+            %1       label               0               0   0
+            %2          !=               i               7   0
+           int       print               i               0   0
+            %3        goto               0               0   0
+            %2       label               0               0   0
+            %4          !=               i               8   0
+           int       print               i               0   0
+            %4       label               0               0   0
+            %3       label               0               0   0
+             i           +               i               2   0
+            %1          <=               i              10   0
+             i           +               0               0   0
+            %5       label               0               0   0
+            #1           -               6               5   0
+            #2           +              #1               2   0
+            #3           *              #2               2   0
+            #4           -              #3               6   0
+          var1           +              10               0   0
+            %6       label               0               0   0
+          var1           -            var1               8   0
+            %6          >=            var1               0   0
+             i           -               i               5   0
+            %5          !=              #4               0   0
+           int       print            var1               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+       exptest  func_begin               0               0   0
+           int       scanf               a               0   0
+          char       scanf               b               0   0
+            #5           -               0              10   0
+            #6           +              #5              20   0
+            #7           *               a              #6   0
+             a           /              #7               5   0
+            #8           -               0             'a'   0
+             c           +              #8               b   0
+        RET_v0           +               c               b   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+     arraytest  func_begin               0               0   0
+        varray         []=               0               1   0
+        varray         []=               1               2   0
+        varray         []=               2               3   0
+        varray         []=               3               4   0
+        varray         []=               4               5   0
+            #9         =[]          varray               0   0
+           #10         =[]          varray               0   0
+           #11         =[]          varray             #10   0
+           #12           +              #9             #11   0
+           #13         =[]          varray               2   0
+           #14           +             #12             #13   0
+           #15         =[]          varray               3   0
+           #16           +             #14             #15   0
+           #17         =[]          varray               4   0
+        RET_v0           *             #16             #17   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+           fib  func_begin               0               0   0
+            %7          !=               a               1   0
+        RET_v0           +               1               0   0
+             0         ret               0               0   0
+            %7       label               0               0   0
+            %8          !=               a               2   0
+        RET_v0           +               1               0   0
+             0         ret               0               0   0
+            %8       label               0               0   0
+           #18           -               a               1   0
+           fib        push             #18               0   0
+           fib        call               0               0   0
+           #19           +          RET_v0               0   0
+           #20           -               a               2   0
+           fib        push             #20               0   0
+           fib        call               0               0   0
+           #21           +          RET_v0               0   0
+        RET_v0           +             #19             #21   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+     whiletest  func_begin               0               0   0
+            %9       label               0               0   0
+           %10          <=               a               0   0
+             a           -               a               3   0
+            %9        goto               0               0   0
+           %10       label               0               0   0
+           #22           -               0               2   0
+           %11          !=               a             #22   0
+           %12       label               0               0   0
+           %13          <=              15               a   0
+             a           +               a               5   0
+           %14          !=               a              13   0
+             a           +               a               2   0
+           %14       label               0               0   0
+           %12        goto               0               0   0
+           %13       label               0               0   0
+           %11       label               0               0   0
+           int       print               a               0   0
+             0    func_end               0               0   0
+     calltest3  func_begin               0               0   0
+           #23           -            var2             100   0
+           #24         =[]          varray               3   0
+           #25           +             #23             #24   0
+           %15          ==             #25               0   0
+           %16          !=               a              97   0
+           #26           +               a               b   0
+           #27           +             #26               c   0
+           #28           +             #27               d   0
+           #29           +             #28               0   0
+           int       print             #29               0   0
+           %16       label               0               0   0
+           %15       label               0               0   0
+             0    func_end               0               0   0
+     calltest2  func_begin               0               0   0
+          var2           +             100               0   0
+     calltest3        push              97               0   0
+     calltest3        push              42               1   0
+     calltest3        push              43               2   0
+     calltest3        push              56               3   0
+     calltest3        call               0               0   0
+          var2           +              30               0   0
+             0    func_end               0               0   0
+     calltest1  func_begin               0               0   0
+     calltest2        call               0               0   0
+          var2           +              50               0   0
+        RET_v0           +               0               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+      chartest  func_begin               0               0   0
+        RET_v0           +             'H'               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+         chara  func_begin               0               0   0
+           %17          !=               x              97   0
+        RET_v0           +             'a'               0   0
+             0         ret               0               0   0
+           %18        goto               0               0   0
+           %17       label               0               0   0
+        RET_v0           +             'z'               0   0
+             0         ret               0               0   0
+           %18       label               0               0   0
+             0    func_end               0               0   0
+          main  func_begin               0               0   0
+           add        push              10               0   0
+           add        push              20               1   0
+           add        call               0               0   0
+        result           +          RET_v0               0   0
+           int       print          result               0   0
+       exptest        call               0               0   0
+           #30           +          RET_v0               0   0
+           int       print             #30               0   0
+     arraytest        call               0               0   0
+           #31           +          RET_v0               0   0
+        result           +             #31               5   0
+           int       print          result               0   0
+           int       scanf          fibnum               0   0
+           %19          <=          fibnum              10   0
+           str       print              ~1               0   0
+           %20        goto               0               0   0
+           %19       label               0               0   0
+           %21          >=          fibnum               1   0
+           str       print              ~2               0   0
+           %22        goto               0               0   0
+           %21       label               0               0   0
+           str       print              ~3               0   0
+           fib        push          fibnum               0   0
+           fib        call               0               0   0
+           #32           +          RET_v0               0   0
+           int       print             #32               0   0
+           %22       label               0               0   0
+           %20       label               0               0   0
+     whiletest        push              10               0   0
+     whiletest        call               0               0   0
+       fortest        call               0               0   0
+          char       scanf            var4               0   0
+           #33           -             314            0314   0
+           #34         =[]          varray               0   0
+           #35           +             #33             #34   0
+           #36           -             #35               1   0
+           %23          ==             #36               0   0
+           str       print              ~4               0   0
+           %23       label               0               0   0
+           %24          ==               1               0   0
+           #37           +            var4               0   0
+         chara        push             #37               0   0
+         chara        call               0               0   0
+           #38           +          RET_v0               0   0
+           %25          !=             #38             'a'   0
+           str       print              ~5               0   0
+           %26        goto               0               0   0
+           %25       label               0               0   0
+           str       print              ~6               0   0
+           %26       label               0               0   0
+           %24       label               0               0   0
+           str       print              ~7               0   0
+      chartest        call               0               0   0
+           #39           +          RET_v0               0   0
+          char       print             #39               0   0
+     calltest1        call               0               0   0
+
+string_7 : .asciiz "! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\\]^_{|}~\n"
+string_6 : .asciiz "error!\n"
+string_4 : .asciiz "error\n"
+string_3 : .asciiz "fib number is:\n"
+string_1 : .asciiz "fibnum is too big\n"
+string_2 : .asciiz "fibnum is too small\n"
+string_5 : .asciiz "your input is correct!\n"
+global:
+          name|class|  type|  len|  def|       addr
+           a10|  int| const|   10|    2|   ffffffff|
+           a20|  int| const|   20|    2|   ffffffff|
+           a30|  int| const|  -30|    2|   ffffffff|
+           add|  int|  func|    2|   10|   ffffffff|
+         adder| char| const|   43|    3|   ffffffff|
+     arraytest|  int|  func|    0|   40|   ffffffff|
+     calltest1|  int|  func|    0|   77|   ffffffff|
+     calltest2| void|  func|    0|   71|   ffffffff|
+     calltest3| void|  func|    4|   67|   ffffffff|
+         chara| char|  func|    1|   87|   ffffffff|
+      chartest| char|  func|    0|   83|   ffffffff|
+       exptest|  int|  func|    0|   28|   ffffffff|
+           fib|  int|  func|    1|   49|   ffffffff|
+       fortest| void|  func|    0|   20|   ffffffff|
+        letter| char| const|   97|    4|   ffffffff|
+          main| void|  func|    0|   92|   ffffffff|
+        number| char| const|   56|    4|   ffffffff|
+            pi|  int| const|  314|    1|   ffffffff|
+        pluser| char| const|   42|    4|   ffffffff|
+          var1|  int|   var|    0|    8|   10010018|
+          var2|  int|   var|    0|    6|   1001001c|
+          var4| char|   var|    0|    7|   10010000|
+        varray|  int| array|   10|    6|   10010020|
+    varraychar| char| array|   20|    7|   10010001|
+     whiletest| void|  func|    1|   55|   ffffffff|
+
+add:
+          name|class|  type|  len|  def|       addr
+             a|  int|  para|    0|   10|          0|
+             b|  int|  para|    1|   10|          4|
+             c|  int|   var|    0|   12|          c|
+          var1|  int| const|    1|   11|   ffffffff|
+arraytest:
+          name|class|  type|  len|  def|       addr
+           #10|  int|   var|    0|   46|          4|
+           #11|  int|   var|    0|   46|          8|
+           #12|  int|   var|    0|   46|          c|
+           #13|  int|   var|    0|   46|         10|
+           #14|  int|   var|    0|   46|         14|
+           #15|  int|   var|    0|   46|         18|
+           #16|  int|   var|    0|   46|         1c|
+           #17|  int|   var|    0|   46|         20|
+            #9|  int|   var|    0|   46|         24|
+calltest1:
+          name|class|  type|  len|  def|       addr
+calltest2:
+          name|class|  type|  len|  def|       addr
+calltest3:
+          name|class|  type|  len|  def|       addr
+           #23|  int|   var|    0|   68|         14|
+           #24|  int|   var|    0|   68|         18|
+           #25|  int|   var|    0|   68|         1c|
+           #26|  int|   var|    0|   68|         20|
+           #27|  int|   var|    0|   68|         24|
+           #28|  int|   var|    0|   68|         28|
+           #29|  int|   var|    0|   68|         2c|
+             a| char|  para|    0|   67|          0|
+             b| char|  para|    1|   67|          4|
+             c| char|  para|    2|   67|          8|
+             d| char|  para|    3|   67|          c|
+chara:
+          name|class|  type|  len|  def|       addr
+             x|  int|  para|    0|   87|          0|
+chartest:
+          name|class|  type|  len|  def|       addr
+exptest:
+          name|class|  type|  len|  def|       addr
+            #5|  int|   var|    0|   32|          4|
+            #6|  int|   var|    0|   32|          8|
+            #7|  int|   var|    0|   32|          c|
+            #8|  int|   var|    0|   33|         10|
+             a|  int|   var|    0|   29|         14|
+             b| char|   var|    0|   30|          0|
+             c|  int|   var|    0|   29|         18|
+fib:
+          name|class|  type|  len|  def|       addr
+           #18|  int|   var|    0|   52|          8|
+           #19|  int|   var|    0|   52|          c|
+           #20|  int|   var|    0|   52|         10|
+           #21|  int|   var|    0|   52|         14|
+             a|  int|  para|    0|   49|          0|
+fortest:
+          name|class|  type|  len|  def|       addr
+            #1|  int|   var|    0|   23|          4|
+            #2|  int|   var|    0|   23|          8|
+            #3|  int|   var|    0|   23|          c|
+            #4|  int|   var|    0|   23|         10|
+             i|  int|   var|    0|   21|         14|
+whiletest:
+          name|class|  type|  len|  def|       addr
+           #22|  int|   var|    0|   59|          8|
+             a|  int|  para|    0|   55|          0|
+
+main:
+          name|class|  type|  len|  def|       addr
+           #30|  int|   var|    0|   98|          4|
+           #31|  int|   var|    0|  100|          8|
+           #32|  int|   var|    0|  109|          c|
+           #33|  int|   var|    0|  116|         10|
+           #34|  int|   var|    0|  116|         14|
+           #35|  int|   var|    0|  116|         18|
+           #36|  int|   var|    0|  116|         1c|
+           #37|  int|   var|    0|  118|         20|
+           #38| char|   var|    0|  118|          0|
+           #39| char|   var|    0|  123|          1|
+        fibnum|  int|   var|    0|   94|         24|
+        result|  int|   var|    0|   94|         28|

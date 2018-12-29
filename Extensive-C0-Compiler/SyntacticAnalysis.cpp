@@ -777,7 +777,7 @@ void return_sentence(bool &value_return, const int &ret_cls, std::string func_na
 		else if (ret_cls != expr_ret_cls)
 			/* class(expr) != return class(func) */
 			ER::logER(ERT::TYPE_DISMATCH);
-		else if (Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#' && value[0]=='#')
+		else if (/*Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#' && */value[0]=='#')
 		{
 			std::string expr_invalid_temp = Med::itmd_code[Med::itmd_code.size() - 1].rst;
 			Med::itmd_code[Med::itmd_code.size() - 1].rst = ret_val_mark;
@@ -870,7 +870,7 @@ void for_sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			if (exprt_ret_cls != temp_id->cls)
 				/* assign char with int -> must the same!!! */
 				ER::logER(ERT::TYPE_DISMATCH);
-			if (Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#')
+			if (/*Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#'*/ value[0]=='#')
 			{
 				std::string expr_invalid_temp = Med::itmd_code[Med::itmd_code.size() - 1].rst;
 				Med::itmd_code[Med::itmd_code.size() - 1].rst = name;
@@ -1107,7 +1107,7 @@ void sentence(bool &value_return, const int &ret_cls, std::string func_name)
 			if (temp_iden->cls != expr_ret_cls)
 				/* unable to assign int to char */
 				ER::logER(ERT::TYPE_DISMATCH);
-			if (Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#')
+			if (/*Med::itmd_code[Med::itmd_code.size() - 1].rst[0] == '#'*/ value[0]=='#')
 			{
 				std::string expr_invalid_temp = Med::itmd_code[Med::itmd_code.size() - 1].rst;
 				Med::itmd_code[Med::itmd_code.size() - 1].rst = name;

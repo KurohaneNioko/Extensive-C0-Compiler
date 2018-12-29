@@ -10,6 +10,7 @@
 #include<map>
 #include<set>
 #include<stack>
+#include<algorithm>
 
 #define DEBUG 1
 #define OPTIMIZE 1
