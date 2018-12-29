@@ -1,0 +1,716 @@
+Basic block info:
+0
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16    next: 17 
+17  prev: 16     next: 18 
+18  prev: 17     next: 19 
+19  prev: 18     next: 20 
+20  prev: 19 
+21
+22    next: 23 
+23  prev: 22 24     next: 24 25 
+24  prev: 23     next: 23 
+25  prev: 23     next: 26 
+26  prev: 25 27     next: 27 28 
+27  prev: 26     next: 26 
+28  prev: 26     next: 29 
+29  prev: 28     next: 30 
+30  prev: 29     next: 31 
+31  prev: 30 31     next: 31 32 
+32  prev: 31     next: 33 
+33  prev: 32 33     next: 33 34 
+34  prev: 33 
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56    next: 57 58 
+57  prev: 56     next: 58 
+58  prev: 56 57     next: 59 60 
+59  prev: 58     next: 60 
+60  prev: 58 59 
+61    next: 62 
+62  prev: 61 62     next: 62 63 
+63  prev: 62     next: 64 
+64  prev: 63 64     next: 64 65 
+65  prev: 64     next: 66 
+66  prev: 65 66     next: 66 67 
+67  prev: 66 
+68    next: 69 
+69  prev: 68 70     next: 70 71 
+70  prev: 69     next: 69 
+71  prev: 69     next: 72 
+72  prev: 71 73     next: 73 74 
+73  prev: 72     next: 72 
+74  prev: 72     next: 75 
+75  prev: 74 76     next: 76 77 
+76  prev: 75     next: 75 
+77  prev: 75 
+78
+79    next: 80 86 
+80  prev: 79     next: 81 82 
+81  prev: 80     next: 83 
+82  prev: 80     next: 83 
+83  prev: 81 82     next: 85 
+84    next: 85 
+85  prev: 83 84     next: 87 
+86  prev: 79     next: 87 
+87  prev: 85 86     next: 88 
+88  prev: 87 113     next: 89 114 
+89  prev: 88 95     next: 90 96 
+90  prev: 89 91     next: 91 92 
+91  prev: 90     next: 90 
+92  prev: 90     next: 93 95 
+93  prev: 92     next: 94 
+94  prev: 93 94     next: 94 95 
+95  prev: 92 94     next: 89 
+96  prev: 89     next: 97 
+97  prev: 96 103     next: 98 
+98  prev: 97 102     next: 99 
+99  prev: 98 101     next: 100 101 
+100  prev: 99     next: 101 
+101  prev: 99 100     next: 99 102 
+102  prev: 101     next: 98 103 
+103  prev: 102     next: 97 104 
+104  prev: 103     next: 105 113 
+105  prev: 104     next: 106 
+106  prev: 105 111     next: 107 112 
+107  prev: 106 110     next: 108 111 
+108  prev: 107     next: 109 
+109  prev: 108 109     next: 109 110 
+110  prev: 109     next: 107 
+111  prev: 107     next: 106 
+112  prev: 106     next: 113 
+113  prev: 104 112     next: 88 
+114  prev: 88 
+115    next: 116 117 
+116  prev: 115 
+117  prev: 115     next: 118 119 
+118  prev: 117 
+119  prev: 117 
+120
+121    next: 122 
+122  prev: 121     next: 123 127 
+123  prev: 122 
+124    next: 126 
+125
+126  prev: 124     next: 164 
+127  prev: 122     next: 128 132 
+128  prev: 127 
+129    next: 131 
+130
+131  prev: 129     next: 163 
+132  prev: 127     next: 133 137 
+133  prev: 132 
+134    next: 136 
+135
+136  prev: 134     next: 162 
+137  prev: 132     next: 138 144 
+138  prev: 137     next: 139 
+139  prev: 138     next: 140 142 
+140  prev: 139 
+141    next: 143 
+142  prev: 139 
+143  prev: 141     next: 161 
+144  prev: 137     next: 145 151 
+145  prev: 144     next: 146 
+146  prev: 145     next: 147 149 
+147  prev: 146 
+148    next: 150 
+149  prev: 146 
+150  prev: 148     next: 160 
+151  prev: 144     next: 152 158 
+152  prev: 151     next: 153 
+153  prev: 152     next: 154 156 
+154  prev: 153 
+155    next: 157 
+156  prev: 153 
+157  prev: 155     next: 159 
+158  prev: 151 
+159  prev: 157     next: 160 
+160  prev: 150 159     next: 161 
+161  prev: 143 160     next: 162 
+162  prev: 136 161     next: 163 
+163  prev: 131 162     next: 164 
+164  prev: 126 163 
+165
+166    next: 167 168 
+167  prev: 166     next: 184 
+168  prev: 166     next: 169 170 
+169  prev: 168     next: 183 
+170  prev: 168     next: 171 172 
+171  prev: 170     next: 182 
+172  prev: 170     next: 173 174 
+173  prev: 172     next: 181 
+174  prev: 172     next: 175 176 
+175  prev: 174     next: 180 
+176  prev: 174     next: 177 178 
+177  prev: 176     next: 179 
+178  prev: 176     next: 179 
+179  prev: 177 178     next: 180 
+180  prev: 175 179     next: 181 
+181  prev: 173 180     next: 182 
+182  prev: 171 181     next: 183 
+183  prev: 169 182     next: 184 
+184  prev: 167 183 
+185    next: 186 
+186  prev: 185 187     next: 187 
+187  prev: 186     next: 186 188 
+188  prev: 187 
+189    next: 190 191 
+190  prev: 189     next: 192 
+191  prev: 189     next: 192 
+192  prev: 190 191 
+193    next: 194 
+194  prev: 193     next: 195 
+195  prev: 194     next: 196 197 
+196  prev: 195 
+197  prev: 195     next: 198 
+198  prev: 197 
+
+tokentest_string  func_begin               0               0   0
+           str       print              ~1               0   0
+           str       print              ~2               0   0
+           str       print              ~3               0   0
+           str       print              ~4               0   0
+           str       print              ~5               0   0
+           str       print              ~6               0   0
+           str       print              ~7               0   0
+             0    func_end               0               0   0
+tokentest_number  func_begin               0               0   1
+           int       print          000000               0   1
+           int       print          000001               0   1
+           int       print          123456               0   1
+           int       print               0               0   1
+           int       print           00000               0   1
+           int       print           12345               0   1
+           int       print          -12345               0   1
+             0    func_end               0               0   1
+tokentest_character  func_begin               0               0   2
+          char       print             '+'               0   2
+          char       print             '-'               0   2
+          char       print             '*'               0   2
+          char       print             '/'               0   2
+          char       print             'a'               0   2
+          char       print             'b'               0   2
+          char       print             'c'               0   2
+          char       print             'd'               0   2
+          char       print             '0'               0   2
+          char       print             '1'               0   2
+          char       print             '2'               0   2
+          char       print             '3'               0   2
+             0    func_end               0               0   2
+tokentest_identifier  func_begin               0               0   3
+           int       print               1               0   3
+           int       print               2               0   3
+           int       print               3               0   3
+             0    func_end               0               0   3
+tokentest_caseignored  func_begin               0               0   4
+           int       print               1               0   4
+             0    func_end               0               0   4
+    test_binop  func_begin               0               0   5
+           int       print              98               0   5
+           int       print             -96               0   5
+           int       print              97               0   5
+           int       print               0               0   5
+             0    func_end               0               0   5
+test_parenexpr  func_begin               0               0   6
+           str       print              ~8               0   6
+           int       print               1               0   6
+           int       print              -6               0   6
+             0    func_end               0               0   6
+  test_unaryop  func_begin               0               0   7
+           int       print              -1               0   7
+           int       print               1               0   7
+           int       print             -97               0   7
+           int       print              97               0   7
+           int       print               1               0   7
+           int       print               1               0   7
+           int       print              -1               0   7
+             0    func_end               0               0   7
+test_subscript  func_begin               0               0   8
+           #22         =[]        intarray               1   8
+           int       print             #22               0   8
+           #23         =[]       chararray               1   8
+          char       print             #23               0   8
+             0    func_end               0               0   8
+test_functionvoid_void  func_begin               0               0   9
+             0    func_end               0               0   9
+test_functionint_int  func_begin               0               0  10
+        RET_v0           +            int1               0  10
+             0         ret               0               0  10
+             0    func_end               0               0  11
+test_functionchar_intchar  func_begin               0               0  12
+        RET_v0           +           char2               0  12
+             0         ret               0               0  12
+             0    func_end               0               0  13
+test_functionint_charcharchar  func_begin               0               0  14
+        RET_v0           +               1               0  14
+             0         ret               0               0  14
+             0    func_end               0               0  15
+     test_call  func_begin               0               0  16
+test_functionvoid_void        call               0               0  16
+test_functionint_int        push               1               0  17
+test_functionint_int        call               0               0  17
+test_functionchar_intchar        push               1               0  18
+test_functionchar_intchar        push             'a'               1  18
+test_functionchar_intchar        call               0               0  18
+test_functionint_charcharchar        push             'a'               0  19
+test_functionint_charcharchar        push             'b'               1  19
+test_functionint_charcharchar        push             'c'               2  19
+test_functionint_charcharchar        call               0               0  19
+             0    func_end               0               0  20
+     test_expr  func_begin               0               0  21
+      intarray         []=               0               1  21
+      intarray         []=               1               2  21
+           #25         =[]        intarray               1  21
+           #26         =[]        intarray             #25  21
+           #27           +               1             #26  21
+           #28         =[]        intarray               1  21
+           #29           +             #27             #28  21
+           #30           /              -1             #29  21
+           #31           +             #30               0  21
+           int       print             #31               0  21
+           #34         =[]        intarray               2  21
+           #35           *             #34               2  21
+           #36           *               2             #35  21
+           int       print             #36               0  21
+           #40         =[]        intarray               0  21
+           int       print             #40               0  21
+           #41         =[]        intarray               1  21
+           #46         =[]        intarray               0  21
+           int       print             #46               0  21
+             0    func_end               0               0  21
+    test_empty  func_begin               0               0  22
+            %1       label               0               0  23
+            %2          ==               1               0  23
+            %1        goto               0               0  24
+            %2       label               0               0  25
+            %3       label               0               0  26
+            %4          ==               1               0  26
+            %3        goto               0               0  27
+            %4       label               0               0  28
+            %5          ==               1               0  28
+            %5       label               0               0  29
+            %6          ==               1               0  29
+            %6       label               0               0  30
+             i           +               1               0  30
+            %7       label               0               0  31
+             i           +               i               1  31
+            %7          !=               i               0  31
+             i           +               1               0  32
+            %8       label               0               0  33
+             i           +               i               1  33
+            %8          !=               i               0  33
+             0    func_end               0               0  34
+     test_read  func_begin               0               0  35
+           int       scanf  singleintvariable               0  35
+          char       scanf  singlecharvariable               0  35
+           int       scanf              _1               0  35
+           int       scanf              _2               0  35
+           int       scanf              _3               0  35
+          char       scanf              _4               0  35
+          char       scanf              _5               0  35
+          char       scanf              _6               0  35
+             0    func_end               0               0  35
+    test_write  func_begin               0               0  36
+           str       print              ~9               0  36
+           #47         =[]        intarray               1  36
+           #48         =[]        intarray               1  36
+           #49           +             #47             #48  36
+           int       print             #49               0  36
+           str       print             ~10               0  36
+           #50         =[]        intarray               1  36
+           #51         =[]        intarray             #50  36
+           #52           +             #51               0  36
+           int       print             #52               0  36
+             0    func_end               0               0  36
+test_return_void  func_begin               0               0  37
+             0         ret               0               0  37
+             0    func_end               0               0  38
+test_return_char  func_begin               0               0  39
+        RET_v0           +    charvariable               0  39
+             0         ret               0               0  39
+        RET_v0         =[]       chararray               1  40
+             0         ret               0               0  40
+        RET_v0           +              97               0  41
+             0         ret               0               0  41
+test_return_char        call               0               0  42
+             0         ret               0               0  42
+        RET_v0           +             'a'               0  43
+             0         ret               0               0  43
+             0    func_end               0               0  44
+test_return_int  func_begin               0               0  45
+        RET_v0           +               1               0  45
+             0         ret               0               0  45
+        RET_v0           +     intvariable               0  46
+             0         ret               0               0  46
+test_return_int        call               0               0  47
+             0         ret               0               0  47
+        RET_v0         =[]        intarray               1  48
+             0         ret               0               0  48
+        RET_v0         =[]        intarray     intvariable  49
+             0         ret               0               0  49
+        RET_v0           +               1               0  50
+             0         ret               0               0  50
+             0    func_end               0               0  51
+test_compound_empty  func_begin               0               0  52
+             0    func_end               0               0  52
+test_compound_noconstdecl  func_begin               0               0  53
+           int       print     intvariable               0  53
+             0    func_end               0               0  53
+test_compound_novardecl  func_begin               0               0  54
+           int       print               1               0  54
+             0    func_end               0               0  54
+test_compound_nostmts  func_begin               0               0  55
+             0    func_end               0               0  55
+       test_if  func_begin               0               0  56
+           #53           *          number          number  56
+           #54           /             #53               2  56
+           #55           +          number             #54  56
+            %9          ==             #55               0  56
+           str       print             ~11               0  57
+            %9       label               0               0  58
+           #56           +          number               1  58
+           #57           *               2          number  58
+           %10           >             #56             #57  58
+           str       print             ~12               0  59
+           %10       label               0               0  60
+             0    func_end               0               0  60
+      test_for  func_begin               0               0  61
+           str       print             ~13               0  61
+             i           +               0               0  61
+           %11       label               0               0  62
+           str       print             ~14               0  62
+           int       print               i               0  62
+             i           +               i               1  62
+           %11           <               i              10  62
+           str       print             ~15               0  63
+             i           +              10               0  63
+           %12       label               0               0  64
+           str       print             ~14               0  64
+           int       print               i               0  64
+             i           -               i               1  64
+           %12          >=               i               0  64
+           str       print             ~16               0  65
+             i           +               0               0  65
+           %13       label               0               0  66
+           str       print             ~14               0  66
+           int       print               i               0  66
+             i           -               i               1  66
+           %13           >               i              10  66
+             0    func_end               0               0  67
+    test_while  func_begin               0               0  68
+           str       print             ~17               0  68
+             i           +               0               0  68
+           %14       label               0               0  69
+           %15          >=               i              10  69
+           str       print             ~14               0  70
+           int       print               i               0  70
+             i           +               i               1  70
+           %14        goto               0               0  70
+           %15       label               0               0  71
+           str       print             ~18               0  71
+             i           +              10               0  71
+           %16       label               0               0  72
+           %17           <               i               0  72
+           str       print             ~14               0  73
+           int       print               i               0  73
+             i           -               i               1  73
+           %16        goto               0               0  73
+           %17       label               0               0  74
+             i           +               0               0  74
+           %18       label               0               0  75
+           %19          <=               i              10  75
+           str       print             ~19               0  76
+           %18        goto               0               0  76
+           %19       label               0               0  77
+             0    func_end               0               0  77
+   test_assign  func_begin               0               0  78
+      intarray         []=               0               1  78
+      intarray         []=               1               2  78
+             0    func_end               0               0  78
+     test_stmt  func_begin               0               0  79
+           %20          ==               1               0  79
+           %21          ==               2               0  80
+           %22          ==               3               0  80
+           str       print             ~20               0  81
+           %23        goto               0               0  81
+           %22       label               0               0  82
+           str       print             ~21               0  82
+           %23       label               0               0  83
+           %24        goto               0               0  83
+           %21       label               0               0  84
+           str       print             ~22               0  84
+           %24       label               0               0  85
+           %25        goto               0               0  85
+           %20       label               0               0  86
+           str       print             ~23               0  86
+           %25       label               0               0  87
+           %26       label               0               0  88
+           %27          ==               1               0  88
+           %28       label               0               0  89
+           %29          ==               2               0  89
+           %30       label               0               0  90
+           %31          ==               3               0  90
+           str       print             ~24               0  91
+           %30        goto               0               0  91
+           %31       label               0               0  92
+           %32          ==               3               0  92
+           str       print             ~25               0  93
+             i           +               0               0  93
+           %33       label               0               0  94
+           str       print             ~26               0  94
+             i           +               i               1  94
+           %33           <               i               4  94
+           %32       label               0               0  95
+           %28        goto               0               0  95
+           %29       label               0               0  96
+             i           +               0               0  96
+           %34       label               0               0  97
+             i           +               0               0  97
+           %35       label               0               0  98
+             i           +               0               0  98
+           %36       label               0               0  99
+           str       print             ~27               0  99
+           %37          ==               5               0  99
+           str       print             ~28               0 100
+           %37       label               0               0 101
+             i           +               i               1 101
+           %36           <               i               4 101
+             i           +               i               1 102
+           %35           <               i               3 102
+             i           +               i               1 103
+           %34           <               i               2 103
+           str       print             ~29               0 104
+           %38          ==               2               0 104
+           str       print             ~30               0 105
+           %39       label               0               0 106
+           %40          ==               3               0 106
+           %41       label               0               0 107
+           %42          ==               4               0 107
+             i           +               0               0 108
+           %43       label               0               0 109
+           str       print             ~31               0 109
+             i           +               i               1 109
+           %43           <               i               5 109
+           %41        goto               0               0 110
+           %42       label               0               0 111
+           %39        goto               0               0 111
+           %40       label               0               0 112
+           %38       label               0               0 113
+           %26        goto               0               0 113
+           %27       label               0               0 114
+             0    func_end               0               0 114
+threewayscompare  func_begin               0               0 115
+           %44          <=               a               b 115
+        RET_v0           +               1               0 116
+             0         ret               0               0 116
+           %44       label               0               0 117
+           %45          >=               a               b 117
+        RET_v0           +              -1               0 118
+             0         ret               0               0 118
+           %45       label               0               0 119
+        RET_v0           +               0               0 119
+             0         ret               0               0 119
+             0    func_end               0               0 120
+   richcompare  func_begin               0               0 121
+threewayscompare        push               a               0 121
+threewayscompare        push               b               1 121
+threewayscompare        call               0               0 121
+         order           +          RET_v0               0 122
+           %46          !=       compareop               0 122
+           %47          !=           order               0 123
+        RET_v0           +               1               0 123
+             0         ret               0               0 123
+           %48        goto               0               0 124
+           %47       label               0               0 125
+        RET_v0           +               0               0 125
+             0         ret               0               0 125
+           %48       label               0               0 126
+           %49        goto               0               0 126
+           %46       label               0               0 127
+           %50          !=       compareop               2 127
+           %51          !=           order              -1 128
+        RET_v0           +               1               0 128
+             0         ret               0               0 128
+           %52        goto               0               0 129
+           %51       label               0               0 130
+        RET_v0           +               0               0 130
+             0         ret               0               0 130
+           %52       label               0               0 131
+           %53        goto               0               0 131
+           %50       label               0               0 132
+           %54          !=       compareop               4 132
+           %55          !=           order               1 133
+        RET_v0           +               1               0 133
+             0         ret               0               0 133
+           %56        goto               0               0 134
+           %55       label               0               0 135
+        RET_v0           +               0               0 135
+             0         ret               0               0 135
+           %56       label               0               0 136
+           %57        goto               0               0 136
+           %54       label               0               0 137
+           %58          !=       compareop               1 137
+   richcompare        push               a               0 138
+   richcompare        push               b               1 138
+   richcompare        push               0               2 138
+   richcompare        call               0               0 138
+         order           +          RET_v0               0 139
+           %59          ==           order               0 139
+        RET_v0           +               0               0 140
+             0         ret               0               0 140
+           %60        goto               0               0 141
+           %59       label               0               0 142
+        RET_v0           +               1               0 142
+             0         ret               0               0 142
+           %60       label               0               0 143
+           %61        goto               0               0 143
+           %58       label               0               0 144
+           %62          !=       compareop               3 144
+   richcompare        push               a               0 145
+   richcompare        push               b               1 145
+   richcompare        push               4               2 145
+   richcompare        call               0               0 145
+         order           +          RET_v0               0 146
+           %63          ==           order               0 146
+        RET_v0           +               0               0 147
+             0         ret               0               0 147
+           %64        goto               0               0 148
+           %63       label               0               0 149
+        RET_v0           +               1               0 149
+             0         ret               0               0 149
+           %64       label               0               0 150
+           %65        goto               0               0 150
+           %62       label               0               0 151
+           %66          !=       compareop               5 151
+   richcompare        push               a               0 152
+   richcompare        push               b               1 152
+   richcompare        push               2               2 152
+   richcompare        call               0               0 152
+         order           +          RET_v0               0 153
+           %67          ==           order               0 153
+        RET_v0           +               0               0 154
+             0         ret               0               0 154
+           %68        goto               0               0 155
+           %67       label               0               0 156
+        RET_v0           +               1               0 156
+             0         ret               0               0 156
+           %68       label               0               0 157
+           %69        goto               0               0 157
+           %66       label               0               0 158
+           str       print             ~32               0 158
+           int       print       compareop               0 158
+        RET_v0           +              -1               0 158
+             0         ret               0               0 158
+           %69       label               0               0 159
+           %65       label               0               0 160
+           %61       label               0               0 161
+           %57       label               0               0 162
+           %53       label               0               0 163
+           %49       label               0               0 164
+        RET_v0           +              -1               0 164
+             0         ret               0               0 164
+             0    func_end               0               0 165
+printcompareop  func_begin               0               0 166
+           %70          !=              op               0 166
+           str       print             ~33               0 167
+           %71        goto               0               0 167
+           %70       label               0               0 168
+           %72          !=              op               1 168
+           str       print             ~34               0 169
+           %73        goto               0               0 169
+           %72       label               0               0 170
+           %74          !=              op               2 170
+           str       print             ~35               0 171
+           %75        goto               0               0 171
+           %74       label               0               0 172
+           %76          !=              op               3 172
+           str       print             ~36               0 173
+           %77        goto               0               0 173
+           %76       label               0               0 174
+           %78          !=              op               4 174
+           str       print             ~37               0 175
+           %79        goto               0               0 175
+           %78       label               0               0 176
+           %80          !=              op               5 176
+           str       print             ~38               0 177
+           %81        goto               0               0 177
+           %80       label               0               0 178
+           str       print             ~39               0 178
+           %81       label               0               0 179
+           %79       label               0               0 180
+           %77       label               0               0 181
+           %75       label               0               0 182
+           %73       label               0               0 183
+           %71       label               0               0 184
+             0    func_end               0               0 184
+printallcompareop  func_begin               0               0 185
+             i           +               0               0 185
+           %82       label               0               0 186
+printcompareop        push               i               0 186
+printcompareop        call               0               0 186
+           int       print               i               0 187
+             i           +               i               1 187
+           %82           <               i               6 187
+             0    func_end               0               0 188
+   printresult  func_begin               0               0 189
+           %83          ==            bool               0 189
+           str       print             ~40               0 190
+           %84        goto               0               0 190
+           %83       label               0               0 191
+           str       print             ~41               0 191
+           %84       label               0               0 192
+             0    func_end               0               0 192
+          main  func_begin               0               0 193
+printallcompareop        call               0               0 193
+           str       print             ~42               0 194
+           int       scanf               a               0 194
+           int       scanf               b               0 194
+           str       print             ~43               0 194
+           int       scanf       compareop               0 194
+   richcompare        push               a               0 194
+   richcompare        push               b               1 194
+   richcompare        push       compareop               2 194
+   richcompare        call               0               0 194
+        result           +          RET_v0               0 195
+           %85          >=          result               0 195
+             0        exit               0               0 196
+           %85       label               0               0 197
+           str       print              ~1               0 197
+printcompareop        push       compareop               0 197
+printcompareop        call               0               0 197
+   printresult        push          result               0 198
+   printresult        call               0               0 198

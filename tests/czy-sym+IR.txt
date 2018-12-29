@@ -1,216 +1,202 @@
-  permutations  func_begin               0               0
-             i           +               0               0
-            %1          !=               a               m
-            %2       label               0               0
-            %3          >=               i               m
-           str       print              ~1               0
-            #1         =[]           stack               i
-           int       print              #1               0
-            #2           +               i               1
-             i           +              #2               0
-            %2        goto               0               0
-            %3       label               0               0
-           str       print              ~2               0
-             0         ret               0               0
-            %1       label               0               0
-             i           +               1               0
-            %4       label               0               0
-            #3         =[]            used               i
-            %5          ==              #3               0
-            %6        goto               0               0
-            %5       label               0               0
-         stack         []=               a               i
-          used         []=               i               1
-            #4           +               a               1
-             0        push              #4               0
-  permutations        call               0               0
-          used         []=               i               0
-            %6       label               0               0
-             i           +               i               1
-            %4          <=               i               n
-             0    func_end               0               0
- get_max_num_1  func_begin               0               0
-        RET_v0           +              10               0
-             0         ret               0               0
-             0    func_end               0               0
- get_max_num_2  func_begin               0               0
-       max_num           +              10               0
-        RET_v0           +         max_num               0
-             0         ret               0               0
-             0    func_end               0               0
-         get_2  func_begin               0               0
-        RET_v0           +               2               0
-             0         ret               0               0
-             0    func_end               0               0
-       compute  func_begin               0               0
-            %7          !=              op             '+'
-            #5           *               2               b
-            #6           +               a              #5
-            #7           -              #6               b
-        RET_v0           +              #7               0
-             0         ret               0               0
-            %8        goto               0               0
-            %7       label               0               0
-            %9          !=              op             '-'
-            #8           +               b               b
-            #9           /              #8               2
-           #10           -               a              #9
-        RET_v0           +             #10               0
-             0         ret               0               0
-           %10        goto               0               0
-            %9       label               0               0
-           %11          !=              op             '*'
-           #11           *               a               b
-        RET_v0           +             #11               0
-             0         ret               0               0
-           %12        goto               0               0
-           %11       label               0               0
-           %13          ==               b               0
-           #12           /               a               b
-        RET_v0           +             #12               0
-             0         ret               0               0
-           %14        goto               0               0
-           %13       label               0               0
-           #13           +               1               2
-           #14           *             #13               3
-           #15           -             #14               4
-           #16           /             #15               5
-           #17           *             #16               6
-           #18           +             #17              -7
-           #19           +             #18               1
-        RET_v0           +             #19               0
-             0         ret               0               0
-           %14       label               0               0
-           %12       label               0               0
-           %10       label               0               0
-            %8       label               0               0
-             0    func_end               0               0
-get_permutations_sy  func_begin               0               0
-        RET_v0           +              84               0
-             0         ret               0               0
-             0    func_end               0               0
-         judge  func_begin               0               0
-          char       print              42               0
- get_max_num_1        call               0               0
-           #20           +          RET_v0               0
-           #21           +             #20               1
-           %15           <               n             #21
-        RET_v0           +             'F'               0
-             0         ret               0               0
-           %15       label               0               0
-           %16          <=               m               n
-        RET_v0           +             'F'               0
-             0         ret               0               0
-           %16       label               0               0
-           %17           >               m               0
-        RET_v0           +             'F'               0
-             0         ret               0               0
-           %17       label               0               0
-        RET_v0           +             'T'               0
-             0         ret               0               0
-             0    func_end               0               0
-   preparation  func_begin               0               0
- get_max_num_1        call               0               0
-           #22           +          RET_v0               0
-             0        push             #22               0
-             0        push               1               1
-             0        push             '+'               2
-       compute        call               0               0
-           #23           +          RET_v0               0
-             n           +             #23               0
-           %18       label               0               0
-           %19          ==               n               0
-           #24           -               0               1
-           #25           +             #24               n
-             n           +             #25               0
-          used         []=               n               0
-         array         []=               n           10086
-           %18        goto               0               0
-           %19       label               0               0
-             0        push              10               0
-         get_2        call               0               0
-           #26           +          RET_v0               0
-             0        push             #26               1
-             0        push             '+'               2
-       compute        call               0               0
-           #27           +          RET_v0               0
-           #28           -             #27               1
-             n           +             #28               0
-           %20       label               0               0
-           #29           -               n               1
-           #30           /               6               4
-           #31           -               0             #30
-           #32           *               2               3
-           #33           +             #31             #32
-           #34           *             #33               4
-           #35           +               n             #34
-           #36           -             #35              21
-           #37         =[]           array             #36
-           #38           -             #37           10086
-         stack         []=             #29             #38
-             n           -               n               1
-           %20          !=               n               0
-             0         ret               0               0
-             0    func_end               0               0
-      test_for  func_begin               0               0
-             i           +               1               0
-           %21       label               0               0
-           str       print              ~3               0
-             i           +               i               1
-           %21          !=               0               0
-             0    func_end               0               0
-   test_6_para  func_begin               0               0
-           #39           +              a1              a2
-           #40           +             #39              a3
-           #41           +             #40              a4
-           #42           +             #41              a5
-           #43           +             #42              a6
-        RET_v0           +             #43               0
-             0         ret               0               0
-             0    func_end               0               0
-          main  func_begin               0               0
-      test_for        call               0               0
-           int       scanf               a               0
-           int       scanf               b               0
-          char       scanf              op               0
-             0        push               a               0
-             0        push               b               1
-             0        push              op               2
-       compute        call               0               0
-           #44           +          RET_v0               0
-             n           +             #44               0
-          char       print              95               0
-           int       print               n               0
-           int       scanf               m               0
-             0        push               n               0
-             0        push               m               1
-         judge        call               0               0
-           #45           +          RET_v0               0
-            sy           +             #45               0
-             0        push               a               0
-             0        push               b               1
-             0        push               n               2
-             0        push               m               3
-             0        push               1               4
-             0        push               2               5
-   test_6_para        call               0               0
-           #46           +          RET_v0               0
-           sum           +             #46               0
-           int       print             sum               0
-           str       print              ~4               0
-          char       print              sy               0
-           str       print              ~2               0
-get_permutations_sy        call               0               0
-           #47           +          RET_v0               0
-        nor_sy           +             #47               0
-           %22          ==              sy          nor_sy
-           str       print              ~5               0
-           %23        goto               0               0
-           %22       label               0               0
-   preparation        call               0               0
-             0        push               0               0
-  permutations        call               0               0
-           %23       label               0               0
+  permutations  func_begin               0               0   0
+             i           +               0               0   0
+            %1          !=               a               m   0
+            %2       label               0               0   0
+            %3          >=               i               m   0
+           str       print              ~1               0   0
+            #1         =[]           stack               i   0
+           int       print              #1               0   0
+             i           +               i               1   0
+            %2        goto               0               0   0
+            %3       label               0               0   0
+           str       print              ~2               0   0
+             0         ret               0               0   0
+            %1       label               0               0   0
+             i           +               1               0   0
+            %4       label               0               0   0
+            #2         =[]            used               i   0
+            %5          ==              #2               0   0
+            %6        goto               0               0   0
+            %5       label               0               0   0
+         stack         []=               a               i   0
+          used         []=               i               1   0
+            #3           +               a               1   0
+  permutations        push              #3               0   0
+  permutations        call               0               0   0
+          used         []=               i               0   0
+            %6       label               0               0   0
+             i           +               i               1   0
+            %4          <=               i               n   0
+             0    func_end               0               0   0
+ get_max_num_1  func_begin               0               0   0
+        RET_v0           +              10               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+ get_max_num_2  func_begin               0               0   0
+       max_num           +              10               0   0
+        RET_v0           +         max_num               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+         get_2  func_begin               0               0   0
+        RET_v0           +               2               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+       compute  func_begin               0               0   0
+            %7          !=              op             '+'   0
+            #4           *               2               b   0
+            #5           +               a              #4   0
+        RET_v0           -              #5               b   0
+             0         ret               0               0   0
+            %8        goto               0               0   0
+            %7       label               0               0   0
+            %9          !=              op             '-'   0
+            #6           +               b               b   0
+            #7           /              #6               2   0
+        RET_v0           -               a              #7   0
+             0         ret               0               0   0
+           %10        goto               0               0   0
+            %9       label               0               0   0
+           %11          !=              op             '*'   0
+        RET_v0           *               a               b   0
+             0         ret               0               0   0
+           %12        goto               0               0   0
+           %11       label               0               0   0
+           %13          ==               b               0   0
+        RET_v0           /               a               b   0
+             0         ret               0               0   0
+           %14        goto               0               0   0
+           %13       label               0               0   0
+            #8           +               1               2   0
+            #9           *              #8               3   0
+           #10           -              #9               4   0
+           #11           /             #10               5   0
+           #12           *             #11               6   0
+           #13           +             #12              -7   0
+        RET_v0           +             #13               1   0
+             0         ret               0               0   0
+           %14       label               0               0   0
+           %12       label               0               0   0
+           %10       label               0               0   0
+            %8       label               0               0   0
+             0    func_end               0               0   0
+get_permutations_sy  func_begin               0               0   0
+        RET_v0           +              84               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+         judge  func_begin               0               0   0
+          char       print              42               0   0
+ get_max_num_1        call               0               0   0
+           #14           +          RET_v0               0   0
+           #15           +             #14               1   0
+           %15           <               n             #15   0
+        RET_v0           +             'F'               0   0
+             0         ret               0               0   0
+           %15       label               0               0   0
+           %16          <=               m               n   0
+        RET_v0           +             'F'               0   0
+             0         ret               0               0   0
+           %16       label               0               0   0
+           %17           >               m               0   0
+        RET_v0           +             'F'               0   0
+             0         ret               0               0   0
+           %17       label               0               0   0
+        RET_v0           +             'T'               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+   preparation  func_begin               0               0   0
+ get_max_num_1        call               0               0   0
+           #16           +          RET_v0               0   0
+       compute        push             #16               0   0
+       compute        push               1               1   0
+       compute        push             '+'               2   0
+       compute        call               0               0   0
+             n           +          RET_v0               0   0
+           %18       label               0               0   0
+           %19          ==               n               0   0
+           #17           -               0               1   0
+             n           +             #17               n   0
+          used         []=               n               0   0
+         array         []=               n           10086   0
+           %18        goto               0               0   0
+           %19       label               0               0   0
+       compute        push              10               0   0
+         get_2        call               0               0   0
+           #18           +          RET_v0               0   0
+       compute        push             #18               1   0
+       compute        push             '+'               2   0
+       compute        call               0               0   0
+           #19           +          RET_v0               0   0
+             n           -             #19               1   0
+           %20       label               0               0   0
+           #20           -               n               1   0
+           #21           /               6               4   0
+           #22           -               0             #21   0
+           #23           *               2               3   0
+           #24           +             #22             #23   0
+           #25           *             #24               4   0
+           #26           +               n             #25   0
+           #27           -             #26              21   0
+           #28         =[]           array             #27   0
+           #29           -             #28           10086   0
+         stack         []=             #20             #29   0
+             n           -               n               1   0
+           %20          !=               n               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+      test_for  func_begin               0               0   0
+             i           +               1               0   0
+           %21       label               0               0   0
+           str       print              ~3               0   0
+             i           +               i               1   0
+           %21          !=               0               0   0
+             0    func_end               0               0   0
+   test_6_para  func_begin               0               0   0
+           #30           +              a1              a2   0
+           #31           +             #30              a3   0
+           #32           +             #31              a4   0
+           #33           +             #32              a5   0
+        RET_v0           +             #33              a6   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+          main  func_begin               0               0   0
+      test_for        call               0               0   0
+           int       scanf               a               0   0
+           int       scanf               b               0   0
+          char       scanf              op               0   0
+       compute        push               a               0   0
+       compute        push               b               1   0
+       compute        push              op               2   0
+       compute        call               0               0   0
+             n           +          RET_v0               0   0
+          char       print              95               0   0
+           int       print               n               0   0
+           int       scanf               m               0   0
+         judge        push               n               0   0
+         judge        push               m               1   0
+         judge        call               0               0   0
+            sy           +          RET_v0               0   0
+   test_6_para        push               a               0   0
+   test_6_para        push               b               1   0
+   test_6_para        push               n               2   0
+   test_6_para        push               m               3   0
+   test_6_para        push               1               4   0
+   test_6_para        push               2               5   0
+   test_6_para        call               0               0   0
+           sum           +          RET_v0               0   0
+           int       print             sum               0   0
+           str       print              ~4               0   0
+          char       print              sy               0   0
+           str       print              ~2               0   0
+get_permutations_sy        call               0               0   0
+        nor_sy           +          RET_v0               0   0
+           %22          ==              sy          nor_sy   0
+           str       print              ~5               0   0
+           %23        goto               0               0   0
+           %22       label               0               0   0
+   preparation        call               0               0   0
+  permutations        push               0               0   0
+  permutations        call               0               0   0
+           %23       label               0               0   0
 
 string_1 : .asciiz " \n"
 string_4 : .asciiz "You can choose m numbers permutations from n numbers ? \n"
@@ -241,21 +227,16 @@ max_choose_num|  int| const|   10|    1|   ffffffff|
 
 compute:
           name|class|  type|  len|  def|       addr
-           #10|  int|   var|    0|   63|         10|
-           #11|  int|   var|    0|   67|         14|
-           #12|  int|   var|    0|   71|         18|
-           #13|  int|   var|    0|   73|         1c|
-           #14|  int|   var|    0|   73|         20|
-           #15|  int|   var|    0|   73|         24|
-           #16|  int|   var|    0|   73|         28|
-           #17|  int|   var|    0|   73|         2c|
-           #18|  int|   var|    0|   73|         30|
-           #19|  int|   var|    0|   73|         34|
-            #5|  int|   var|    0|   59|         38|
-            #6|  int|   var|    0|   59|         3c|
-            #7|  int|   var|    0|   59|         40|
-            #8|  int|   var|    0|   63|         44|
-            #9|  int|   var|    0|   63|         48|
+           #10|  int|   var|    0|   73|         14|
+           #11|  int|   var|    0|   73|         18|
+           #12|  int|   var|    0|   73|         1c|
+           #13|  int|   var|    0|   73|         20|
+            #4|  int|   var|    0|   59|         24|
+            #5|  int|   var|    0|   59|         28|
+            #6|  int|   var|    0|   63|         2c|
+            #7|  int|   var|    0|   63|         30|
+            #8|  int|   var|    0|   73|         34|
+            #9|  int|   var|    0|   73|         38|
              a|  int|  para|    0|   56|          0|
              b|  int|  para|    1|   56|          4|
             op| char|  para|    2|   56|          8|
@@ -266,55 +247,50 @@ get_max_num_1:
           name|class|  type|  len|  def|       addr
 get_max_num_2:
           name|class|  type|  len|  def|       addr
-       max_num|  int|   var|    0|   45|          4|
+       max_num|  int|   var|    0|   45|          8|
 get_permutations_sy:
           name|class|  type|  len|  def|       addr
 permutations_sy| char| const|   84|   81|   ffffffff|
 judge:
           name|class|  type|  len|  def|       addr
-           #20|  int|   var|    0|   89|          c|
-           #21|  int|   var|    0|   89|         10|
+           #14|  int|   var|    0|   89|         10|
+           #15|  int|   var|    0|   89|         14|
         divide| char| const|   42|   87|   ffffffff|
              m|  int|  para|    1|   85|          4|
              n|  int|  para|    0|   85|          0|
 permutations:
           name|class|  type|  len|  def|       addr
-            #1|  int|   var|    0|   17|          8|
-            #2|  int|   var|    0|   18|          c|
-            #3|  int|   var|    0|   26|         10|
-            #4|  int|   var|    0|   32|         14|
+            #1|  int|   var|    0|   17|          c|
+            #2|  int|   var|    0|   26|         10|
+            #3|  int|   var|    0|   32|         14|
              a|  int|  para|    0|    8|          0|
              i|  int|   var|    0|   10|         18|
 preparation:
           name|class|  type|  len|  def|       addr
-           #22|  int|   var|    0|  105|          4|
-           #23|  int|   var|    0|  105|          8|
-           #24|  int|   var|    0|  109|          c|
-           #25|  int|   var|    0|  109|         10|
-           #26|  int|   var|    0|  114|         14|
-           #27|  int|   var|    0|  114|         18|
-           #28|  int|   var|    0|  114|         1c|
-           #29|  int|   var|    0|  115|         20|
-           #30|  int|   var|    0|  115|         24|
-           #31|  int|   var|    0|  115|         28|
-           #32|  int|   var|    0|  115|         2c|
-           #33|  int|   var|    0|  115|         30|
-           #34|  int|   var|    0|  115|         34|
-           #35|  int|   var|    0|  115|         38|
-           #36|  int|   var|    0|  115|         3c|
-           #37|  int|   var|    0|  115|         40|
-           #38|  int|   var|    0|  115|         44|
-         array|  int| array|   12|  103|         48|
-             i|  int|   var|    0|  102|         78|
-             n|  int|   var|    0|  101|         7c|
+           #16|  int|   var|    0|  105|          8|
+           #17|  int|   var|    0|  109|          c|
+           #18|  int|   var|    0|  114|         10|
+           #19|  int|   var|    0|  114|         14|
+           #20|  int|   var|    0|  115|         18|
+           #21|  int|   var|    0|  115|         1c|
+           #22|  int|   var|    0|  115|         20|
+           #23|  int|   var|    0|  115|         24|
+           #24|  int|   var|    0|  115|         28|
+           #25|  int|   var|    0|  115|         2c|
+           #26|  int|   var|    0|  115|         30|
+           #27|  int|   var|    0|  115|         34|
+           #28|  int|   var|    0|  115|         38|
+           #29|  int|   var|    0|  115|         3c|
+         array|  int| array|   12|  103|         40|
+             i|  int|   var|    0|  102|         70|
+             n|  int|   var|    0|  101|         74|
           zero|  int| const|    0|  100|   ffffffff|
 test_6_para:
           name|class|  type|  len|  def|       addr
-           #39|  int|   var|    0|  128|         1c|
-           #40|  int|   var|    0|  128|         20|
-           #41|  int|   var|    0|  128|         24|
-           #42|  int|   var|    0|  128|         28|
-           #43|  int|   var|    0|  128|         2c|
+           #30|  int|   var|    0|  128|         20|
+           #31|  int|   var|    0|  128|         24|
+           #32|  int|   var|    0|  128|         28|
+           #33|  int|   var|    0|  128|         2c|
             a1|  int|  para|    0|  126|          0|
             a2|  int|  para|    1|  126|          4|
             a3|  int|  para|    2|  126|          8|
@@ -323,16 +299,12 @@ test_6_para:
             a6|  int|  para|    5|  126|         14|
 test_for:
           name|class|  type|  len|  def|       addr
-             i|  int|   var|    0|  121|          4|
+             i|  int|   var|    0|  121|          8|
 
 main:
           name|class|  type|  len|  def|       addr
-           #44|  int|   var|    0|  141|          4|
-           #45|  int|   var|    0|  146|          8|
-           #46|  int|   var|    0|  147|          c|
-           #47|  int|   var|    0|  153|         10|
-             a|  int|   var|    0|  133|         14|
-             b|  int|   var|    0|  133|         18|
+             a|  int|   var|    0|  133|          8|
+             b|  int|   var|    0|  133|          c|
         nor_sy| char|   var|    0|  135|          0|
             op| char|   var|    0|  134|          1|
             sy| char|   var|    0|  135|          2|

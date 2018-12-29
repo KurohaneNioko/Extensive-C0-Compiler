@@ -13,7 +13,7 @@
 #include<algorithm>
 
 #define DEBUG 1
-#define OPTIMIZE 1
+#define OPTIMIZE 0
 #define INCLASS 1
 
 constexpr auto data_seg_base = 0x10000000;

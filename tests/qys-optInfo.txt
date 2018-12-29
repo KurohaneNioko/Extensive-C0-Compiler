@@ -1,0 +1,246 @@
+Basic block info:
+0
+1
+2    next: 3 
+3  prev: 2 3     next: 3 4 
+4  prev: 3     next: 5 
+5  prev: 4 5     next: 5 6 
+6  prev: 5     next: 7 
+7  prev: 6 7     next: 7 8 
+8  prev: 7 
+9
+10
+11
+12
+13    next: 14 15 
+14  prev: 13 
+15  prev: 13     next: 16 17 
+16  prev: 15 
+17  prev: 15     next: 18 
+18  prev: 17     next: 19 
+19  prev: 18 
+20
+21    next: 22 
+22  prev: 21 23     next: 23 24 
+23  prev: 22     next: 22 
+24  prev: 22     next: 25 
+25  prev: 24 26     next: 26 27 
+26  prev: 25     next: 25 
+27  prev: 25 
+28
+29    next: 30 
+30  prev: 29 
+31    next: 32 
+32  prev: 31 
+33
+34
+35
+36    next: 37 
+37  prev: 36     next: 38 
+38  prev: 37     next: 39 
+39  prev: 38     next: 40 41 
+40  prev: 39     next: 46 
+41  prev: 39     next: 42 43 
+42  prev: 41     next: 45 
+43  prev: 41     next: 44 
+44  prev: 43     next: 45 
+45  prev: 42 44     next: 46 
+46  prev: 40 45     next: 47 
+47  prev: 46     next: 48 49 
+48  prev: 47     next: 49 
+49  prev: 47 48     next: 50 51 
+50  prev: 49     next: 51 
+51  prev: 49 50     next: 52 53 
+52  prev: 51     next: 54 
+53  prev: 51     next: 54 
+54  prev: 52 53     next: 55 
+55  prev: 54     next: 56 
+56  prev: 55 
+
+           add  func_begin               0               0   0
+             c           +               a               b   0
+        RET_v0           +               c               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   1
+       fortest  func_begin               0               0   2
+           str       print              ~1               0   2
+             i           +               0               0   2
+            %1       label               0               0   3
+           int       print               i               0   3
+             i           +               i               2   3
+            %1          <=               i              10   3
+             i           +               0               0   4
+            %2       label               0               0   5
+           int       print               i               0   5
+             i           -               i               5   5
+            %2          !=               0               0   5
+             i           +              10               0   6
+            %3       label               0               0   7
+           int       print               i               0   7
+             i           -               i               2   7
+            %3          >=               i               0   7
+           str       print              ~2               0   8
+             0    func_end               0               0   8
+       exptest  func_begin               0               0   9
+           str       print              ~3               0   9
+           int       scanf               a               0   9
+          char       scanf               b               0   9
+            #3           *               a              10   9
+             a           /              #3               5   9
+             c           +             -97               b   9
+           int       print               a               0   9
+           int       print               c               0   9
+        RET_v0           +               c               b   9
+             0         ret               0               0   9
+             0    func_end               0               0  10
+     arraytest  func_begin               0               0  11
+        varray         []=               0               1  11
+        varray         []=               1               2  11
+        varray         []=               2               3  11
+        varray         []=               3               4  11
+        varray         []=               4               5  11
+            #5         =[]          varray               0  11
+            #6         =[]          varray               0  11
+            #7         =[]          varray              #6  11
+            #8           +              #5              #7  11
+            #9         =[]          varray               2  11
+           #10           +              #8              #9  11
+           #11         =[]          varray               3  11
+           #12           +             #10             #11  11
+           #13         =[]          varray               4  11
+        RET_v0           *             #12             #13  11
+             0         ret               0               0  11
+             0    func_end               0               0  12
+           fib  func_begin               0               0  13
+            %4          !=               a               1  13
+        RET_v0           +               1               0  14
+             0         ret               0               0  14
+            %4       label               0               0  15
+            %5          !=               a               2  15
+        RET_v0           +               1               0  16
+             0         ret               0               0  16
+            %5       label               0               0  17
+           #14           -               a               1  17
+           fib        push             #14               0  17
+           fib        call               0               0  17
+           #15           +          RET_v0               0  18
+           #16           -               a               2  18
+           fib        push             #16               0  18
+           fib        call               0               0  18
+           #17           +          RET_v0               0  19
+        RET_v0           +             #15             #17  19
+             0         ret               0               0  19
+             0    func_end               0               0  20
+     whiletest  func_begin               0               0  21
+           str       print              ~4               0  21
+            %6       label               0               0  22
+            %7          <=               a               0  22
+           int       print               a               0  23
+             a           -               a               3  23
+            %6        goto               0               0  23
+            %7       label               0               0  24
+            %8       label               0               0  25
+            %9          <=              15               a  25
+           int       print               a               0  26
+             a           +               a               5  26
+            %8        goto               0               0  26
+            %9       label               0               0  27
+           str       print              ~5               0  27
+             0    func_end               0               0  27
+     calltest3  func_begin               0               0  28
+          char       print               a               0  28
+          char       print               b               0  28
+          char       print               c               0  28
+          char       print               d               0  28
+           str       print              ~6               0  28
+             0    func_end               0               0  28
+     calltest2  func_begin               0               0  29
+     calltest3        push              97               0  29
+     calltest3        push              42               1  29
+     calltest3        push              43               2  29
+     calltest3        push              56               3  29
+     calltest3        call               0               0  29
+           str       print              ~7               0  30
+             0    func_end               0               0  30
+     calltest1  func_begin               0               0  31
+           str       print              ~8               0  31
+     calltest2        call               0               0  31
+        RET_v0           +               0               0  32
+             0         ret               0               0  32
+             0    func_end               0               0  33
+      chartest  func_begin               0               0  34
+          char       print             'H'               0  34
+          char       print             'E'               0  34
+          char       print             'L'               0  34
+          char       print             'L'               0  34
+          char       print             'O'               0  34
+        RET_v0           +             'W'               0  34
+             0         ret               0               0  34
+             0    func_end               0               0  35
+          main  func_begin               0               0  36
+           str       print              ~9               0  36
+           str       print             ~10               0  36
+           add        push              10               0  36
+           add        push              20               1  36
+           add        call               0               0  36
+        result           +          RET_v0               0  37
+           str       print             ~11               0  37
+           int       print          result               0  37
+           str       print             ~12               0  37
+       exptest        call               0               0  37
+           #18           +          RET_v0               0  38
+           int       print             #18               0  38
+           str       print             ~13               0  38
+     arraytest        call               0               0  38
+           #19           +          RET_v0               0  39
+        result           +             #19               5  39
+           str       print             ~14               0  39
+           int       print          result               0  39
+           str       print             ~15               0  39
+           int       scanf          fibnum               0  39
+           %10          <=          fibnum              10  39
+           str       print             ~16               0  40
+           %11        goto               0               0  40
+           %10       label               0               0  41
+           %12          >=          fibnum               1  41
+           str       print             ~17               0  42
+           %13        goto               0               0  42
+           %12       label               0               0  43
+           str       print             ~18               0  43
+           fib        push          fibnum               0  43
+           fib        call               0               0  43
+           #20           +          RET_v0               0  44
+           int       print             #20               0  44
+           %13       label               0               0  45
+           %11       label               0               0  46
+           str       print             ~19               0  46
+     whiletest        push              10               0  46
+     whiletest        call               0               0  46
+       fortest        call               0               0  47
+           str       print             ~20               0  47
+           str       print             ~21               0  47
+           %14          ==               0               0  47
+           str       print             ~22               0  48
+           %14       label               0               0  49
+           %15          ==               1               0  49
+           str       print             ~23               0  50
+           %15       label               0               0  51
+           str       print             ~24               0  51
+          char       scanf              cc               0  51
+           %16          !=              cc             'a'  51
+           str       print             ~25               0  52
+           %17        goto               0               0  52
+           %16       label               0               0  53
+           str       print             ~26               0  53
+           %17       label               0               0  54
+           str       print             ~27               0  54
+           str       print             ~28               0  54
+           str       print             ~29               0  54
+           str       print             ~30               0  54
+      chartest        call               0               0  54
+           #21           +          RET_v0               0  55
+          char       print             #21               0  55
+           str       print             ~31               0  55
+     calltest1        call               0               0  55
+           str       print             ~32               0  56
+           str       print             ~33               0  56

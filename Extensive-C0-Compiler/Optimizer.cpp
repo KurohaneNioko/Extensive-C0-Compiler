@@ -193,7 +193,7 @@ void DivideBasicBlock()
 			it->op == OP::LES || it->op == OP::LESEQ)
 		{
 			it->BBno = bbcounter;
-			if (it + 1 != Med::itmd_code.end() && !(bbcounter > (it - 1)->BBno))
+			if (it + 1 != Med::itmd_code.end()/* && !(bbcounter > (it - 1)->BBno)*/)
 				addBlock();
 
 		}
@@ -501,6 +501,15 @@ void deleteUnusedAssign()
 				if (!to_be_used)
 				{	/* WARNING: modify iterator */
 					// delete this IR
+
+					optout << "delete:" << std::endl;
+					optout << std::right;
+					optout << std::setw(14) << i->rst << "  " << std::setw(10) << i->op << "  "
+						<< std::setw(14) << i->num1 << "  " << std::setw(14) << i->num2
+#if OPTIMIZE
+						<< std::setw(4) << i->BBno
+#endif
+						<< std::endl;
 					i = Med::itmd_code.erase(i);
 					firstIR = firstIRinBLK(blk_no);
 					lastIR = lastIRinBlock(blk_no);

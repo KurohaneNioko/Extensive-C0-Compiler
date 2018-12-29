@@ -137,7 +137,7 @@ void main(){
     if(1) printf("correct");
     printf("please input: 'a'");
     scanf(cc);
-    if(cc=='a') printf("your input is correct!");
+    if((cc)==('a')) printf("your input is correct!");
     else printf("error!");
 
     printf("string test");

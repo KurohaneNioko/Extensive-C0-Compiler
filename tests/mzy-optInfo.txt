@@ -1,0 +1,253 @@
+Basic block info:
+0
+1
+2
+3
+4    next: 5 6 
+5  prev: 4 
+6  prev: 4     next: 7 9 
+7  prev: 6 
+8    next: 12 
+9  prev: 6     next: 10 11 
+10  prev: 9 
+11  prev: 9     next: 12 
+12  prev: 8 11 
+13    next: 14 16 
+14  prev: 13 
+15    next: 19 
+16  prev: 13     next: 17 
+17  prev: 16     next: 18 
+18  prev: 17 
+19  prev: 15 
+20
+21
+22
+23    next: 24 26 
+24  prev: 23 
+25    next: 27 
+26  prev: 23 
+27  prev: 25 
+28    next: 29 
+29  prev: 28 
+30
+31    next: 32 
+32  prev: 31 34     next: 33 35 
+33  prev: 32     next: 34 
+34  prev: 33     next: 32 
+35  prev: 32 
+36    next: 37 
+37  prev: 36 37     next: 37 38 
+38  prev: 37 
+39
+40
+41    next: 42 
+42  prev: 41 
+43    next: 44 
+44  prev: 43     next: 45 
+45  prev: 44     next: 46 
+46  prev: 45     next: 47 
+47  prev: 46     next: 48 
+48  prev: 47     next: 49 53 
+49  prev: 48     next: 50 51 
+50  prev: 49     next: 52 
+51  prev: 49     next: 52 
+52  prev: 50 51     next: 59 
+53  prev: 48     next: 54 58 
+54  prev: 53     next: 55 56 
+55  prev: 54     next: 57 
+56  prev: 54     next: 57 
+57  prev: 55 56     next: 58 
+58  prev: 53 57     next: 59 
+59  prev: 52 58     next: 60 
+60  prev: 59     next: 61 62 
+61  prev: 60     next: 62 
+62  prev: 60 61     next: 63 
+63  prev: 62     next: 64 
+64  prev: 63 
+
+           add  func_begin               0               0   0
+            #1           +               a               b   0
+            #2           +              #1               c   0
+            #3           +              #2               d   0
+            #4           +              #3               e   0
+        RET_v0           +              #4               f   0
+             0         ret               0               0   0
+             0    func_end               0               0   1
+          fool  func_begin               0               0   2
+        RET_v0           +             'T'               0   2
+             0         ret               0               0   2
+             0    func_end               0               0   3
+        getabs  func_begin               0               0   4
+            %1          <=               x               0   4
+        RET_v0           +               x               0   5
+             0         ret               0               0   5
+            %1       label               0               0   6
+            %2          !=               x               0   6
+        RET_v0           +               0               0   7
+             0         ret               0               0   7
+            %3        goto               0               0   8
+            %2       label               0               0   9
+            %4          ==               x               0   9
+        RET_v0           -               0               x  10
+             0         ret               0               0  10
+            %4       label               0               0  11
+            %3       label               0               0  12
+             0    func_end               0               0  12
+          fibo  func_begin               0               0  13
+            %5          >=               n               3  13
+        RET_v0           +               1               0  14
+             0         ret               0               0  14
+            %6        goto               0               0  15
+            %5       label               0               0  16
+            #5           -               n               1  16
+          fibo        push              #5               0  16
+          fibo        call               0               0  16
+            #6           +          RET_v0               0  17
+            #7           -               n               2  17
+          fibo        push              #7               0  17
+          fibo        call               0               0  17
+            #8           +          RET_v0               0  18
+        RET_v0           +              #6              #8  18
+             0         ret               0               0  18
+            %6       label               0               0  19
+             0    func_end               0               0  19
+test_strelement  func_begin               0               0  20
+           str       print              ~1               0  20
+             0    func_end               0               0  20
+test_chartypetrans  func_begin               0               0  21
+        RET_v0           +              ch               1  21
+             0         ret               0               0  21
+             0    func_end               0               0  22
+test_condition  func_begin               0               0  23
+           #10           -               x              12  23
+           #12           +             #10              12  23
+            %7          ==             #12               0  23
+        RET_v0           +               1               0  24
+             0         ret               0               0  24
+            %8        goto               0               0  25
+            %7       label               0               0  26
+        RET_v0           +               0               0  26
+             0         ret               0               0  26
+            %8       label               0               0  27
+             0    func_end               0               0  27
+     call_fibo  func_begin               0               0  28
+           int       scanf               m               0  28
+          fibo        push               m               0  28
+          fibo        call               0               0  28
+             t           +          RET_v0               0  29
+           str       print              ~2               0  29
+           int       print               t               0  29
+             0    func_end               0               0  29
+test_arrayindex  func_begin               0               0  30
+          data         []=               1             100  30
+          data         []=               5             200  30
+          data         []=               8             400  30
+             0    func_end               0               0  30
+test_arrayassign  func_begin               0               0  31
+             i           +               0               0  31
+            %9       label               0               0  32
+           %10          >=               i              10  32
+           add        push               0               0  33
+           #14           -               i               2  33
+           add        push             #14               1  33
+           add        push               0               2  33
+           add        push               1               3  33
+           add        push               1               4  33
+           add        push               0               5  33
+           add        call               0               0  33
+           #15           +          RET_v0               0  34
+           #16           +               i               1  34
+          data         []=             #15             #16  34
+             i           +               i               1  34
+            %9        goto               0               0  34
+           %10       label               0               0  35
+             0    func_end               0               0  35
+      test_for  func_begin               0               0  36
+          _abc           +               0               0  36
+             i           +               0               0  36
+           %11       label               0               0  37
+           #17         =[]            data               i  37
+          _abc           +            _abc             #17  37
+             i           +               i               1  37
+           %11           <               i               n  37
+        RET_v0           +            _abc               0  38
+             0         ret               0               0  38
+             0    func_end               0               0  39
+test_bra_statement  func_begin               0               0  40
+             0    func_end               0               0  40
+      call_abs  func_begin               0               0  41
+           int       scanf               m               0  41
+        getabs        push               m               0  41
+        getabs        call               0               0  41
+             t           +          RET_v0               0  42
+           str       print              ~3               0  42
+           int       print               t               0  42
+             0    func_end               0               0  42
+          main  func_begin               0               0  43
+             x           +             003               0  43
+             y           +              -4               0  43
+            c1           +             'T'               0  43
+             z           +            -144               0  43
+test_chartypetrans        push             'r'               0  43
+test_chartypetrans        call               0               0  43
+             i           +          RET_v0               0  44
+           add        push               x               0  44
+           add        push               y               1  44
+           add        push               z               2  44
+           add        push               i               3  44
+           add        push               x               0  44
+           add        push               0               1  44
+           add        push               0               2  44
+           add        push               y               3  44
+           add        push               0               4  44
+           add        push               0               5  44
+           add        call               0               0  44
+           #23           +          RET_v0               0  45
+           add        push             #23               4  45
+           add        push               0               5  45
+           add        call               0               0  45
+             t           +          RET_v0               0  46
+           int       print               t               0  46
+test_bra_statement        call               0               0  46
+           int       scanf               n               0  47
+test_arrayindex        call               0               0  47
+test_arrayassign        call               0               0  48
+           %12          <=               n               0  48
+      test_for        call               0               0  49
+           #24           +          RET_v0               0  49
+           #25           +               n               1  49
+           #26           *               n             #25  49
+           #27           /             #26               2  49
+           %13          !=             #24             #27  49
+           str       print              ~4               0  50
+           %14        goto               0               0  50
+           %13       label               0               0  51
+           str       print              ~5               0  51
+           %14       label               0               0  52
+           %15        goto               0               0  52
+           %12       label               0               0  53
+           %16          !=               n               0  53
+      test_for        call               0               0  54
+           #28           +          RET_v0               0  54
+           %17          !=             #28               1  54
+           str       print              ~4               0  55
+           %18        goto               0               0  55
+           %17       label               0               0  56
+           str       print              ~5               0  56
+           %18       label               0               0  57
+           %16       label               0               0  58
+           %15       label               0               0  59
+     call_fibo        call               0               0  59
+      call_abs        call               0               0  60
+             y           +             100               0  60
+           %19          !=             100             100  60
+          fool        call               0               0  61
+           #29           +          RET_v0               0  61
+          char       print             #29               0  61
+           %19       label               0               0  62
+test_strelement        call               0               0  62
+test_condition        push               n               0  63
+test_condition        call               0               0  63
+           #30           +          RET_v0               0  64
+           int       print             #30               0  64
+             0        exit               0               0  64

@@ -94,7 +94,7 @@ void assignAddr()
 				j->second.addr = addr;
 				addr += (j->second.type == ST::VAR_TYP ? 1 : j->second.length);
 			}
-		addr = addr + size_of_reg - (addr & 0x00000003);
+		addr = addr + 2*size_of_reg - (addr & 0x00000003);
 		for (auto j = i->second.begin(); j != i->second.end(); j++)
 			if (j->second.cls == ST::INT_CLS && j->second.type != ST::PARAM_TYP && j->second.type != ST::CONST_TYP)
 			{
@@ -360,7 +360,7 @@ bool opr_is_const(std::string opr, int &rst)
 
 void write2RAM(std::string iden, std::string reg)
 {
-	if (*(iden.begin()) != '#' && iden!=RETV0)
+	if (*(iden.begin()) != '#')
 	{
 		SSSS;
 		if (curRI.symtab.count(iden) > 0)
@@ -758,7 +758,8 @@ void read_arr(mcode &c, ociter o)
 				ss << LBU << ' ' << rdreg << ' ' << mark2global_IDEN(arr) << '(' << reg_index << ')'; mpss;
 		}
 	}
-	write2RAM(c.rst, rdreg);
+	if (rdreg != V0)
+		write2RAM(c.rst, rdreg);
 	if (!const_index)
 		futureUseChk(index, reg_index, o);
 #if COMMENT
@@ -794,6 +795,8 @@ void calc(mcode &c, ociter o)
 		rdreg = regSeek(c.rst, false);
 		ss << MOVE << ' ' << rdreg << ' ' << V0;
 		mpss;
+		if (rdreg != V0)
+			write2RAM(c.rst, rdreg);
 		return;
 	}
 	if (r1const & r2const)
@@ -897,7 +900,8 @@ void calc(mcode &c, ociter o)
 		}
 	}
 	else { assert(false); }
-	write2RAM(c.rst, rdreg);
+	if(rdreg != V0)
+		write2RAM(c.rst, rdreg);
 	if (!r1const)
 		futureUseChk(c.num1, r1reg, o);
 	if (!r2const)

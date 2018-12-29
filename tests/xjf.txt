@@ -152,7 +152,7 @@ void main(){
                 printf("error11");
             else if( 4 >= 4 ){
                 if( t15 > 0 ) 
-                    if( t15 < 0)
+                    if( t15 <= 0)
                         printf("error12");
                     else
                         printf(" ojbk");
