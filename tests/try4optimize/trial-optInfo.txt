@@ -5,8 +5,7 @@ Basic block info:
 3    next: 4 5 
 4  prev: 3     next: 5 
 5  prev: 3 4 
-6    next: 7 
-7  prev: 6 
+6
 
            add  func_begin               0               0   0
              i           +               0               0   0
@@ -25,26 +24,5 @@ Basic block info:
             %2       label               0               0   5
              0    func_end               0               0   5
           main  func_begin               0               0   6
-            ch           +             'a'               0   6
-             a           +              98               0   6
-             a           +               5               0   6
-             b           +               4               0   6
              x           +               3               0   6
-            #5           +              25               0   6
-            #6           +              16               0   6
-            #7           +               9               0   6
-            #8           +               9               0   6
-            #9           +               0               0   6
-             d           +              25               0   6
-           add        push               1               0   6
-           add        push               2               1   6
-           add        push               3               2   6
-           add        call               0               0   6
-             c           +             134               0   7
-           #10           *               d               d   7
-           #11           +             576               0   7
-           #12           -             #10             576   7
-           #13           +             #12             134   7
-           #14           +             134               0   7
-             c           -             #13             134   7
-           int       print               c               0   7
+           int       print              49               0   6

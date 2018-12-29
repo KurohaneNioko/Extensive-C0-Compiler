@@ -1,0 +1,128 @@
+const int zero = 0;
+const int one = 1, minus_two = -0002;
+const char renn = '0';
+const char first_alpha = 'a', first_captical = 'A';
+int x, yy, zz, yyy[7];
+
+int fact(int t)
+{
+    if(t < 3)
+        return(t);
+    else
+        return(fact(t-1)*t);
+}
+
+int rt15
+{
+    const int zero=1;
+    return(3*5/ONE+one-ZERO);
+}
+
+char fun2(int a, int b, int c, int d, int e, int f)
+{
+    printf(a+b*c*d/e-f);
+    return('A');
+}
+
+void main()
+{
+    const int b =+01, c=2, d=3, e=4;
+    char ar[2];
+    int r, m1[8];
+    int aa, a;
+    
+    x = +-1;
+    r = -4;
+    aa = 6;
+    printf("!@#$%%abcd114514ABCD963287~;: ", fact(AA));
+    AR[d*e+6*(minus_two+b-1)] = fun2(x-r, aa, b, e, c, minus_two) ;
+    printf((ar[ZeRo/fact(4)]));
+    ar[1] = '0';
+    aa = -b * (ar[1] + rt15) + (c - e * 9) + 2 * 'm';
+    printf(aa);
+    a = aa;
+    scanf(a, x);
+    if (a > 0)
+    {
+        printf("1 hit ");
+        if (x <= 0) {
+            r = a / x * a;
+            printf("2 hit ");
+        }
+        r = r + aa;
+    }
+    if (x != 0)
+    {
+        printf("3 hit ");
+        if (a == -4)
+        {
+            r = r + 1;
+            printf("4 hit ");
+        }
+    }
+    if (a < 0)
+    {
+        printf("5 hit ");
+        if (x >= 0)
+        {
+            r = r + a;
+            printf("6 hit ");
+        }
+    }
+    else
+    {
+        r = r * -1;
+        printf(r);
+    }
+    for(a = -2; a<d; a = a+1)
+    {
+        x = x + e;
+    }
+    while (x > 0)
+    {
+        x = x - c;
+    }
+    printf(x);
+}
+
+先输出
+!@#$%abcd114514ABCD963287~;: 
+720
+17
+65
+121
+
+之后根据输入，可得相应输出为->下边的部分
+1
+3
+->
+1 hit
+3 hit
+-117
+-1
+
+-3
+1
+->
+3 hit
+5 hit
+6 hit
+-1
+
+6
+-1
+->
+1 hit
+2 hit
+3 hit
+-85
+-1
+
+-4
+3
+->
+3 hit
+4 hit
+5 hit
+6 hit
+-1

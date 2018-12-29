@@ -227,7 +227,8 @@ void Test_Compound_NoStmts {
   int IntVariable;
 }
 
-void Test_If(int Number) {
+void Test_If {
+  int Number;
   if (Number + Number * Number / 2) {
     Printf("Condition ::= Expr");
   }
@@ -433,3 +434,64 @@ void main() {
   PrintCompareOp(CompareOp);
   PrintResult(Result);
 }
+
+
+# Case 1
+输入：
+1
+1
+0
+
+输出：
+CompareEqual
+Result: true
+
+# Case 2
+输入：
+-1
+1
+1
+
+输出：
+CompareNotEqual
+Result: true
+
+# Case 3
+输入：
+10
+-3
+2
+
+输出：
+CompareLess
+Result: false
+
+# Case 4
+输入：
+-3
+10
+3
+
+输出：
+CompareLessEqual
+Result: true
+
+# Case 5
+输入：
+10
+-3
+4
+
+输出：
+CompareGreater
+Result: true
+
+# Case 6
+输入：
+10
+-3
+5
+
+输出：
+CompareGreaterEqual
+Result: true

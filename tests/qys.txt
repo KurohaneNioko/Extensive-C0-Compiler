@@ -153,3 +153,239 @@ void main(){
     
     printf("TEST IS OVER!");
 } 
+
+
+测试用例1及预期结果
+
+output:test is starting
+output:add test
+output:add result: 10+20=30
+
+output:exptest begin,please input a int and a char
+input:10 z;
+output:20
+output:25
+output:exptest result:147
+
+array test
+array test result:55
+
+output:recursion test,please input a fib number
+input:7
+output:fib result is:13
+
+output:loop test begin
+output:while test
+output:10
+output:7
+output:4
+output:1
+output:-2
+output:3
+output:8
+output:13
+output:while test finished
+output:for test
+output:0
+output:2
+output:4
+output:6
+output:8
+output:10
+output:0
+output:10
+output:8
+output:6
+output:4
+output:2
+output:0
+output:loop test finished
+
+output:if test begin
+output:correct
+output:please input:'a'
+input:a
+output:correct!
+
+output:string test
+output:! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~
+output:string test finished
+
+output:char test
+output:H
+output:E
+output:L
+output:L
+output:O
+output:W
+output:call test finished
+
+output:call test
+output:this is calltest1
+output:a
+output:*
+output:+
+output:8
+output:this is calltest3
+output:this is calltest2
+output:call test finished
+
+output:TEST IS OVER!
+
+
+测试用例2及预期结果
+
+
+output:test is starting
+output:add test
+output:add result: 10+20=30
+
+output:exptest begin,please input a int and a char
+input:-5 a;
+output:-10
+output:0
+output:exptest result:97
+
+array test
+array test result:55
+
+output:recursion test,please input a fib number
+input:12
+output:fibnum is too big
+
+output:loop test begin
+output:while test
+output:10
+output:7
+output:4
+output:1
+output:-2
+output:3
+output:8
+output:13
+output:while test finished
+output:for test
+output:0
+output:2
+output:4
+output:6
+output:8
+output:10
+output:0
+output:10
+output:8
+output:6
+output:4
+output:2
+output:0
+output:loop test finished
+
+output:if test begin
+output:correct
+output:please input:'a'
+input:x
+output:error!
+
+output:string test
+output:! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~
+output:string test finished
+
+output:char test
+output:H
+output:E
+output:L
+output:L
+output:O
+output:W
+output:call test finished
+
+output:call test
+output:this is calltest1
+output:a
+output:*
+output:+
+output:8
+output:this is calltest3
+output:this is calltest2
+output:call test finished
+
+output:TEST IS OVER!
+
+
+测试用例3及预期结果
+
+
+output:test is starting
+output:add test
+output:add result: 10+20=30
+
+output:exptest begin,please input a int and a char
+input:0 b;
+output:0
+output:1
+output:exptest result:99
+
+array test
+array test result:55
+
+output:recursion test,please input a fib number
+input:-8
+output:fibnum is too small
+
+output:loop test begin
+output:while test
+output:10
+output:7
+output:4
+output:1
+output:-2
+output:3
+output:8
+output:13
+output:while test finished
+output:for test
+output:0
+output:2
+output:4
+output:6
+output:8
+output:10
+output:0
+output:10
+output:8
+output:6
+output:4
+output:2
+output:0
+output:loop test finished
+
+output:if test begin
+output:correct
+output:please input:'a'
+input:a
+output:correct!
+
+output:string test
+output:! #$%&'()*+,-./0123456789:;<=>?@ABCXYZabcxyz[\]^_{|}~
+output:string test finished
+
+output:char test
+output:H
+output:E
+output:L
+output:L
+output:O
+output:W
+output:call test finished
+
+output:call test
+output:this is calltest1
+output:a
+output:*
+output:+
+output:8
+output:this is calltest3
+output:this is calltest2
+output:call test finished
+
+output:TEST IS OVER! 

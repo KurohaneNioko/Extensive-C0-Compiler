@@ -111,7 +111,7 @@ void main()
     else testresult[0]='F';
     if(testwhile)testresult[1]='T';
     else testresult[1]='F';
-    if(testfactorial=='T')testresult[2]='T';
+    if((testfactorial)==('T'))testresult[2]='T';
     else testresult[2]='F';
     if(testexpression)testresult[3]='T';
     else testresult[3]='F';
@@ -120,3 +120,37 @@ void main()
     testprintf(flag);
     for(i=0;i<5;i=i+1)printf(testresult[i]);
 }
+
+
+=============================================================
+input:
+0
+output:
+this is a string, !#$%&'()*+,-./0123456789:;<=>?@[\]^_`{|}~|
+T
+T
+T
+T
+T
+==============================================================
+input:
+2
+output:
+a
+2
+*
+T
+T
+T
+T
+T
+=======================================================
+input:
+1
+output:
+this is a string 5
+T
+T
+T
+T
+T

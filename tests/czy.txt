@@ -159,4 +159,120 @@ void Main()
         preparation;
         permutations(0);
     }
-}rfhrdhkgh
+}
+
+
+正确的输入输出
+testcase 1:
+input : 2 1 + 2
+
+test for success
+_
+3
+*
+11
+You can choose m numbers permutations from n numbers ? T
+___________
+ 1
+ 2
+___________
+ 1
+ 3
+___________
+ 2
+ 1
+___________
+ 2
+ 3
+___________
+ 3
+ 1
+___________
+ 3
+ 2
+___________
+
+testcase 2: 
+input : 12 -1 - 6
+
+test for success
+_
+13
+*
+33
+You can choose m numbers permutations from n numbers ? F
+___________
+error input: 0 < m <= n <= 10
+
+testcase 3:
+input: 2 3 * 7
+
+test for success
+_
+6
+*
+21
+You can choose m numbers permutations from n numbers ? F
+___________
+error input: 0 < m <= n <= 10
+
+
+testcase4:
+input : 7 0 / 1
+
+test for success
+_
+0
+*
+11
+You can choose m numbers permutations from n numbers ? F
+___________
+error input: 0 < m <= n <= 10
+
+testcase 5:
+input: 6 2 / 0
+
+test for success
+_
+3
+*
+14
+You can choose m numbers permutations from n numbers ? F
+___________
+error input: 0 < m <= n <= 10
+
+
+testcase 6:
+input : 3 1 * 3
+
+test for success
+_
+3
+*
+13
+You can choose m numbers permutations from n numbers ? T
+___________
+ 1
+ 2
+ 3
+___________
+ 1
+ 3
+ 2
+___________
+ 2
+ 1
+ 3
+___________
+ 2
+ 3
+ 1
+___________
+ 3
+ 1
+ 2
+___________
+ 3
+ 2
+ 1
+___________

@@ -40,12 +40,13 @@ void constCombine()
 			bool r2const = _opr_is_const(r2, v2);
 			if (r1const & r2const)
 			{
-				it->op = OP::ADD;
 				int val =
 					op == OP::ADD ? v1 + v2 :
 					op == OP::SUB ? v1 - v2 :
 					op == OP::MUL ? v1 * v2 :
 					op == OP::DIV ? v1 / v2 : 0;
+				it->op = OP::ADD;
+
 				it->num1 = std::to_string(val);
 				it->num2 = "0";
 				combineFlag = true;
@@ -63,12 +64,12 @@ void constCombine()
 			{
 				if ((v1 == 0 && op == OP::ADD) || (v1 == 1 && op == OP::MUL))
 				{
-					it->op == OP::ADD; it->num1 = it->num2; it->num2 = "0";
+					it->op = OP::ADD; it->num1 = it->num2; it->num2 = "0";
 					combineFlag = true;
 				}
 				else if (v1 == 0 && (op == OP::DIV || op == OP::MUL))
 				{
-					it->op == OP::ADD; it->num1 = "0"; it->num2 = "0";
+					it->op = OP::ADD; it->num1 = "0"; it->num2 = "0";
 					combineFlag = true;
 				}
 			}
@@ -176,7 +177,9 @@ void DivideBasicBlock()
 	{
 		if (it->op == OP::LABEL)
 		{
-			addBlock();
+			//(it-1)->BBno 
+			if (!(bbcounter > (it - 1)->BBno))
+				addBlock();
 			it->BBno = bbcounter;
 		}
 		else if (it->op == OP::FUNC_BEGIN)
@@ -190,11 +193,14 @@ void DivideBasicBlock()
 			it->op == OP::LES || it->op == OP::LESEQ)
 		{
 			it->BBno = bbcounter;
-			if (it + 1 != Med::itmd_code.end())
+			if (it + 1 != Med::itmd_code.end() && !(bbcounter > (it - 1)->BBno))
 				addBlock();
 
-		}else
+		}
+		else
+		{
 			it->BBno = bbcounter;
+		}
 	}
 	func_name = "";
 	//connect
@@ -249,10 +255,10 @@ void useInIR(const mcode &c, const std::string &var, std::pair<int, std::set<int
 {
 	def_place = -1;
 	r.first = NO_USE;
-	if (c.op == OP::PUSH_PARA && c.rst == var)
+	if (c.op == OP::PUSH_PARA && c.num1 == var)
 	{
 		r.first = USE;
-		r.second.insert(0);
+		r.second.insert(1);
 	}
 	else if (c.op == OP::SCAN && c.num1 == var)
 	{
@@ -310,7 +316,7 @@ void useInIR(const mcode &c, const std::string &var, std::pair<int, std::set<int
 		}
 	}
 }
-auto firstIRinBLK(unsigned &blk_no)
+auto firstIRinBLK(const unsigned &blk_no)
 {
 	assert(blk_no < blocks.size());
 	auto i = Med::itmd_code.begin();
@@ -401,10 +407,43 @@ void naiveConstSpread(bool &with_spread)/* HARD! */
 	}
 }
 
-std::vector<bool> checked_block(blocks.size(), false);
-void checkUseInblock(const std::string &var)
+std::vector<bool> checked_block;
+void checkUseInblock(const std::string &var, bool &tobeused, const unsigned &block_no)
 {
-
+	auto block = blocks[block_no];
+	auto firstIR = firstIRinBLK(block_no);
+	auto lastIR = lastIRinBlock(block_no);
+	for (auto i = firstIR; i != lastIR + 1; i++)
+	{
+		std::pair<int, std::set<int>> result;
+		int def_place;
+		useInIR(*i, var, result, def_place);
+		if(result.first == USE || result.first == USE_DEF)
+		{
+			tobeused = true;
+			break;
+		}
+		if (result.first == DEF)
+			break;
+	}
+	if (!tobeused)
+	{
+		// lookup IR after this block
+		auto after_block = block.nextBBno;
+		for (auto nextblk_iter = after_block.begin();
+			nextblk_iter != after_block.end();
+			nextblk_iter++)
+		{
+			if (checked_block[*nextblk_iter] == false)
+			{
+				checked_block[*nextblk_iter] = true;
+				checkUseInblock(var, tobeused, *nextblk_iter);
+			}
+			if (tobeused)
+				break;
+		}
+	}
+	
 }
 void deleteUnusedAssign()
 {
@@ -427,7 +466,9 @@ void deleteUnusedAssign()
 				auto checking_var = i->rst;
 				if (func_sym.count(checking_var) == 0)
 					continue;
-				bool to_be_use = false;
+				std::vector<bool> temp(blocks.size(), false);
+				checked_block = temp;
+				bool to_be_used = false;
 				// lookup IR after def
 				for (auto j = i + 1; j != lastIR + 1; j++)
 				{
@@ -436,20 +477,39 @@ void deleteUnusedAssign()
 					useInIR(*j, checking_var, result, def_place);
 					if (result.first == USE || result.first == USE_DEF)
 					{
-						to_be_use = true;
+						to_be_used = true;
 						break;
 					}
 				}
-				if (!to_be_use)
+				if (!to_be_used)
 				{	
 					// lookup IR after this block
-					//for()
+					auto after_block = blk_iter->nextBBno;
+					for (auto nextblk_iter = after_block.begin();
+						nextblk_iter != after_block.end();
+						nextblk_iter++)
+					{
+						if (checked_block[*nextblk_iter] == false)
+						{
+							checked_block[*nextblk_iter] = true;
+							checkUseInblock(checking_var, to_be_used, *nextblk_iter);
+						}
+						if (to_be_used)
+							break;
+					}
 				}
-				if (!to_be_use)
-				{
+				if (!to_be_used)
+				{	/* WARNING: modify iterator */
 					// delete this IR
+					i = Med::itmd_code.erase(i);
+					firstIR = firstIRinBLK(blk_no);
+					lastIR = lastIRinBlock(blk_no);
+					if (i != firstIR)
+						i--;
 				}
 				// reset checked block info 
+				std::vector<bool> temp1(blocks.size(), false);
+				checked_block = temp1;
 			}
 		}
 
@@ -486,9 +546,8 @@ void OPT::allOptimize()
 		DivideBasicBlock();
 		naiveConstSpread(with_spread);
 	} while (with_spread);
-
-
-
+	deleteUnusedAssign();
+	DivideBasicBlock();
 	print_BB();
 
 	optout << std::endl;

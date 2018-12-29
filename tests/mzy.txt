@@ -116,3 +116,49 @@ void MAIN(){
 
     return;
 }
+
+
+case 1
+输入:
+9
+1
+10
+输出:
+-31
+...for loop work well
+...fibo result is :1
+...abs is: 10
+T
+\n! ~}|{abcABC<=+-$%&*()/
+1
+
+
+
+case2:
+输入:
+5
+2
+0
+输出：
+-31
+...for loop work well
+...fibo result is :1
+...abs is: 0
+T
+\n! ~}|{abcABC<=+-$%&*()/
+1
+
+
+case3:
+输入:
+0
+5
+-9
+输出：
+-31
+...for loop work well
+...fibo result is :5
+...abs is: 9
+T
+\n! ~}|{abcABC<=+-$%&*()/
+0

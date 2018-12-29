@@ -31,7 +31,7 @@ const std::string J = "j";
 const std::string JAL = "jal";
 const std::string JR = "jr";
 const std::string MUL = "mul";
-const std::string DIV = "divu";
+const std::string DIV = "div";
 //const std::string MFLO = "mflo";
 const std::string SYSCALL = "syscall";
 const std::string LA = "la";
@@ -273,6 +273,8 @@ int reg2Index(std::string reg)
 }
 std::string regSeek(std::string &v, bool is_rsrt)
 {	// if reg_t/s_max changed, modify here.
+	if (v == RETV0)
+		return V0;
 	auto lookup_ts = mark2useReg(v);
 	if (lookup_ts != "0")
 	{
@@ -358,7 +360,7 @@ bool opr_is_const(std::string opr, int &rst)
 
 void write2RAM(std::string iden, std::string reg)
 {
-	if (*(iden.begin()) != '#')
+	if (*(iden.begin()) != '#' && iden!=RETV0)
 	{
 		SSSS;
 		if (curRI.symtab.count(iden) > 0)
@@ -771,7 +773,7 @@ void calc(mcode &c, ociter o)
 	bool r1const = opr_is_const(r1, v1);
 	bool r2const = opr_is_const(r2, v2);
 	std::string r1reg, r2reg; SSSS;
-	if (c.rst == RETV0)		// when optimize, don't touch anything about RETV0, 
+	/*if (c.rst == RETV0)
 	{
 		if (v1 == 0)
 			ss << MOVE << ' ' << V0 << ' ' << ZERO;
@@ -785,7 +787,7 @@ void calc(mcode &c, ociter o)
 		}
 		mpss;
 		return;
-	}
+	}*/
 	std::string rdreg;
 	if (r1 == RETV0)
 	{
