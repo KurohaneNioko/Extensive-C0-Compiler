@@ -33,6 +33,22 @@ delete:
 delete:
            #22           +              -7               0  35
 delete:
+           t10           +               2               0  35
+delete:
+            c5           +             '+'               0  35
+delete:
+            c6           +              43               0  35
+delete:
+           t11           +              -7               0  35
+delete:
+           t12           +              -7               0  35
+delete:
+           #23           +              45               0  37
+delete:
+           #24           +              88               0  37
+delete:
+           #30           +              49               0  37
+delete:
            #36           +              -1               0  37
 delete:
            #37           +               1               0  37
@@ -43,9 +59,13 @@ delete:
 delete:
            _c4           +            6666               0  86
 delete:
+           _t1           +             '8'               0  86
+delete:
            #47           +            6722               0  86
 delete:
            #50           +               8               0  89
+delete:
+           #51           +              48               0  89
 delete:
            #52           +              12               0  89
 delete:
@@ -259,31 +279,23 @@ Basic block info:
            %13          !=            in_1               2  34
       t_array1         []=               0            2333  35
       c_array1         []=               0             '/'  35
-           t10           +               2               0  35
-            c5           +             '+'               0  35
-            c6           +              43               0  35
             c7         =[]        c_array1               0  35
-           t11           +              -7               0  35
-           t12           +              -7               0  35
            t13         =[]        t_array1               0  35
            ff2        call               0               0  35
            t14           +          RET_v0               0  36
            ff1        push             'y'               0  36
            ff1        call               0               0  36
             c8           +          RET_v0               0  37
-           #23           +             t10              c5  37
-           #24           +             #23              c6  37
-           #25           +             #24              c7  37
-           #26           +             #25             t11  37
-           #27           +             #26             t12  37
+           #25           +              88              c7  37
+           #26           +             #25              -7  37
+           #27           +             #26              -7  37
            #28           +             #27             t13  37
            #29           +             #28             t14  37
            t14           +             #29              c8  37
-           #30           *             t11            -007  37
-           #31           *             #30             t13  37
+           #31           *              49             t13  37
            #32           /             #31              c8  37
-           #33           /             #32             t10  37
-           #34           *             #33             t12  37
+           #33           /             #32               2  37
+           #34           *             #33              -7  37
            int       print             #34               0  37
            str       print             ~14               0  37
            #35           +               4             t14  37
@@ -390,10 +402,10 @@ Basic block info:
            _c1           +             'a'               0  81
            ff1        push             '+'               0  81
            ff1        call               0               0  81
-          char       print             _c1               0  82
+          char       print              97               0  82
            _c2           +             'b'               0  82
            ff2        call               0               0  82
-          char       print             _c2               0  83
+          char       print              98               0  83
            ff3        push               1               0  83
            ff3        push               2               1  83
            ff3        push             'a'               2  83
@@ -404,7 +416,6 @@ Basic block info:
            ff4        call               0               0  84
            _c1           +             '*'               0  85
            ff5        call               0               0  85
-           _t1           +             '8'               0  86
            int       print            6722               0  86
       c_array2         []=              50             'h'  86
            #48         =[]        c_array2              50  86
@@ -419,7 +430,6 @@ Basic block info:
       t_array2         []=               i               i  88
              i           +               i               1  88
            %38           <               i             100  88
-           #51           +              48               0  89
            #54         =[]        t_array2              60  89
            #55           /             #54              23  89
            #56           *              22               i  89
@@ -452,3 +462,760 @@ Basic block info:
            int       print             #85               0  90
            %37       label               0               0  91
              0        exit               0               0  91
+Def-Use Web
+====== factorial ======
+#7
+10, 1
+(10, 2) --> 
+
+#8
+11, 0
+(11, 1) --> 
+
+a
+7, 0
+(7, 1) --> (10, 1) --> (11, 1) --> 
+
+
+b
+11, 1
+(11, 2) --> 
+
+====== ff1 ======
+c
+0, 0
+(0, 2) --> 
+
+====== ff2 ======
+====== ff3 ======
+#2
+4, 1
+(4, 2) --> 
+
+#3
+4, 2
+(4, 3) --> 
+
+#4
+4, 3
+(4, 4) --> 
+
+#5
+4, 4
+(4, 5) --> 
+
+#6
+4, 5
+(4, 6) --> 
+
+a
+4, 0
+(4, 1) --> 
+
+b
+4, 0
+(4, 1) --> 
+
+c
+4, 0
+(4, 2) --> 
+
+d
+4, 0
+(4, 3) --> 
+
+e
+4, 0
+(4, 4) --> 
+
+f
+4, 0
+(4, 5) --> 
+
+====== ff4 ======
+====== ff5 ======
+#10
+13, 1
+(13, 2) --> 
+
+====== main ======
+#11
+15, 4
+(15, 5) --> 
+
+#12
+15, 5
+(15, 7) --> 
+
+#13
+15, 6
+(15, 7) --> 
+
+#14
+15, 7
+(15, 8) --> 
+
+#25
+37, 1
+(37, 2) --> 
+
+#26
+37, 2
+(37, 3) --> 
+
+#27
+37, 3
+(37, 4) --> 
+
+#28
+37, 4
+(37, 5) --> 
+
+#29
+37, 5
+(37, 6) --> 
+
+#31
+37, 7
+(37, 8) --> 
+
+#32
+37, 8
+(37, 9) --> 
+
+#33
+37, 9
+(37, 10) --> 
+
+#34
+37, 10
+(37, 11) --> 
+
+#35
+37, 13
+(37, 14) --> 
+
+#40
+73, 1
+(73, 2) --> 
+
+#41
+73, 2
+(73, 3) --> 
+
+#42
+79, 0
+(80, 1) --> 
+
+#43
+80, 0
+(80, 1) --> 
+
+#44
+80, 1
+(81, 1) --> 
+
+#45
+81, 0
+(81, 1) --> 
+
+#46
+81, 1
+(81, 2) --> 
+
+#48
+86, 2
+(86, 3) --> 
+
+#49
+87, 0
+(87, 1) --> 
+
+#54
+89, 0
+(89, 1) --> 
+
+#55
+89, 1
+(89, 11) --> 
+
+#56
+89, 2
+(89, 3) --> 
+
+#57
+89, 3
+(89, 6) --> 
+
+#58
+89, 4
+(89, 5) --> 
+
+#59
+89, 5
+(89, 6) --> 
+
+#60
+89, 6
+(89, 7) --> 
+
+#61
+89, 7
+(89, 8) --> 
+
+#63
+89, 8
+(89, 9) --> 
+
+#64
+89, 9
+(89, 10) --> 
+
+#65
+89, 10
+(89, 11) --> 
+
+#66
+89, 11
+(89, 12) --> 
+
+#71
+89, 13
+(89, 14) --> 
+
+#72
+89, 14
+(89, 24) --> 
+
+#73
+89, 15
+(89, 16) --> 
+
+#74
+89, 16
+(89, 19) --> 
+
+#75
+89, 17
+(89, 18) --> 
+
+#76
+89, 18
+(89, 19) --> 
+
+#77
+89, 19
+(89, 20) --> 
+
+#78
+89, 20
+(89, 21) --> 
+
+#80
+89, 21
+(89, 22) --> 
+
+#81
+89, 22
+(89, 23) --> 
+
+#82
+89, 23
+(89, 24) --> 
+
+#83
+89, 24
+(89, 25) --> 
+
+#84
+89, 25
+(89, 26) --> 
+
+#85
+90, 0
+(90, 1) --> 
+
+c1
+15, 2
+(15, 6) --> 
+
+c2
+15, 1
+(15, 4) --> (15, 5) --> (15, 12) --> 
+
+
+c7
+35, 2
+(37, 1) --> 
+
+c8
+37, 0
+(37, 6) --> (37, 8) --> 
+
+i
+87, 3
+(88, 1) --> (88, 2) --> 
+88, 2
+(88, 3) --> (88, 1) --> (88, 2) --> 
+(89, 2) --> 
+89, 12
+(89, 15) --> 
+
+in_1
+14, 1
+(14, 2) --> (34, 1) --> (77, 1) --> 
+(34, 1) --> (77, 1) --> 
+
+t1
+15, 0
+(15, 4) --> (15, 6) --> 
+
+t13
+35, 3
+(37, 4) --> (37, 7) --> 
+
+t14
+36, 0
+(37, 5) --> 
+37, 6
+(37, 13) --> 
+
+t15
+39, 1
+(44, 0) --> (45, 0) --> 
+
+t16
+53, 1
+(54, 1) --> (56, 1) --> (58, 1) --> 
+
+58, 1
+(54, 1) --> (56, 1) --> (58, 1) --> 
+
+
+t17
+55, 0
+(56, 1) --> (57, 0) --> (57, 1) --> 
+
+57, 1
+(56, 1) --> (57, 0) --> (57, 1) --> 
+
+
+t18
+53, 2
+(57, 0) --> 
+57, 0
+(57, 0) --> 
+
+t19
+59, 1
+
+62, 0
+
+66, 0
+(73, 1) --> (73, 1) --> 
+
+t2
+15, 3
+
+
+t20
+59, 2
+(61, 3) --> 
+62, 1
+(62, 2) --> (61, 3) --> 
+63, 0
+(65, 3) --> 
+66, 1
+(66, 2) --> (65, 3) --> 
+
+t21
+60, 2
+(61, 1) --> (61, 2) --> 
+61, 2
+(61, 3) --> (61, 1) --> (61, 2) --> 
+
+64, 2
+(65, 1) --> (65, 2) --> 
+65, 2
+(65, 3) --> (65, 1) --> (65, 2) --> 
+
+
+t22
+60, 1
+(61, 1) --> 
+61, 1
+(61, 1) --> (62, 0) --> 
+64, 1
+(65, 1) --> 
+65, 1
+(65, 1) --> (66, 0) --> 
+
+t23
+71, 0
+(72, 1) --> 
+72, 1
+(72, 2) --> (73, 2) --> (74, 1) --> 
+
+74, 1
+(74, 2) --> (72, 1) --> 
+
+t3
+15, 25
+(17, 1) --> (19, 1) --> (21, 1) --> 
+(25, 1) --> (25, 1) --> (21, 1) --> 
+(19, 1) --> (17, 1) --> 
+
+t4
+15, 26
+(17, 1) --> (19, 1) --> (23, 1) --> 
+(23, 1) --> (19, 1) --> (17, 1) --> 
+
+
+t5
+15, 27
+(21, 1) --> (23, 1) --> (25, 1) --> 
+(25, 1) --> (23, 1) --> (21, 1) --> 
+
+
+
+
+Crash Graph
+factorial ======
+#7:
+    a  
+#8:
+    a  b  
+a:
+    #7  #8  b  
+b:
+    #8  a  
+
+ff1 ======
+c:
+    
+
+ff2 ======
+
+ff3 ======
+#2:
+    #3  a  b  c  
+#3:
+    #2  #4  c  d  
+#4:
+    #3  #5  d  e  
+#5:
+    #4  #6  e  f  
+#6:
+    #5  f  
+a:
+    #2  b  
+b:
+    #2  a  
+c:
+    #2  #3  
+d:
+    #3  #4  
+e:
+    #4  #5  
+f:
+    #5  #6  
+
+ff4 ======
+
+ff5 ======
+#10:
+    
+
+main ======
+#11:
+    #12  c2  t1  
+#12:
+    #11  #13  #14  c2  
+#13:
+    #12  #14  c1  t1  
+#14:
+    #12  #13  
+#25:
+    #26  c7  
+#26:
+    #25  #27  
+#27:
+    #26  #28  t13  
+#28:
+    #27  #29  t13  t14  
+#29:
+    #28  c8  t14  
+#31:
+    #32  c8  t13  
+#32:
+    #31  #33  c8  
+#33:
+    #32  #34  
+#34:
+    #33  
+#35:
+    t14  
+#40:
+    #41  t19  t23  
+#41:
+    #40  t23  
+#42:
+    #43  #44  
+#43:
+    #42  #44  
+#44:
+    #42  #43  #45  #46  
+#45:
+    #44  #46  
+#46:
+    #44  #45  
+#48:
+    
+#49:
+    
+#54:
+    #55  
+#55:
+    #54  #65  #66  
+#56:
+    #57  i  
+#57:
+    #56  #59  #60  
+#58:
+    #59  
+#59:
+    #57  #58  #60  
+#60:
+    #57  #59  #61  
+#61:
+    #60  #63  
+#63:
+    #61  #64  
+#64:
+    #63  #65  
+#65:
+    #55  #64  #66  
+#66:
+    #55  #65  i  
+#71:
+    #72  
+#72:
+    #71  #82  #83  
+#73:
+    #74  i  
+#74:
+    #73  #76  #77  
+#75:
+    #76  
+#76:
+    #74  #75  #77  
+#77:
+    #74  #76  #78  
+#78:
+    #77  #80  
+#80:
+    #78  #81  
+#81:
+    #80  #82  
+#82:
+    #72  #81  #83  
+#83:
+    #72  #82  #84  
+#84:
+    #83  
+#85:
+    
+c1:
+    #13  t1  
+c2:
+    #11  #12  t1  
+c7:
+    #25  
+c8:
+    #29  #31  #32  t14  
+i:
+    #56  #66  #73  
+in_1:
+    
+t1:
+    #11  #13  c1  c2  
+t13:
+    #27  #28  #31  
+t14:
+    #28  #29  #35  c8  
+t15:
+    
+t16:
+    t17  
+t17:
+    t16  t18  
+t18:
+    t17  
+t19:
+    #40  t22  
+t2:
+    
+t20:
+    t21  
+t21:
+    t20  t22  
+t22:
+    t19  t21  
+t23:
+    #40  #41  
+t3:
+    t4  t5  
+t4:
+    t3  t5  
+t5:
+    t3  t4  
+
+string_14 : .asciiz " \n"
+string_18 : .asciiz " ojbk\n"
+string_4 : .asciiz "@@@@@\n"
+string_3 : .asciiz "\n"
+string_2 : .asciiz "___ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~___\\n\\t\\\\\\'___\n"
+string_1 : .asciiz "_ff4_\n"
+string_15 : .asciiz "error10\n"
+string_16 : .asciiz "error11\n"
+string_17 : .asciiz "error12\n"
+string_19 : .asciiz "error13\n"
+string_20 : .asciiz "error14\n"
+string_5 : .asciiz "error1\n"
+string_6 : .asciiz "error2\n"
+string_7 : .asciiz "error3\n"
+string_8 : .asciiz "error4\n"
+string_9 : .asciiz "error5\n"
+string_10 : .asciiz "error6\n"
+string_11 : .asciiz "error7\n"
+string_12 : .asciiz "error8\n"
+string_13 : .asciiz "error9\n"
+global:
+          name|class|  type|  len|  def|       addr
+           _c1| char|   var|    0|    2|   ffffffff|
+           _c2| char|   var|    0|    2|   ffffffff|
+           _c3| char|   var|    0|    2|   ffffffff|
+           _c4| char|   var|    0|    2|   ffffffff|
+           _t1|  int| const|    1|    1|   ffffffff|
+           _t2|  int| const|    2|    1|   ffffffff|
+           _t3|  int| const|    3|    1|   ffffffff|
+     factorial|  int|  func|    1|   25|   ffffffff|
+           ff1| char|  func|    1|    4|   ffffffff|
+           ff2|  int|  func|    0|   10|   ffffffff|
+           ff3| void|  func|    6|   15|   ffffffff|
+           ff4| void|  func|    0|   20|   ffffffff|
+           ff5| void|  func|    0|   36|   ffffffff|
+          main| void|  func|    0|   45|   ffffffff|
+
+factorial:
+          name|class|  type|  len|  def|       addr|reg
+            #7|  int|   var|    0|   31|   ffffffff|  0
+            #8|  int|   var|    0|   31|   ffffffff|  1
+             a|  int|  para|    0|   25|   ffffffff|  2
+             b|  int|   var|    0|   26|   ffffffff|  3
+ff1:
+          name|class|  type|  len|  def|       addr|reg
+             c| char|  para|    0|    4|   ffffffff|  0
+        temp_c| char| const|   98|    5|   ffffffff| -1
+ff2:
+          name|class|  type|  len|  def|       addr|reg
+ff3:
+          name|class|  type|  len|  def|       addr|reg
+            #2|  int|   var|    0|   16|   ffffffff|  0
+            #3|  int|   var|    0|   16|   ffffffff|  1
+            #4|  int|   var|    0|   16|   ffffffff|  2
+            #5|  int|   var|    0|   16|   ffffffff|  3
+            #6|  int|   var|    0|   16|   ffffffff|  4
+             a|  int|  para|    0|   15|   ffffffff|  5
+             b|  int|  para|    1|   15|   ffffffff|  6
+             c| char|  para|    2|   15|   ffffffff|  7
+             d|  int|  para|    3|   15|   ffffffff|  8
+             e| char|  para|    4|   15|   ffffffff|  9
+             f| char|  para|    5|   15|   ffffffff| 10
+ff4:
+          name|class|  type|  len|  def|       addr|reg
+ff5:
+          name|class|  type|  len|  def|       addr|reg
+           #10|  int|   var|    0|   42|   ffffffff|  0
+           _c2| char| const|  122|   37|   ffffffff| -1
+
+main:
+          name|class|  type|  len|  def|       addr|reg
+           #11|  int|   var|    0|   69|   ffffffff|  2
+           #12|  int|   var|    0|   69|   ffffffff|  1
+           #13|  int|   var|    0|   69|   ffffffff|  0
+           #14|  int|   var|    0|   69|   ffffffff| 16
+           #25|  int|   var|    0|  138|   ffffffff| 15
+           #26|  int|   var|    0|  138|   ffffffff| 14
+           #27|  int|   var|    0|  138|   ffffffff| 13
+           #28|  int|   var|    0|  138|   ffffffff| 12
+           #29|  int|   var|    0|  138|   ffffffff| 11
+           #31|  int|   var|    0|  140|   ffffffff| 10
+           #32|  int|   var|    0|  140|   ffffffff|  9
+           #33|  int|   var|    0|  140|   ffffffff|  8
+           #34|  int|   var|    0|  140|   ffffffff|  7
+           #35|  int|   var|    0|  142|   ffffffff|  6
+           #40|  int|   var|    0|  207|   ffffffff|  5
+           #41|  int|   var|    0|  207|   ffffffff|  4
+           #42|  int|   var|    0|  217|   ffffffff|  3
+           #43|  int|   var|    0|  217|   ffffffff|  2
+           #44|  int|   var|    0|  217|   ffffffff|  1
+           #45|  int|   var|    0|  217|   ffffffff|  0
+           #46|  int|   var|    0|  217|   ffffffff| 16
+           #48| char|   var|    0|  239|   ffffffff| 15
+           #49| char|   var|    0|  240|   ffffffff| 14
+           #54|  int|   var|    0|  245|   ffffffff| 13
+           #55|  int|   var|    0|  245|   ffffffff| 12
+           #56|  int|   var|    0|  245|   ffffffff| 11
+           #57|  int|   var|    0|  245|   ffffffff| 10
+           #58|  int|   var|    0|  245|   ffffffff|  9
+           #59|  int|   var|    0|  245|   ffffffff|  8
+           #60|  int|   var|    0|  245|   ffffffff|  7
+           #61|  int|   var|    0|  245|   ffffffff|  6
+           #63|  int|   var|    0|  245|   ffffffff|  5
+           #64|  int|   var|    0|  245|   ffffffff|  4
+           #65|  int|   var|    0|  245|   ffffffff|  3
+           #66|  int|   var|    0|  245|   ffffffff|  2
+           #71|  int|   var|    0|  247|   ffffffff|  1
+           #72|  int|   var|    0|  247|   ffffffff|  0
+           #73|  int|   var|    0|  247|   ffffffff| 16
+           #74|  int|   var|    0|  247|   ffffffff| 15
+           #75|  int|   var|    0|  247|   ffffffff| 14
+           #76|  int|   var|    0|  247|   ffffffff| 13
+           #77|  int|   var|    0|  247|   ffffffff| 12
+           #78|  int|   var|    0|  247|   ffffffff| 11
+           #80|  int|   var|    0|  247|   ffffffff| 10
+           #81|  int|   var|    0|  247|   ffffffff|  9
+           #82|  int|   var|    0|  247|   ffffffff|  8
+           #83|  int|   var|    0|  247|   ffffffff|  7
+           #84|  int|   var|    0|  247|   ffffffff|  6
+           #85|  int|   var|    0|  247|   ffffffff|  5
+            c1| char|   var|    0|   50|   ffffffff|  4
+            c2| char|   var|    0|   50|   ffffffff|  3
+            c7| char|   var|    0|   56|   ffffffff|  2
+            c8| char|   var|    0|   56|   ffffffff|  1
+      c_array1| char| array|  100|   58|   ffffffff| -1
+      c_array2| char| array|  100|   62|   ffffffff| -1
+        char_z| char| const|  122|   47|   ffffffff| -1
+             i|  int|   var|    0|   59|   ffffffff|  0
+          in_1|  int|   var|    0|   48|   ffffffff| 16
+       int_100|  int| const|  100|   46|   ffffffff| -1
+  single_chars| char| array|   10|   50|   ffffffff| -1
+            t1|  int|   var|    0|   49|   ffffffff| 15
+           t13|  int|   var|    0|   55|   ffffffff| 14
+           t14|  int|   var|    0|   55|   ffffffff| 13
+           t15|  int|   var|    0|   55|   ffffffff| 12
+           t16|  int|   var|    0|   55|   ffffffff| 11
+           t17|  int|   var|    0|   55|   ffffffff| 10
+           t18|  int|   var|    0|   55|   ffffffff|  9
+           t19|  int|   var|    0|   55|   ffffffff|  8
+            t2|  int|   var|    0|   49|   ffffffff|  7
+           t20|  int|   var|    0|   55|   ffffffff|  6
+           t21|  int|   var|    0|   55|   ffffffff|  5
+           t22|  int|   var|    0|   55|   ffffffff|  4
+           t23|  int|   var|    0|   55|   ffffffff|  3
+            t3|  int|   var|    0|   51|   ffffffff|  2
+            t4|  int|   var|    0|   51|   ffffffff|  1
+            t5|  int|   var|    0|   51|   ffffffff|  0
+      t_array1|  int| array|  100|   57|   ffffffff| -1
+      t_array2|  int| array|  100|   61|   ffffffff| -1

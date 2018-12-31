@@ -249,14 +249,19 @@ int main(int argc, char** argv)
 	if (!with_error)
 	{
 		Med::printIMC(symIRout);
+		symIRout << std::endl;
+		ST::printSym(symIRout);
 #if OPTIMIZE
 		std::string cp_ = cp;
 		OPT::optinfofile = cp_.replace(cp_.begin() + cp_.find_last_of('.'), cp_.end(), "-optInfo.txt");
 		OPT::allOptimize();
+		ST::printSym(OPT::optout);
+		if (OPT::optout.is_open())
+		{
+			OPT::optout.close();
+		}
 #endif
-		symIRout << std::endl;
 		OC::Med2Mips(asm_path);
-		ST::printSym(symIRout);
 	}
 	else
 	{

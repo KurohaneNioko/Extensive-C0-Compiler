@@ -3,8 +3,7 @@
 #include"SymbolHead.h"
 #include"Compiler.h"
 
-constexpr auto reg_t_max = 8;
-constexpr auto reg_s_max = 9;
+
 
 struct runinfo
 {

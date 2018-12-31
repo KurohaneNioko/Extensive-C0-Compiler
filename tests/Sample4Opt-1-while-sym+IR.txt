@@ -172,46 +172,46 @@ global:
           swap| void|  func|    2|   15|   ffffffff|
 
 complete_num:
-          name|class|  type|  len|  def|       addr
-           #10|  int|   var|    0|  102|          c|
-           #11|  int|   var|    0|  113|         10|
-            #5|  int|   var|    0|   43|         14|
-            #6|  int|   var|    0|   44|         18|
-            #7|  int|   var|    0|   62|         1c|
-            #8|  int|   var|    0|   77|         20|
-            #9|  int|   var|    0|  101|         24|
-             a|  int|   var|    0|   33|         28|
-             b|  int|   var|    0|   33|         2c|
-             c|  int|   var|    0|   33|         30|
-             h|  int|   var|    0|   32|         34|
-             i|  int|   var|    0|   31|         38|
-             j|  int|   var|    0|   31|         3c|
-             k|  int| array|  128|   30|         40|
-            k2|  int|   var|    0|   32|        240|
-          leap|  int|   var|    0|   32|        244|
-             m|  int|   var|    0|   32|        248|
-             n|  int|   var|    0|   31|        24c|
-             s|  int|   var|    0|   31|        250|
-           val|  int|  para|    0|   28|          0|
-            x1|  int|   var|    0|   31|        254|
-            x2|  int|   var|    0|   32|        258|
+          name|class|  type|  len|  def|       addr|reg
+           #10|  int|   var|    0|  102|   ffffffff| -1
+           #11|  int|   var|    0|  113|   ffffffff| -1
+            #5|  int|   var|    0|   43|   ffffffff| -1
+            #6|  int|   var|    0|   44|   ffffffff| -1
+            #7|  int|   var|    0|   62|   ffffffff| -1
+            #8|  int|   var|    0|   77|   ffffffff| -1
+            #9|  int|   var|    0|  101|   ffffffff| -1
+             a|  int|   var|    0|   33|   ffffffff| -1
+             b|  int|   var|    0|   33|   ffffffff| -1
+             c|  int|   var|    0|   33|   ffffffff| -1
+             h|  int|   var|    0|   32|   ffffffff| -1
+             i|  int|   var|    0|   31|   ffffffff| -1
+             j|  int|   var|    0|   31|   ffffffff| -1
+             k|  int| array|  128|   30|   ffffffff| -1
+            k2|  int|   var|    0|   32|   ffffffff| -1
+          leap|  int|   var|    0|   32|   ffffffff| -1
+             m|  int|   var|    0|   32|   ffffffff| -1
+             n|  int|   var|    0|   31|   ffffffff| -1
+             s|  int|   var|    0|   31|   ffffffff| -1
+           val|  int|  para|    0|   28|   ffffffff| -1
+            x1|  int|   var|    0|   31|   ffffffff| -1
+            x2|  int|   var|    0|   32|   ffffffff| -1
 factorial:
-          name|class|  type|  len|  def|       addr
-            #1|  int|   var|    0|    6|          c|
-            #2|  int|   var|    0|    6|         10|
-             n|  int|  para|    0|    3|          0|
+          name|class|  type|  len|  def|       addr|reg
+            #1|  int|   var|    0|    6|   ffffffff| -1
+            #2|  int|   var|    0|    6|   ffffffff| -1
+             n|  int|  para|    0|    3|   ffffffff| -1
 mod:
-          name|class|  type|  len|  def|       addr
-            #3|  int|   var|    0|   10|         10|
-            #4|  int|   var|    0|   10|         14|
-             x|  int|  para|    0|    9|          0|
-             y|  int|  para|    1|    9|          4|
+          name|class|  type|  len|  def|       addr|reg
+            #3|  int|   var|    0|   10|   ffffffff| -1
+            #4|  int|   var|    0|   10|   ffffffff| -1
+             x|  int|  para|    0|    9|   ffffffff| -1
+             y|  int|  para|    1|    9|   ffffffff| -1
 swap:
-          name|class|  type|  len|  def|       addr
-          temp|  int|   var|    0|   16|         10|
-             x|  int|  para|    0|   15|          0|
-             y|  int|  para|    1|   15|          4|
+          name|class|  type|  len|  def|       addr|reg
+          temp|  int|   var|    0|   16|   ffffffff| -1
+             x|  int|  para|    0|   15|   ffffffff| -1
+             y|  int|  para|    1|   15|   ffffffff| -1
 
 main:
-          name|class|  type|  len|  def|       addr
-             n|  int|   var|    0|  128|          8|
+          name|class|  type|  len|  def|       addr|reg
+             n|  int|   var|    0|  128|   ffffffff| -1

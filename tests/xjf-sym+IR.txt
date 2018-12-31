@@ -1,331 +1,331 @@
-           ff1  func_begin               0               0
-           _c1           +              98               0
-        RET_v0           +               c               0
-             0         ret               0               0
-             0    func_end               0               0
-           ff2  func_begin               0               0
-           _c2           +             '-'               0
-            #1           +               1               2
-        RET_v0           +              #1               3
-             0         ret               0               0
-             0    func_end               0               0
-           ff3  func_begin               0               0
-            #2           +               a               b
-            #3           +              #2               c
-            #4           +              #3               d
-            #5           +              #4               e
-            #6           +              #5               f
-           int       print              #6               0
-             0         ret               0               0
-             0    func_end               0               0
-           ff4  func_begin               0               0
-           str       print              ~1               0
-             0    func_end               0               0
-     factorial  func_begin               0               0
-            %1          !=               a               1
-        RET_v0           +               1               0
-             0         ret               0               0
-            %2        goto               0               0
-            %1       label               0               0
-            #7           -               a               1
-     factorial        push              #7               0
-     factorial        call               0               0
-            #8           +          RET_v0               0
-             b           *              #8               a
-        RET_v0           +               b               0
-             0         ret               0               0
-            %2       label               0               0
-             0    func_end               0               0
-           ff5  func_begin               0               0
-           _t1           +               4               0
-            #9           +             _t1             122
-           #10           +              #9             _c1
-           int       print             #10               0
-             0    func_end               0               0
-          main  func_begin               0               0
-           int       scanf            in_1               0
-            %3          !=            in_1               1
-           int       scanf              t1               0
-          char       scanf              c2               0
-          char       scanf              c1               0
-           int       scanf              t2               0
-           #11           *              t1              c2
-           #12           +              c2             #11
-           #13           /              t1              c1
-           #14           -             #12             #13
-           int       print             #14               0
-           str       print              ~2               0
-           str       print              ~3               0
-           str       print              ~4               0
-          char       print              c2               0
-  single_chars         []=               0             '+'
-  single_chars         []=               1             '-'
-  single_chars         []=               2             '*'
-  single_chars         []=               3             '/'
-  single_chars         []=               4             '0'
-  single_chars         []=               5             '9'
-  single_chars         []=               6             'a'
-  single_chars         []=               7             'z'
-  single_chars         []=               8             'A'
-  single_chars         []=               9             'Z'
-           _c1           +             '+'               0
-           _c3           +             'a'               0
-            t3           +             _c1               2
-           #15           -               0             _c3
-            t4           +             #15              77
-           #16           -               0               1
-           #17           +             #16             '-'
-            t5           +             #17               1
-            %4          ==              t3              t5
-           str       print              ~5               0
-            %4       label               0               0
-            %5          !=              t3              t4
-           str       print              ~6               0
-            %5       label               0               0
-            %6           >              t3              t4
-           str       print              ~7               0
-            %6       label               0               0
-            %7          >=              t3              t5
-           str       print              ~8               0
-            %7       label               0               0
-            %8           <              t4              t5
-           str       print              ~9               0
-            %8       label               0               0
-            %9          <=              t5              t3
-           str       print             ~10               0
-            %9       label               0               0
-            t6           +           00012               0
-            t7           +            0023               0
-            t8           -               0            0023
-           #18           +              t8              t6
-           #19           +             #18              t7
-           %10          ==             #19              12
-           str       print             ~11               0
-           %10       label               0               0
-           %11          <=               3               5
-           str       print             ~12               0
-           %11       label               0               0
-            t9           +               9               0
-            c3           +             '3'               0
-            c4           +             '4'               0
-           #20           -              c4              c3
-           #21           +             #20              t9
-           %12          ==             #21              10
-           str       print             ~13               0
-           %12       label               0               0
-            %3       label               0               0
-           %13          !=            in_1               2
-      t_array1         []=               0            2333
-      c_array1         []=               0             '/'
-           #22           -               0             007
-           t10           +             #22             009
-            c5           +             '+'               0
-            c6           +              c5               0
-            c7         =[]        c_array1               0
-           t11           -               0             007
-           t12           +             t11               0
-           t13         =[]        t_array1               0
-           ff2        call               0               0
-           t14           +          RET_v0               0
-           ff1        push             'y'               0
-           ff1        call               0               0
-            c8           +          RET_v0               0
-           #23           +             t10              c5
-           #24           +             #23              c6
-           #25           +             #24              c7
-           #26           +             #25             t11
-           #27           +             #26             t12
-           #28           +             #27             t13
-           #29           +             #28             t14
-           t14           +             #29              c8
-           #30           *             t11            -007
-           #31           *             #30             t13
-           #32           /             #31              c8
-           #33           /             #32             t10
-           #34           *             #33             t12
-           int       print             #34               0
-           str       print             ~14               0
-           #35           +               4             t14
-           int       print             #35               0
-           str       print             ~14               0
-           #36           /               3              -2
-           #37           -               0             #36
-           int       print             #37               0
-           #38           /               4               5
-           %14          ==             #38               0
-           str       print             ~15               0
-           %15        goto               0               0
-           %14       label               0               0
-           t15           +               1               0
-           %15       label               0               0
-           %16          >=               3               4
-           %17          >=               4               4
-           str       print             ~16               0
-           %18        goto               0               0
-           %17       label               0               0
-           %19           <               4               4
-           %20          <=             t15               0
-           %21           >             t15               0
-           str       print             ~17               0
-           %22        goto               0               0
-           %21       label               0               0
-           str       print             ~18               0
-           %22       label               0               0
-           %20       label               0               0
-           %19       label               0               0
-           %18       label               0               0
-           %23        goto               0               0
-           %16       label               0               0
-           str       print             ~19               0
-           %23       label               0               0
-           t16           +               1               0
-           t18           +               0               0
-           %24       label               0               0
-           %25           >             t16               4
-           t17           +               1               0
-           %26       label               0               0
-           %27          >=             t17             t16
-           t18           +             t18             t17
-           t17           +             t17               1
-           %26        goto               0               0
-           %27       label               0               0
-           t16           +             t16               1
-           %24        goto               0               0
-           %25       label               0               0
-           t19           +               0               0
-           t20           +               2               0
-           %28       label               0               0
-           t22           +               1               0
-           t21           +               2               0
-           %29       label               0               0
-           t22           *             t22             t21
-           t21           +             t21               2
-           %29           <             t21             t20
-           t19           +             t19             t22
-           t20           +             t20               1
-           %28          <=             t20               5
-           t20           +             100               0
-           %30       label               0               0
-           t22           +               1               0
-           t21           +             100               0
-           %31       label               0               0
-           t22           *             t22             t21
-           t21           -             t21               2
-           %31           >             t21             t20
-           t19           +             t19             t22
-           t20           -             t20               1
-           %30          >=             t20              97
-           #39           -               0             000
-           %32          <=               1             #39
-           str       print             ~18               0
-           %32       label               0               0
-           %33       label               0               0
-           %34          ==               1               0
-           t23           +               0               0
-           %35       label               0               0
-           t23           +             t23               2
-           %36          <=             t23              60
-           str       print             ~14               0
-           #40           +             t18             t19
-           #41           +             #40             t23
-           int       print             #41               0
-             0        exit               0               0
-           %36       label               0               0
-           t23           +             t23               1
-           %35           <             t23             100
-           %33        goto               0               0
-           %34       label               0               0
-           str       print             ~20               0
-           %13       label               0               0
-           %37          !=            in_1               3
-     factorial        push               1               0
-     factorial        call               0               0
-           #42           +          RET_v0               0
-     factorial        push               2               0
-     factorial        call               0               0
-           #43           +          RET_v0               0
-           #44           +             #42             #43
-     factorial        push               5               0
-     factorial        call               0               0
-           #45           +          RET_v0               0
-           #46           +             #44             #45
-           int       print             #46               0
-           _c1           +             'a'               0
-           ff1        push             '+'               0
-           ff1        call               0               0
-          char       print             _c1               0
-           _c2           +             'b'               0
-           ff2        call               0               0
-          char       print             _c2               0
-           ff3        push               1               0
-           ff3        push               2               1
-           ff3        push             'a'               2
-           ff3        push               3               3
-           ff3        push             'b'               4
-           ff3        push             'c'               5
-           ff3        call               0               0
-           ff4        call               0               0
-           _c1           +             '*'               0
-           ff5        call               0               0
-           _c4           +            6666               0
-           _t1           +             '8'               0
-           #47           +             _c4             _t1
-           int       print             #47               0
-      c_array2         []=              50             'h'
-           #48         =[]        c_array2              50
-          char       print             #48               0
-           ff1        push             'g'               0
-           ff1        call               0               0
-           #49           +          RET_v0               0
-          char       print             #49               0
-           int       print             'r'               0
-             i           +               0               0
-           %38       label               0               0
-      t_array2         []=               i               i
-             i           +               i               1
-           %38           <               i             100
-           #50           /              34               4
-           #51           *             #50               6
-           #52           /             122              10
-           #53           +             #51             #52
-           #54         =[]        t_array2             #53
-           #55           /             #54              23
-           #56           *              22               i
-           #57           /             #56              23
-           #58         =[]        t_array2               1
-           #59           *             #58            1000
-           #60           *             #57             #59
-           #61           /             #60            1000
-           #62           /             '9'              17
-           #63           +             #61             #62
-           #64         =[]        t_array2             #63
-           #65           /             #64              30
-           #66           +             #55             #65
-             i         =[]        t_array2             #66
-           #67           /              34               4
-           #68           *             #67               6
-           #69           /             122              10
-           #70           +             #68             #69
-           #71         =[]        t_array2             #70
-           #72           /             #71              23
-           #73           *              22               i
-           #74           /             #73              23
-           #75         =[]        t_array2               1
-           #76           *             #75            1000
-           #77           *             #74             #76
-           #78           /             #77            1000
-           #79           /             '9'              17
-           #80           +             #78             #79
-           #81         =[]        t_array2             #80
-           #82           /             #81              30
-           #83           +             #72             #82
-           #84         =[]        t_array2             #83
-     factorial        push             #84               0
-     factorial        call               0               0
-           #85           +          RET_v0               0
-           int       print             #85               0
-           %37       label               0               0
-             0        exit               0               0
+           ff1  func_begin               0               0   0
+           _c1           +              98               0   0
+        RET_v0           +               c               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+           ff2  func_begin               0               0   0
+           _c2           +             '-'               0   0
+            #1           +               1               2   0
+        RET_v0           +              #1               3   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+           ff3  func_begin               0               0   0
+            #2           +               a               b   0
+            #3           +              #2               c   0
+            #4           +              #3               d   0
+            #5           +              #4               e   0
+            #6           +              #5               f   0
+           int       print              #6               0   0
+             0         ret               0               0   0
+             0    func_end               0               0   0
+           ff4  func_begin               0               0   0
+           str       print              ~1               0   0
+             0    func_end               0               0   0
+     factorial  func_begin               0               0   0
+            %1          !=               a               1   0
+        RET_v0           +               1               0   0
+             0         ret               0               0   0
+            %2        goto               0               0   0
+            %1       label               0               0   0
+            #7           -               a               1   0
+     factorial        push              #7               0   0
+     factorial        call               0               0   0
+            #8           +          RET_v0               0   0
+             b           *              #8               a   0
+        RET_v0           +               b               0   0
+             0         ret               0               0   0
+            %2       label               0               0   0
+             0    func_end               0               0   0
+           ff5  func_begin               0               0   0
+           _t1           +               4               0   0
+            #9           +             _t1             122   0
+           #10           +              #9             _c1   0
+           int       print             #10               0   0
+             0    func_end               0               0   0
+          main  func_begin               0               0   0
+           int       scanf            in_1               0   0
+            %3          !=            in_1               1   0
+           int       scanf              t1               0   0
+          char       scanf              c2               0   0
+          char       scanf              c1               0   0
+           int       scanf              t2               0   0
+           #11           *              t1              c2   0
+           #12           +              c2             #11   0
+           #13           /              t1              c1   0
+           #14           -             #12             #13   0
+           int       print             #14               0   0
+           str       print              ~2               0   0
+           str       print              ~3               0   0
+           str       print              ~4               0   0
+          char       print              c2               0   0
+  single_chars         []=               0             '+'   0
+  single_chars         []=               1             '-'   0
+  single_chars         []=               2             '*'   0
+  single_chars         []=               3             '/'   0
+  single_chars         []=               4             '0'   0
+  single_chars         []=               5             '9'   0
+  single_chars         []=               6             'a'   0
+  single_chars         []=               7             'z'   0
+  single_chars         []=               8             'A'   0
+  single_chars         []=               9             'Z'   0
+           _c1           +             '+'               0   0
+           _c3           +             'a'               0   0
+            t3           +             _c1               2   0
+           #15           -               0             _c3   0
+            t4           +             #15              77   0
+           #16           -               0               1   0
+           #17           +             #16             '-'   0
+            t5           +             #17               1   0
+            %4          ==              t3              t5   0
+           str       print              ~5               0   0
+            %4       label               0               0   0
+            %5          !=              t3              t4   0
+           str       print              ~6               0   0
+            %5       label               0               0   0
+            %6           >              t3              t4   0
+           str       print              ~7               0   0
+            %6       label               0               0   0
+            %7          >=              t3              t5   0
+           str       print              ~8               0   0
+            %7       label               0               0   0
+            %8           <              t4              t5   0
+           str       print              ~9               0   0
+            %8       label               0               0   0
+            %9          <=              t5              t3   0
+           str       print             ~10               0   0
+            %9       label               0               0   0
+            t6           +           00012               0   0
+            t7           +            0023               0   0
+            t8           -               0            0023   0
+           #18           +              t8              t6   0
+           #19           +             #18              t7   0
+           %10          ==             #19              12   0
+           str       print             ~11               0   0
+           %10       label               0               0   0
+           %11          <=               3               5   0
+           str       print             ~12               0   0
+           %11       label               0               0   0
+            t9           +               9               0   0
+            c3           +             '3'               0   0
+            c4           +             '4'               0   0
+           #20           -              c4              c3   0
+           #21           +             #20              t9   0
+           %12          ==             #21              10   0
+           str       print             ~13               0   0
+           %12       label               0               0   0
+            %3       label               0               0   0
+           %13          !=            in_1               2   0
+      t_array1         []=               0            2333   0
+      c_array1         []=               0             '/'   0
+           #22           -               0             007   0
+           t10           +             #22             009   0
+            c5           +             '+'               0   0
+            c6           +              c5               0   0
+            c7         =[]        c_array1               0   0
+           t11           -               0             007   0
+           t12           +             t11               0   0
+           t13         =[]        t_array1               0   0
+           ff2        call               0               0   0
+           t14           +          RET_v0               0   0
+           ff1        push             'y'               0   0
+           ff1        call               0               0   0
+            c8           +          RET_v0               0   0
+           #23           +             t10              c5   0
+           #24           +             #23              c6   0
+           #25           +             #24              c7   0
+           #26           +             #25             t11   0
+           #27           +             #26             t12   0
+           #28           +             #27             t13   0
+           #29           +             #28             t14   0
+           t14           +             #29              c8   0
+           #30           *             t11            -007   0
+           #31           *             #30             t13   0
+           #32           /             #31              c8   0
+           #33           /             #32             t10   0
+           #34           *             #33             t12   0
+           int       print             #34               0   0
+           str       print             ~14               0   0
+           #35           +               4             t14   0
+           int       print             #35               0   0
+           str       print             ~14               0   0
+           #36           /               3              -2   0
+           #37           -               0             #36   0
+           int       print             #37               0   0
+           #38           /               4               5   0
+           %14          ==             #38               0   0
+           str       print             ~15               0   0
+           %15        goto               0               0   0
+           %14       label               0               0   0
+           t15           +               1               0   0
+           %15       label               0               0   0
+           %16          >=               3               4   0
+           %17          >=               4               4   0
+           str       print             ~16               0   0
+           %18        goto               0               0   0
+           %17       label               0               0   0
+           %19           <               4               4   0
+           %20          <=             t15               0   0
+           %21           >             t15               0   0
+           str       print             ~17               0   0
+           %22        goto               0               0   0
+           %21       label               0               0   0
+           str       print             ~18               0   0
+           %22       label               0               0   0
+           %20       label               0               0   0
+           %19       label               0               0   0
+           %18       label               0               0   0
+           %23        goto               0               0   0
+           %16       label               0               0   0
+           str       print             ~19               0   0
+           %23       label               0               0   0
+           t16           +               1               0   0
+           t18           +               0               0   0
+           %24       label               0               0   0
+           %25           >             t16               4   0
+           t17           +               1               0   0
+           %26       label               0               0   0
+           %27          >=             t17             t16   0
+           t18           +             t18             t17   0
+           t17           +             t17               1   0
+           %26        goto               0               0   0
+           %27       label               0               0   0
+           t16           +             t16               1   0
+           %24        goto               0               0   0
+           %25       label               0               0   0
+           t19           +               0               0   0
+           t20           +               2               0   0
+           %28       label               0               0   0
+           t22           +               1               0   0
+           t21           +               2               0   0
+           %29       label               0               0   0
+           t22           *             t22             t21   0
+           t21           +             t21               2   0
+           %29           <             t21             t20   0
+           t19           +             t19             t22   0
+           t20           +             t20               1   0
+           %28          <=             t20               5   0
+           t20           +             100               0   0
+           %30       label               0               0   0
+           t22           +               1               0   0
+           t21           +             100               0   0
+           %31       label               0               0   0
+           t22           *             t22             t21   0
+           t21           -             t21               2   0
+           %31           >             t21             t20   0
+           t19           +             t19             t22   0
+           t20           -             t20               1   0
+           %30          >=             t20              97   0
+           #39           -               0             000   0
+           %32          <=               1             #39   0
+           str       print             ~18               0   0
+           %32       label               0               0   0
+           %33       label               0               0   0
+           %34          ==               1               0   0
+           t23           +               0               0   0
+           %35       label               0               0   0
+           t23           +             t23               2   0
+           %36          <=             t23              60   0
+           str       print             ~14               0   0
+           #40           +             t18             t19   0
+           #41           +             #40             t23   0
+           int       print             #41               0   0
+             0        exit               0               0   0
+           %36       label               0               0   0
+           t23           +             t23               1   0
+           %35           <             t23             100   0
+           %33        goto               0               0   0
+           %34       label               0               0   0
+           str       print             ~20               0   0
+           %13       label               0               0   0
+           %37          !=            in_1               3   0
+     factorial        push               1               0   0
+     factorial        call               0               0   0
+           #42           +          RET_v0               0   0
+     factorial        push               2               0   0
+     factorial        call               0               0   0
+           #43           +          RET_v0               0   0
+           #44           +             #42             #43   0
+     factorial        push               5               0   0
+     factorial        call               0               0   0
+           #45           +          RET_v0               0   0
+           #46           +             #44             #45   0
+           int       print             #46               0   0
+           _c1           +             'a'               0   0
+           ff1        push             '+'               0   0
+           ff1        call               0               0   0
+          char       print             _c1               0   0
+           _c2           +             'b'               0   0
+           ff2        call               0               0   0
+          char       print             _c2               0   0
+           ff3        push               1               0   0
+           ff3        push               2               1   0
+           ff3        push             'a'               2   0
+           ff3        push               3               3   0
+           ff3        push             'b'               4   0
+           ff3        push             'c'               5   0
+           ff3        call               0               0   0
+           ff4        call               0               0   0
+           _c1           +             '*'               0   0
+           ff5        call               0               0   0
+           _c4           +            6666               0   0
+           _t1           +             '8'               0   0
+           #47           +             _c4             _t1   0
+           int       print             #47               0   0
+      c_array2         []=              50             'h'   0
+           #48         =[]        c_array2              50   0
+          char       print             #48               0   0
+           ff1        push             'g'               0   0
+           ff1        call               0               0   0
+           #49           +          RET_v0               0   0
+          char       print             #49               0   0
+           int       print             'r'               0   0
+             i           +               0               0   0
+           %38       label               0               0   0
+      t_array2         []=               i               i   0
+             i           +               i               1   0
+           %38           <               i             100   0
+           #50           /              34               4   0
+           #51           *             #50               6   0
+           #52           /             122              10   0
+           #53           +             #51             #52   0
+           #54         =[]        t_array2             #53   0
+           #55           /             #54              23   0
+           #56           *              22               i   0
+           #57           /             #56              23   0
+           #58         =[]        t_array2               1   0
+           #59           *             #58            1000   0
+           #60           *             #57             #59   0
+           #61           /             #60            1000   0
+           #62           /             '9'              17   0
+           #63           +             #61             #62   0
+           #64         =[]        t_array2             #63   0
+           #65           /             #64              30   0
+           #66           +             #55             #65   0
+             i         =[]        t_array2             #66   0
+           #67           /              34               4   0
+           #68           *             #67               6   0
+           #69           /             122              10   0
+           #70           +             #68             #69   0
+           #71         =[]        t_array2             #70   0
+           #72           /             #71              23   0
+           #73           *              22               i   0
+           #74           /             #73              23   0
+           #75         =[]        t_array2               1   0
+           #76           *             #75            1000   0
+           #77           *             #74             #76   0
+           #78           /             #77            1000   0
+           #79           /             '9'              17   0
+           #80           +             #78             #79   0
+           #81         =[]        t_array2             #80   0
+           #82           /             #81              30   0
+           #83           +             #72             #82   0
+           #84         =[]        t_array2             #83   0
+     factorial        push             #84               0   0
+     factorial        call               0               0   0
+           #85           +          RET_v0               0   0
+           int       print             #85               0   0
+           %37       label               0               0   0
+             0        exit               0               0   0
 
 string_14 : .asciiz " \n"
 string_18 : .asciiz " ojbk\n"
@@ -349,10 +349,10 @@ string_12 : .asciiz "error8\n"
 string_13 : .asciiz "error9\n"
 global:
           name|class|  type|  len|  def|       addr
-           _c1| char|   var|    0|    2|   10010000|
-           _c2| char|   var|    0|    2|   10010001|
-           _c3| char|   var|    0|    2|   10010002|
-           _c4| char|   var|    0|    2|   10010003|
+           _c1| char|   var|    0|    2|   ffffffff|
+           _c2| char|   var|    0|    2|   ffffffff|
+           _c3| char|   var|    0|    2|   ffffffff|
+           _c4| char|   var|    0|    2|   ffffffff|
            _t1|  int| const|    1|    1|   ffffffff|
            _t2|  int| const|    2|    1|   ffffffff|
            _t3|  int| const|    3|    1|   ffffffff|
@@ -365,156 +365,156 @@ global:
           main| void|  func|    0|   45|   ffffffff|
 
 factorial:
-          name|class|  type|  len|  def|       addr
-            #7|  int|   var|    0|   31|          c|
-            #8|  int|   var|    0|   31|         10|
-             a|  int|  para|    0|   25|          0|
-             b|  int|   var|    0|   26|         14|
+          name|class|  type|  len|  def|       addr|reg
+            #7|  int|   var|    0|   31|   ffffffff| -1
+            #8|  int|   var|    0|   31|   ffffffff| -1
+             a|  int|  para|    0|   25|   ffffffff| -1
+             b|  int|   var|    0|   26|   ffffffff| -1
 ff1:
-          name|class|  type|  len|  def|       addr
-             c| char|  para|    0|    4|          0|
-        temp_c| char| const|   98|    5|   ffffffff|
+          name|class|  type|  len|  def|       addr|reg
+             c| char|  para|    0|    4|   ffffffff| -1
+        temp_c| char| const|   98|    5|   ffffffff| -1
 ff2:
-          name|class|  type|  len|  def|       addr
-            #1|  int|   var|    0|   12|          8|
+          name|class|  type|  len|  def|       addr|reg
+            #1|  int|   var|    0|   12|   ffffffff| -1
 ff3:
-          name|class|  type|  len|  def|       addr
-            #2|  int|   var|    0|   16|         20|
-            #3|  int|   var|    0|   16|         24|
-            #4|  int|   var|    0|   16|         28|
-            #5|  int|   var|    0|   16|         2c|
-            #6|  int|   var|    0|   16|         30|
-             a|  int|  para|    0|   15|          0|
-             b|  int|  para|    1|   15|          4|
-             c| char|  para|    2|   15|          8|
-             d|  int|  para|    3|   15|          c|
-             e| char|  para|    4|   15|         10|
-             f| char|  para|    5|   15|         14|
+          name|class|  type|  len|  def|       addr|reg
+            #2|  int|   var|    0|   16|   ffffffff| -1
+            #3|  int|   var|    0|   16|   ffffffff| -1
+            #4|  int|   var|    0|   16|   ffffffff| -1
+            #5|  int|   var|    0|   16|   ffffffff| -1
+            #6|  int|   var|    0|   16|   ffffffff| -1
+             a|  int|  para|    0|   15|   ffffffff| -1
+             b|  int|  para|    1|   15|   ffffffff| -1
+             c| char|  para|    2|   15|   ffffffff| -1
+             d|  int|  para|    3|   15|   ffffffff| -1
+             e| char|  para|    4|   15|   ffffffff| -1
+             f| char|  para|    5|   15|   ffffffff| -1
 ff4:
-          name|class|  type|  len|  def|       addr
+          name|class|  type|  len|  def|       addr|reg
 ff5:
-          name|class|  type|  len|  def|       addr
-           #10|  int|   var|    0|   42|          8|
-            #9|  int|   var|    0|   42|          c|
-           _c2| char| const|  122|   37|   ffffffff|
-           _t1|  int|   var|    0|   39|         10|
+          name|class|  type|  len|  def|       addr|reg
+           #10|  int|   var|    0|   42|   ffffffff| -1
+            #9|  int|   var|    0|   42|   ffffffff| -1
+           _c2| char| const|  122|   37|   ffffffff| -1
+           _t1|  int|   var|    0|   39|   ffffffff| -1
 
 main:
-          name|class|  type|  len|  def|       addr
-           #11|  int|   var|    0|   69|         e4|
-           #12|  int|   var|    0|   69|         e8|
-           #13|  int|   var|    0|   69|         ec|
-           #14|  int|   var|    0|   69|         f0|
-           #15|  int|   var|    0|   89|         f4|
-           #16|  int|   var|    0|   90|         f8|
-           #17|  int|   var|    0|   90|         fc|
-           #18|  int|   var|    0|  107|        100|
-           #19|  int|   var|    0|  107|        104|
-           #20|  int|   var|    0|  115|        108|
-           #21|  int|   var|    0|  115|        10c|
-           #22|  int|   var|    0|  125|        110|
-           #23|  int|   var|    0|  138|        114|
-           #24|  int|   var|    0|  138|        118|
-           #25|  int|   var|    0|  138|        11c|
-           #26|  int|   var|    0|  138|        120|
-           #27|  int|   var|    0|  138|        124|
-           #28|  int|   var|    0|  138|        128|
-           #29|  int|   var|    0|  138|        12c|
-           #30|  int|   var|    0|  140|        130|
-           #31|  int|   var|    0|  140|        134|
-           #32|  int|   var|    0|  140|        138|
-           #33|  int|   var|    0|  140|        13c|
-           #34|  int|   var|    0|  140|        140|
-           #35|  int|   var|    0|  142|        144|
-           #36|  int|   var|    0|  143|        148|
-           #37|  int|   var|    0|  143|        14c|
-           #38|  int|   var|    0|  145|        150|
-           #39|  int|   var|    0|  194|        154|
-           #40|  int|   var|    0|  207|        158|
-           #41|  int|   var|    0|  207|        15c|
-           #42|  int|   var|    0|  217|        160|
-           #43|  int|   var|    0|  217|        164|
-           #44|  int|   var|    0|  217|        168|
-           #45|  int|   var|    0|  217|        16c|
-           #46|  int|   var|    0|  217|        170|
-           #47|  int|   var|    0|  236|        174|
-           #48| char|   var|    0|  239|          0|
-           #49| char|   var|    0|  240|          1|
-           #50|  int|   var|    0|  245|        178|
-           #51|  int|   var|    0|  245|        17c|
-           #52|  int|   var|    0|  245|        180|
-           #53|  int|   var|    0|  245|        184|
-           #54|  int|   var|    0|  245|        188|
-           #55|  int|   var|    0|  245|        18c|
-           #56|  int|   var|    0|  245|        190|
-           #57|  int|   var|    0|  245|        194|
-           #58|  int|   var|    0|  245|        198|
-           #59|  int|   var|    0|  245|        19c|
-           #60|  int|   var|    0|  245|        1a0|
-           #61|  int|   var|    0|  245|        1a4|
-           #62|  int|   var|    0|  245|        1a8|
-           #63|  int|   var|    0|  245|        1ac|
-           #64|  int|   var|    0|  245|        1b0|
-           #65|  int|   var|    0|  245|        1b4|
-           #66|  int|   var|    0|  245|        1b8|
-           #67|  int|   var|    0|  247|        1bc|
-           #68|  int|   var|    0|  247|        1c0|
-           #69|  int|   var|    0|  247|        1c4|
-           #70|  int|   var|    0|  247|        1c8|
-           #71|  int|   var|    0|  247|        1cc|
-           #72|  int|   var|    0|  247|        1d0|
-           #73|  int|   var|    0|  247|        1d4|
-           #74|  int|   var|    0|  247|        1d8|
-           #75|  int|   var|    0|  247|        1dc|
-           #76|  int|   var|    0|  247|        1e0|
-           #77|  int|   var|    0|  247|        1e4|
-           #78|  int|   var|    0|  247|        1e8|
-           #79|  int|   var|    0|  247|        1ec|
-           #80|  int|   var|    0|  247|        1f0|
-           #81|  int|   var|    0|  247|        1f4|
-           #82|  int|   var|    0|  247|        1f8|
-           #83|  int|   var|    0|  247|        1fc|
-           #84|  int|   var|    0|  247|        200|
-           #85|  int|   var|    0|  247|        204|
-           _c4|  int|   var|    0|   59|        208|
-           _t1| char|   var|    0|   60|          2|
-            c1| char|   var|    0|   50|          3|
-            c2| char|   var|    0|   50|          4|
-            c3| char|   var|    0|   54|          5|
-            c4| char|   var|    0|   54|          6|
-            c5| char|   var|    0|   56|          7|
-            c6| char|   var|    0|   56|          8|
-            c7| char|   var|    0|   56|          9|
-            c8| char|   var|    0|   56|          a|
-      c_array1| char| array|  100|   58|          b|
-      c_array2| char| array|  100|   62|         6f|
-        char_z| char| const|  122|   47|   ffffffff|
-             i|  int|   var|    0|   59|        20c|
-          in_1|  int|   var|    0|   48|        210|
-       int_100|  int| const|  100|   46|   ffffffff|
-  single_chars| char| array|   10|   50|         d3|
-            t1|  int|   var|    0|   49|        214|
-           t10|  int|   var|    0|   55|        218|
-           t11|  int|   var|    0|   55|        21c|
-           t12|  int|   var|    0|   55|        220|
-           t13|  int|   var|    0|   55|        224|
-           t14|  int|   var|    0|   55|        228|
-           t15|  int|   var|    0|   55|        22c|
-           t16|  int|   var|    0|   55|        230|
-           t17|  int|   var|    0|   55|        234|
-           t18|  int|   var|    0|   55|        238|
-           t19|  int|   var|    0|   55|        23c|
-            t2|  int|   var|    0|   49|        240|
-           t20|  int|   var|    0|   55|        244|
-           t21|  int|   var|    0|   55|        248|
-           t22|  int|   var|    0|   55|        24c|
-           t23|  int|   var|    0|   55|        250|
-            t3|  int|   var|    0|   51|        254|
-            t4|  int|   var|    0|   51|        258|
-            t5|  int|   var|    0|   51|        25c|
-            t6|  int|   var|    0|   52|        260|
-            t7|  int|   var|    0|   52|        264|
-            t8|  int|   var|    0|   52|        268|
-            t9|  int|   var|    0|   53|        26c|
-      t_array1|  int| array|  100|   57|        270|
-      t_array2|  int| array|  100|   61|        400|
+          name|class|  type|  len|  def|       addr|reg
+           #11|  int|   var|    0|   69|   ffffffff| -1
+           #12|  int|   var|    0|   69|   ffffffff| -1
+           #13|  int|   var|    0|   69|   ffffffff| -1
+           #14|  int|   var|    0|   69|   ffffffff| -1
+           #15|  int|   var|    0|   89|   ffffffff| -1
+           #16|  int|   var|    0|   90|   ffffffff| -1
+           #17|  int|   var|    0|   90|   ffffffff| -1
+           #18|  int|   var|    0|  107|   ffffffff| -1
+           #19|  int|   var|    0|  107|   ffffffff| -1
+           #20|  int|   var|    0|  115|   ffffffff| -1
+           #21|  int|   var|    0|  115|   ffffffff| -1
+           #22|  int|   var|    0|  125|   ffffffff| -1
+           #23|  int|   var|    0|  138|   ffffffff| -1
+           #24|  int|   var|    0|  138|   ffffffff| -1
+           #25|  int|   var|    0|  138|   ffffffff| -1
+           #26|  int|   var|    0|  138|   ffffffff| -1
+           #27|  int|   var|    0|  138|   ffffffff| -1
+           #28|  int|   var|    0|  138|   ffffffff| -1
+           #29|  int|   var|    0|  138|   ffffffff| -1
+           #30|  int|   var|    0|  140|   ffffffff| -1
+           #31|  int|   var|    0|  140|   ffffffff| -1
+           #32|  int|   var|    0|  140|   ffffffff| -1
+           #33|  int|   var|    0|  140|   ffffffff| -1
+           #34|  int|   var|    0|  140|   ffffffff| -1
+           #35|  int|   var|    0|  142|   ffffffff| -1
+           #36|  int|   var|    0|  143|   ffffffff| -1
+           #37|  int|   var|    0|  143|   ffffffff| -1
+           #38|  int|   var|    0|  145|   ffffffff| -1
+           #39|  int|   var|    0|  194|   ffffffff| -1
+           #40|  int|   var|    0|  207|   ffffffff| -1
+           #41|  int|   var|    0|  207|   ffffffff| -1
+           #42|  int|   var|    0|  217|   ffffffff| -1
+           #43|  int|   var|    0|  217|   ffffffff| -1
+           #44|  int|   var|    0|  217|   ffffffff| -1
+           #45|  int|   var|    0|  217|   ffffffff| -1
+           #46|  int|   var|    0|  217|   ffffffff| -1
+           #47|  int|   var|    0|  236|   ffffffff| -1
+           #48| char|   var|    0|  239|   ffffffff| -1
+           #49| char|   var|    0|  240|   ffffffff| -1
+           #50|  int|   var|    0|  245|   ffffffff| -1
+           #51|  int|   var|    0|  245|   ffffffff| -1
+           #52|  int|   var|    0|  245|   ffffffff| -1
+           #53|  int|   var|    0|  245|   ffffffff| -1
+           #54|  int|   var|    0|  245|   ffffffff| -1
+           #55|  int|   var|    0|  245|   ffffffff| -1
+           #56|  int|   var|    0|  245|   ffffffff| -1
+           #57|  int|   var|    0|  245|   ffffffff| -1
+           #58|  int|   var|    0|  245|   ffffffff| -1
+           #59|  int|   var|    0|  245|   ffffffff| -1
+           #60|  int|   var|    0|  245|   ffffffff| -1
+           #61|  int|   var|    0|  245|   ffffffff| -1
+           #62|  int|   var|    0|  245|   ffffffff| -1
+           #63|  int|   var|    0|  245|   ffffffff| -1
+           #64|  int|   var|    0|  245|   ffffffff| -1
+           #65|  int|   var|    0|  245|   ffffffff| -1
+           #66|  int|   var|    0|  245|   ffffffff| -1
+           #67|  int|   var|    0|  247|   ffffffff| -1
+           #68|  int|   var|    0|  247|   ffffffff| -1
+           #69|  int|   var|    0|  247|   ffffffff| -1
+           #70|  int|   var|    0|  247|   ffffffff| -1
+           #71|  int|   var|    0|  247|   ffffffff| -1
+           #72|  int|   var|    0|  247|   ffffffff| -1
+           #73|  int|   var|    0|  247|   ffffffff| -1
+           #74|  int|   var|    0|  247|   ffffffff| -1
+           #75|  int|   var|    0|  247|   ffffffff| -1
+           #76|  int|   var|    0|  247|   ffffffff| -1
+           #77|  int|   var|    0|  247|   ffffffff| -1
+           #78|  int|   var|    0|  247|   ffffffff| -1
+           #79|  int|   var|    0|  247|   ffffffff| -1
+           #80|  int|   var|    0|  247|   ffffffff| -1
+           #81|  int|   var|    0|  247|   ffffffff| -1
+           #82|  int|   var|    0|  247|   ffffffff| -1
+           #83|  int|   var|    0|  247|   ffffffff| -1
+           #84|  int|   var|    0|  247|   ffffffff| -1
+           #85|  int|   var|    0|  247|   ffffffff| -1
+           _c4|  int|   var|    0|   59|   ffffffff| -1
+           _t1| char|   var|    0|   60|   ffffffff| -1
+            c1| char|   var|    0|   50|   ffffffff| -1
+            c2| char|   var|    0|   50|   ffffffff| -1
+            c3| char|   var|    0|   54|   ffffffff| -1
+            c4| char|   var|    0|   54|   ffffffff| -1
+            c5| char|   var|    0|   56|   ffffffff| -1
+            c6| char|   var|    0|   56|   ffffffff| -1
+            c7| char|   var|    0|   56|   ffffffff| -1
+            c8| char|   var|    0|   56|   ffffffff| -1
+      c_array1| char| array|  100|   58|   ffffffff| -1
+      c_array2| char| array|  100|   62|   ffffffff| -1
+        char_z| char| const|  122|   47|   ffffffff| -1
+             i|  int|   var|    0|   59|   ffffffff| -1
+          in_1|  int|   var|    0|   48|   ffffffff| -1
+       int_100|  int| const|  100|   46|   ffffffff| -1
+  single_chars| char| array|   10|   50|   ffffffff| -1
+            t1|  int|   var|    0|   49|   ffffffff| -1
+           t10|  int|   var|    0|   55|   ffffffff| -1
+           t11|  int|   var|    0|   55|   ffffffff| -1
+           t12|  int|   var|    0|   55|   ffffffff| -1
+           t13|  int|   var|    0|   55|   ffffffff| -1
+           t14|  int|   var|    0|   55|   ffffffff| -1
+           t15|  int|   var|    0|   55|   ffffffff| -1
+           t16|  int|   var|    0|   55|   ffffffff| -1
+           t17|  int|   var|    0|   55|   ffffffff| -1
+           t18|  int|   var|    0|   55|   ffffffff| -1
+           t19|  int|   var|    0|   55|   ffffffff| -1
+            t2|  int|   var|    0|   49|   ffffffff| -1
+           t20|  int|   var|    0|   55|   ffffffff| -1
+           t21|  int|   var|    0|   55|   ffffffff| -1
+           t22|  int|   var|    0|   55|   ffffffff| -1
+           t23|  int|   var|    0|   55|   ffffffff| -1
+            t3|  int|   var|    0|   51|   ffffffff| -1
+            t4|  int|   var|    0|   51|   ffffffff| -1
+            t5|  int|   var|    0|   51|   ffffffff| -1
+            t6|  int|   var|    0|   52|   ffffffff| -1
+            t7|  int|   var|    0|   52|   ffffffff| -1
+            t8|  int|   var|    0|   52|   ffffffff| -1
+            t9|  int|   var|    0|   53|   ffffffff| -1
+      t_array1|  int| array|  100|   57|   ffffffff| -1
+      t_array2|  int| array|  100|   61|   ffffffff| -1

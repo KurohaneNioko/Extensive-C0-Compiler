@@ -1,3 +1,6 @@
-﻿  main.cpp
-c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\main.cpp(214): warning C4326: “main”的返回类型应为“int”而非“void”
+﻿  ObjectCode.cpp
+  Optimizer.cpp
+  main.cpp
+  正在生成代码...
+c:\users\秦子檸\programmingprojects\extensive-c0-compiler\extensive-c0-compiler\objectcode.cpp(518): warning C4715: “regSeek”: 不是所有的控件路径都返回值
   Extensive-C0-Compiler.vcxproj -> C:\Users\秦子檸\ProgrammingProjects\Extensive-C0-Compiler\Debug\Extensive-C0-Compiler.exe

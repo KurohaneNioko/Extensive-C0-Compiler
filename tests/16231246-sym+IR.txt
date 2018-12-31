@@ -144,16 +144,16 @@ first_captical| char| const|   65|    4|   ffffffff|
 
 fact:
           name|class|  type|  len|  def|       addr
-            #1|  int|   var|    0|   13|          8|
-            #2|  int|   var|    0|   13|          c|
+            #1|  int|   var|    0|   13|          c|
+            #2|  int|   var|    0|   13|         10|
              t|  int|  para|    0|    8|          0|
 fun2:
           name|class|  type|  len|  def|       addr
-           #10|  int|   var|    0|   24|         1c|
-            #6|  int|   var|    0|   24|         20|
-            #7|  int|   var|    0|   24|         24|
-            #8|  int|   var|    0|   24|         28|
-            #9|  int|   var|    0|   24|         2c|
+           #10|  int|   var|    0|   24|         20|
+            #6|  int|   var|    0|   24|         24|
+            #7|  int|   var|    0|   24|         28|
+            #8|  int|   var|    0|   24|         2c|
+            #9|  int|   var|    0|   24|         30|
              a|  int|  para|    0|   22|          0|
              b|  int|  para|    1|   22|          4|
              c|  int|  para|    2|   22|          8|
@@ -162,41 +162,41 @@ fun2:
              f|  int|  para|    5|   22|         14|
 rt15:
           name|class|  type|  len|  def|       addr
-            #3|  int|   var|    0|   19|          4|
-            #4|  int|   var|    0|   19|          8|
-            #5|  int|   var|    0|   19|          c|
+            #3|  int|   var|    0|   19|          8|
+            #4|  int|   var|    0|   19|          c|
+            #5|  int|   var|    0|   19|         10|
           zero|  int| const|    1|   18|   ffffffff|
 
 main:
           name|class|  type|  len|  def|       addr
-           #11|  int|   var|    0|   40|          8|
-           #12|  int|   var|    0|   41|          c|
-           #13|  int|   var|    0|   41|         10|
-           #14|  int|   var|    0|   41|         14|
-           #15|  int|   var|    0|   41|         18|
-           #16|  int|   var|    0|   41|         1c|
-           #17|  int|   var|    0|   41|         20|
+           #11|  int|   var|    0|   40|          c|
+           #12|  int|   var|    0|   41|         10|
+           #13|  int|   var|    0|   41|         14|
+           #14|  int|   var|    0|   41|         18|
+           #15|  int|   var|    0|   41|         1c|
+           #16|  int|   var|    0|   41|         20|
+           #17|  int|   var|    0|   41|         24|
            #18| char|   var|    0|   41|          0|
-           #19|  int|   var|    0|   42|         24|
-           #20|  int|   var|    0|   42|         28|
+           #19|  int|   var|    0|   42|         28|
+           #20|  int|   var|    0|   42|         2c|
            #21| char|   var|    0|   42|          1|
            #22| char|   var|    0|   44|          2|
-           #23|  int|   var|    0|   44|         2c|
-           #24|  int|   var|    0|   44|         30|
-           #25|  int|   var|    0|   44|         34|
-           #26|  int|   var|    0|   44|         38|
-           #27|  int|   var|    0|   44|         3c|
-           #28|  int|   var|    0|   44|         40|
-           #29|  int|   var|    0|   44|         44|
-           #30|  int|   var|    0|   44|         48|
-           #31|  int|   var|    0|   52|         4c|
-           #32|  int|   var|    0|   62|         50|
-             a|  int|   var|    0|   33|         54|
-            aa|  int|   var|    0|   33|         58|
+           #23|  int|   var|    0|   44|         30|
+           #24|  int|   var|    0|   44|         34|
+           #25|  int|   var|    0|   44|         38|
+           #26|  int|   var|    0|   44|         3c|
+           #27|  int|   var|    0|   44|         40|
+           #28|  int|   var|    0|   44|         44|
+           #29|  int|   var|    0|   44|         48|
+           #30|  int|   var|    0|   44|         4c|
+           #31|  int|   var|    0|   52|         50|
+           #32|  int|   var|    0|   62|         54|
+             a|  int|   var|    0|   33|         58|
+            aa|  int|   var|    0|   33|         5c|
             ar| char| array|    2|   31|          3|
              b|  int| const|    1|   30|   ffffffff|
              c|  int| const|    2|   30|   ffffffff|
              d|  int| const|    3|   30|   ffffffff|
              e|  int| const|    4|   30|   ffffffff|
-            m1|  int| array|    8|   32|         5c|
-             r|  int|   var|    0|   32|         7c|
+            m1|  int| array|    8|   32|         60|
+             r|  int|   var|    0|   32|         80|

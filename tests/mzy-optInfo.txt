@@ -1,3 +1,21 @@
+delete:
+            #9           +              12               0  23
+delete:
+           #11           +              12               0  23
+delete:
+           #13           +               5               0  30
+delete:
+             a           +             -99               0  43
+delete:
+           #18           +             -12               0  43
+delete:
+           #19           +             -33               0  43
+delete:
+           #20           +             -45               0  43
+delete:
+           #21           +              -1               0  43
+delete:
+           #22           +              99               0  43
 Basic block info:
 0
 1
@@ -47,23 +65,28 @@ Basic block info:
 45  prev: 44     next: 46 
 46  prev: 45     next: 47 
 47  prev: 46     next: 48 
-48  prev: 47     next: 49 53 
-49  prev: 48     next: 50 51 
-50  prev: 49     next: 52 
-51  prev: 49     next: 52 
-52  prev: 50 51     next: 59 
-53  prev: 48     next: 54 58 
-54  prev: 53     next: 55 56 
-55  prev: 54     next: 57 
-56  prev: 54     next: 57 
-57  prev: 55 56     next: 58 
-58  prev: 53 57     next: 59 
-59  prev: 52 58     next: 60 
-60  prev: 59     next: 61 62 
-61  prev: 60     next: 62 
-62  prev: 60 61     next: 63 
+48  prev: 47     next: 49 
+49  prev: 48     next: 50 55 
+50  prev: 49     next: 51 
+51  prev: 50     next: 52 53 
+52  prev: 51     next: 54 
+53  prev: 51     next: 54 
+54  prev: 52 53     next: 62 
+55  prev: 49     next: 56 61 
+56  prev: 55     next: 57 
+57  prev: 56     next: 58 59 
+58  prev: 57     next: 60 
+59  prev: 57     next: 60 
+60  prev: 58 59     next: 61 
+61  prev: 55 60     next: 62 
+62  prev: 54 61     next: 63 
 63  prev: 62     next: 64 
-64  prev: 63 
+64  prev: 63     next: 65 67 
+65  prev: 64     next: 66 
+66  prev: 65     next: 67 
+67  prev: 64 66     next: 68 
+68  prev: 67     next: 69 
+69  prev: 68 
 
            add  func_begin               0               0   0
             #1           +               a               b   0
@@ -191,14 +214,14 @@ test_bra_statement  func_begin               0               0  40
 test_chartypetrans        push             'r'               0  43
 test_chartypetrans        call               0               0  43
              i           +          RET_v0               0  44
-           add        push               x               0  44
-           add        push               y               1  44
-           add        push               z               2  44
+           add        push               3               0  44
+           add        push              -4               1  44
+           add        push            -144               2  44
            add        push               i               3  44
-           add        push               x               0  44
+           add        push               3               0  44
            add        push               0               1  44
            add        push               0               2  44
-           add        push               y               3  44
+           add        push              -4               3  44
            add        push               0               4  44
            add        push               0               5  44
            add        call               0               0  44
@@ -212,42 +235,379 @@ test_bra_statement        call               0               0  46
            int       scanf               n               0  47
 test_arrayindex        call               0               0  47
 test_arrayassign        call               0               0  48
-           %12          <=               n               0  48
-      test_for        call               0               0  49
-           #24           +          RET_v0               0  49
-           #25           +               n               1  49
-           #26           *               n             #25  49
-           #27           /             #26               2  49
-           %13          !=             #24             #27  49
-           str       print              ~4               0  50
-           %14        goto               0               0  50
-           %13       label               0               0  51
-           str       print              ~5               0  51
-           %14       label               0               0  52
-           %15        goto               0               0  52
-           %12       label               0               0  53
-           %16          !=               n               0  53
-      test_for        call               0               0  54
-           #28           +          RET_v0               0  54
-           %17          !=             #28               1  54
-           str       print              ~4               0  55
-           %18        goto               0               0  55
-           %17       label               0               0  56
-           str       print              ~5               0  56
-           %18       label               0               0  57
-           %16       label               0               0  58
-           %15       label               0               0  59
-     call_fibo        call               0               0  59
-      call_abs        call               0               0  60
-             y           +             100               0  60
-           %19          !=             100             100  60
-          fool        call               0               0  61
-           #29           +          RET_v0               0  61
-          char       print             #29               0  61
-           %19       label               0               0  62
-test_strelement        call               0               0  62
-test_condition        push               n               0  63
-test_condition        call               0               0  63
-           #30           +          RET_v0               0  64
-           int       print             #30               0  64
-             0        exit               0               0  64
+           %12          <=               n               0  49
+      test_for        call               0               0  50
+           #24           +          RET_v0               0  51
+           #25           +               n               1  51
+           #26           *               n             #25  51
+           #27           /             #26               2  51
+           %13          !=             #24             #27  51
+           str       print              ~4               0  52
+           %14        goto               0               0  52
+           %13       label               0               0  53
+           str       print              ~5               0  53
+           %14       label               0               0  54
+           %15        goto               0               0  54
+           %12       label               0               0  55
+           %16          !=               n               0  55
+      test_for        call               0               0  56
+           #28           +          RET_v0               0  57
+           %17          !=             #28               1  57
+           str       print              ~4               0  58
+           %18        goto               0               0  58
+           %17       label               0               0  59
+           str       print              ~5               0  59
+           %18       label               0               0  60
+           %16       label               0               0  61
+           %15       label               0               0  62
+     call_fibo        call               0               0  62
+      call_abs        call               0               0  63
+             y           +             100               0  64
+           %19          !=             100             100  64
+          fool        call               0               0  65
+           #29           +          RET_v0               0  66
+          char       print             #29               0  66
+           %19       label               0               0  67
+test_strelement        call               0               0  67
+test_condition        push               n               0  68
+test_condition        call               0               0  68
+           #30           +          RET_v0               0  69
+           int       print             #30               0  69
+             0        exit               0               0  69
+Def-Use Web
+====== add ======
+#1
+0, 1
+(0, 2) --> 
+
+#2
+0, 2
+(0, 3) --> 
+
+#3
+0, 3
+(0, 4) --> 
+
+#4
+0, 4
+(0, 5) --> 
+
+a
+0, 0
+(0, 1) --> 
+
+b
+0, 0
+(0, 1) --> 
+
+c
+0, 0
+(0, 2) --> 
+
+d
+0, 0
+(0, 3) --> 
+
+e
+0, 0
+(0, 4) --> 
+
+f
+0, 0
+(0, 5) --> 
+
+====== call_abs ======
+====== call_fibo ======
+====== fibo ======
+#5
+16, 1
+(16, 2) --> 
+
+#6
+17, 0
+(18, 1) --> 
+
+#7
+17, 1
+(17, 2) --> 
+
+#8
+18, 0
+(18, 1) --> 
+
+n
+13, 0
+(13, 1) --> (16, 1) --> (17, 1) --> 
+
+
+====== fool ======
+====== getabs ======
+x
+4, 0
+(4, 1) --> (5, 0) --> (6, 1) --> 
+(9, 1) --> (10, 0) --> 
+
+====== main ======
+#23
+45, 0
+(45, 1) --> 
+
+#24
+51, 0
+(51, 4) --> 
+
+#25
+51, 1
+(51, 2) --> 
+
+#26
+51, 2
+(51, 3) --> 
+
+#27
+51, 3
+(51, 4) --> 
+
+#28
+57, 0
+(57, 1) --> 
+
+#29
+66, 0
+(66, 1) --> 
+
+#30
+69, 0
+(69, 1) --> 
+
+====== test_arrayassign ======
+#14
+33, 1
+(33, 2) --> 
+
+#15
+34, 0
+(34, 2) --> 
+
+#16
+34, 1
+(34, 2) --> 
+
+====== test_arrayindex ======
+====== test_bra_statement ======
+====== test_chartypetrans ======
+ch
+21, 0
+(21, 1) --> 
+
+====== test_condition ======
+#10
+23, 1
+(23, 2) --> 
+
+#12
+23, 2
+(23, 3) --> 
+
+x
+23, 0
+(23, 1) --> 
+
+====== test_for ======
+#17
+37, 1
+(37, 2) --> 
+
+====== test_strelement ======
+
+
+Crash Graph
+add ======
+#1:
+    #2  a  b  c  
+#2:
+    #1  #3  c  d  
+#3:
+    #2  #4  d  e  
+#4:
+    #3  e  f  
+a:
+    #1  b  
+b:
+    #1  a  
+c:
+    #1  #2  
+d:
+    #2  #3  
+e:
+    #3  #4  
+f:
+    #4  
+
+call_abs ======
+
+call_fibo ======
+
+fibo ======
+#5:
+    n  
+#6:
+    #8  
+#7:
+    n  
+#8:
+    #6  
+n:
+    #5  #7  
+
+fool ======
+
+getabs ======
+x:
+    
+
+main ======
+#23:
+    
+#24:
+    #27  
+#25:
+    #26  
+#26:
+    #25  #27  
+#27:
+    #24  #26  
+#28:
+    
+#29:
+    
+#30:
+    
+
+test_arrayassign ======
+#14:
+    
+#15:
+    #16  
+#16:
+    #15  
+
+test_arrayindex ======
+
+test_bra_statement ======
+
+test_chartypetrans ======
+ch:
+    
+
+test_condition ======
+#10:
+    #12  x  
+#12:
+    #10  
+x:
+    #10  
+
+test_for ======
+#17:
+    
+
+test_strelement ======
+
+string_3 : .asciiz "...abs is: \n"
+string_2 : .asciiz "...fibo result is :\n"
+string_5 : .asciiz "...for error\n"
+string_4 : .asciiz "...for loop work well\n"
+string_1 : .asciiz "\\n! ~}|{abcABC<=+-$%&*()/\n"
+global:
+          name|class|  type|  len|  def|       addr
+          _abc|  int|   var|    0|    3|   ffffffff|
+             a|  int| const|  100|    1|   ffffffff|
+           add|  int|  func|    6|    6|   ffffffff|
+            c1| char|   var|    0|    4|   ffffffff|
+            c2| char|   var|    0|    4|   ffffffff|
+      call_abs| void|  func|    0|   76|   ffffffff|
+     call_fibo| void|  func|    0|   41|   ffffffff|
+            ch| char| const|   77|    2|   ffffffff|
+          data|  int| array|   10|    3|   ffffffff|
+          fibo|  int|  func|    1|   21|   ffffffff|
+          fool| char|  func|    0|   11|   ffffffff|
+        getabs|  int|  func|    1|   15|   ffffffff|
+             i|  int|   var|    0|    3|   ffffffff|
+             m|  int|   var|    0|    3|   ffffffff|
+          main| void|  func|    0|   82|   ffffffff|
+           max|  int| const|   10|    1|   ffffffff|
+             n|  int|   var|    0|    3|   ffffffff|
+             t|  int|   var|    0|    3|   ffffffff|
+test_arrayassign| void|  func|    0|   54|   ffffffff|
+test_arrayindex| void|  func|    0|   48|   ffffffff|
+test_bra_statement| void|  func|    0|   68|   ffffffff|
+test_chartypetrans|  int|  func|    1|   30|   ffffffff|
+test_condition|  int|  func|    1|   34|   ffffffff|
+      test_for|  int|  func|    0|   61|   ffffffff|
+test_strelement| void|  func|    0|   26|   ffffffff|
+             x|  int|   var|    0|    3|   ffffffff|
+             y|  int|   var|    0|    3|   ffffffff|
+             z|  int|   var|    0|    3|   ffffffff|
+
+add:
+          name|class|  type|  len|  def|       addr|reg
+            #1|  int|   var|    0|    7|   ffffffff|  0
+            #2|  int|   var|    0|    7|   ffffffff|  1
+            #3|  int|   var|    0|    7|   ffffffff|  2
+            #4|  int|   var|    0|    7|   ffffffff|  3
+             a|  int|  para|    0|    6|   ffffffff|  4
+             b|  int|  para|    1|    6|   ffffffff|  5
+             c|  int|  para|    2|    6|   ffffffff|  6
+             d|  int|  para|    3|    6|   ffffffff|  7
+             e|  int|  para|    4|    6|   ffffffff|  8
+             f|  int|  para|    5|    6|   ffffffff|  9
+call_abs:
+          name|class|  type|  len|  def|       addr|reg
+call_fibo:
+          name|class|  type|  len|  def|       addr|reg
+fibo:
+          name|class|  type|  len|  def|       addr|reg
+            #5|  int|   var|    0|   23|   ffffffff|  0
+            #6|  int|   var|    0|   23|   ffffffff|  1
+            #7|  int|   var|    0|   23|   ffffffff|  2
+            #8|  int|   var|    0|   23|   ffffffff|  3
+             n|  int|  para|    0|   21|   ffffffff|  4
+fool:
+          name|class|  type|  len|  def|       addr|reg
+getabs:
+          name|class|  type|  len|  def|       addr|reg
+             x|  int|  para|    0|   15|   ffffffff|  0
+test_arrayassign:
+          name|class|  type|  len|  def|       addr|reg
+           #14|  int|   var|    0|   57|   ffffffff|  0
+           #15|  int|   var|    0|   57|   ffffffff|  1
+           #16|  int|   var|    0|   57|   ffffffff|  2
+test_arrayindex:
+          name|class|  type|  len|  def|       addr|reg
+test_bra_statement:
+          name|class|  type|  len|  def|       addr|reg
+test_chartypetrans:
+          name|class|  type|  len|  def|       addr|reg
+            ch| char|  para|    0|   30|   ffffffff|  0
+test_condition:
+          name|class|  type|  len|  def|       addr|reg
+           #10|  int|   var|    0|   35|   ffffffff|  0
+           #12|  int|   var|    0|   35|   ffffffff|  1
+             x|  int|  para|    0|   34|   ffffffff|  2
+test_for:
+          name|class|  type|  len|  def|       addr|reg
+           #17|  int|   var|    0|   64|   ffffffff|  0
+test_strelement:
+          name|class|  type|  len|  def|       addr|reg
+
+main:
+          name|class|  type|  len|  def|       addr|reg
+           #23|  int|   var|    0|   90|   ffffffff|  0
+           #24|  int|   var|    0|   97|   ffffffff|  1
+           #25|  int|   var|    0|   97|   ffffffff|  2
+           #26|  int|   var|    0|   97|   ffffffff|  3
+           #27|  int|   var|    0|   97|   ffffffff|  4
+           #28|  int|   var|    0|  103|   ffffffff|  5
+           #29| char|   var|    0|  113|   ffffffff|  6
+           #30|  int|   var|    0|  115|   ffffffff|  7

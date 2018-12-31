@@ -201,3 +201,351 @@ Basic block info:
           swap        call               0               0  47
   complete_num        push               2               0  48
   complete_num        call               0               0  48
+Def-Use Web
+====== complete_num ======
+#10
+37, 0
+(37, 1) --> 
+
+#11
+41, 3
+(41, 4) --> 
+
+#5
+12, 0
+
+
+#6
+13, 0
+(13, 1) --> 
+
+#7
+23, 1
+(23, 2) --> 
+
+#8
+28, 3
+(28, 4) --> 
+
+#9
+36, 0
+
+
+a
+26, 2
+(28, 0) --> (28, 2) --> (29, 1) --> 
+
+28, 2
+(28, 3) --> 
+28, 4
+(28, 0) --> (28, 2) --> (29, 1) --> 
+
+
+b
+28, 0
+(28, 3) --> 
+29, 1
+(31, 0) --> (32, 2) --> 
+31, 0
+(31, 0) --> (32, 2) --> 
+
+c
+28, 1
+(28, 4) --> 
+
+h
+32, 4
+(41, 2) --> (45, 2) --> 
+41, 2
+(41, 3) --> (41, 5) --> (41, 2) --> 
+(45, 2) --> (41, 2) --> (45, 2) --> 
+
+
+i
+10, 2
+(11, 1) --> (12, 0) --> (12, 2) --> 
+(14, 1) --> (17, 0) --> (19, 1) --> 
+(19, 1) --> (17, 0) --> 
+19, 1
+(11, 1) --> (12, 0) --> (12, 2) --> 
+(14, 1) --> (17, 0) --> (19, 1) --> 
+(19, 1) --> (17, 0) --> 
+21, 2
+(22, 1) --> (23, 1) --> (23, 3) --> 
+
+23, 3
+(22, 1) --> (23, 1) --> (23, 3) --> 
+
+26, 3
+(27, 1) --> (28, 0) --> (28, 2) --> 
+(28, 5) --> 
+28, 5
+(27, 1) --> (28, 0) --> (28, 2) --> 
+(28, 5) --> 
+29, 2
+(30, 1) --> (31, 0) --> (31, 1) --> 
+
+31, 1
+(30, 1) --> (31, 0) --> (31, 1) --> 
+
+34, 1
+(35, 1) --> (36, 0) --> (36, 2) --> 
+(39, 1) --> (39, 1) --> 
+39, 1
+(35, 1) --> (36, 0) --> (36, 2) --> 
+(39, 1) --> (39, 1) --> 
+
+j
+8, 1
+(9, 1) --> (10, 1) --> (11, 1) --> 
+(12, 0) --> (12, 1) --> (21, 1) --> 
+(25, 1) --> (25, 1) --> (28, 1) --> 
+
+25, 1
+(9, 1) --> (10, 1) --> (11, 1) --> 
+(12, 0) --> (12, 1) --> (21, 1) --> 
+(25, 1) --> (25, 1) --> (28, 1) --> 
+
+
+k2
+34, 0
+(35, 1) --> 
+
+leap
+32, 5
+(40, 1) --> 
+38, 0
+(40, 1) --> 
+44, 1
+(40, 1) --> 
+
+m
+32, 6
+(33, 1) --> (34, 0) --> (36, 0) --> 
+(36, 1) --> (41, 1) --> (44, 2) --> 
+(44, 2) --> 
+44, 2
+(33, 1) --> (34, 0) --> (36, 0) --> 
+(36, 1) --> (41, 1) --> (44, 2) --> 
+(44, 2) --> 
+
+n
+10, 0
+(14, 0) --> (22, 1) --> (28, 1) --> 
+(28, 1) --> 
+14, 0
+(14, 2) --> (16, 1) --> (17, 0) --> 
+(14, 0) --> (22, 1) --> (28, 1) --> 
+(28, 1) --> (14, 0) --> (22, 1) --> 
+(16, 1) --> (17, 0) --> 
+
+s
+10, 1
+(14, 1) --> (20, 1) --> 
+14, 1
+(14, 1) --> (20, 1) --> (14, 1) --> 
+(20, 1) --> 
+
+val
+8, 0
+(8, 1) --> 
+
+x2
+41, 4
+(41, 5) --> 
+
+====== factorial ======
+#1
+2, 1
+(2, 2) --> 
+
+#2
+3, 0
+(3, 1) --> 
+
+n
+0, 0
+(0, 1) --> (2, 1) --> (3, 1) --> 
+
+
+====== main ======
+n
+47, 0
+(47, 2) --> 
+
+====== mod ======
+#3
+5, 1
+(5, 2) --> 
+
+#4
+5, 2
+(5, 3) --> 
+
+x
+5, 0
+(5, 1) --> (5, 3) --> 
+5, 3
+(5, 4) --> 
+
+y
+5, 0
+(5, 1) --> (5, 2) --> 
+
+====== swap ======
+temp
+7, 5
+(7, 7) --> 
+
+x
+7, 0
+(7, 2) --> (7, 5) --> 
+7, 6
+(7, 9) --> 
+
+y
+7, 0
+(7, 4) --> (7, 6) --> 
+7, 7
+(7, 11) --> 
+
+
+
+Crash Graph
+complete_num ======
+#10:
+    
+#11:
+    h  x2  
+#5:
+    i  j  
+#6:
+    
+#7:
+    i  
+#8:
+    a  b  c  
+#9:
+    i  m  
+a:
+    #8  b  c  i  
+b:
+    #8  a  i  
+c:
+    #8  a  j  n  
+h:
+    #11  x2  
+i:
+    #5  #7  #9  a  b  j  k2  m  n  s  
+j:
+    #5  c  i  n  s  val  
+k2:
+    i  m  
+leap:
+    
+m:
+    #9  i  k2  
+n:
+    c  i  j  
+s:
+    i  j  
+val:
+    j  
+x2:
+    #11  h  
+
+factorial ======
+#1:
+    n  
+#2:
+    n  
+n:
+    #1  #2  
+
+main ======
+n:
+    
+
+mod ======
+#3:
+    #4  x  y  
+#4:
+    #3  x  y  
+x:
+    #3  #4  y  
+y:
+    #3  #4  x  
+
+swap ======
+temp:
+    x  y  
+x:
+    temp  y  
+y:
+    temp  x  
+
+string_12 : .asciiz "          The total is \n"
+string_8 : .asciiz "          \n"
+string_7 : .asciiz "  \n"
+string_9 : .asciiz " ---------------------------------------------------------------          \n"
+string_13 : .asciiz " 10! = \n"
+string_5 : .asciiz " OVERFLOW!          \n"
+string_3 : .asciiz " SWAP x = \n"
+string_4 : .asciiz " SWAP y = \n"
+string_11 : .asciiz " \n"
+string_10 : .asciiz " b = \n"
+string_6 : .asciiz " complete number: \n"
+string_1 : .asciiz " x = \n"
+string_2 : .asciiz " y = \n"
+global:
+          name|class|  type|  len|  def|       addr
+  complete_num| void|  func|    1|   28|   ffffffff|
+     factorial|  int|  func|    1|    3|   ffffffff|
+          main| void|  func|    0|  126|   ffffffff|
+       max_num|  int| const| 1024|    1|   ffffffff|
+           mod|  int|  func|    2|    9|   ffffffff|
+          swap| void|  func|    2|   15|   ffffffff|
+
+complete_num:
+          name|class|  type|  len|  def|       addr|reg
+           #10|  int|   var|    0|  102|   ffffffff|  2
+           #11|  int|   var|    0|  113|   ffffffff|  1
+            #5|  int|   var|    0|   43|   ffffffff|  0
+            #6|  int|   var|    0|   44|   ffffffff| 16
+            #7|  int|   var|    0|   62|   ffffffff| 15
+            #8|  int|   var|    0|   77|   ffffffff| 14
+            #9|  int|   var|    0|  101|   ffffffff| 13
+             a|  int|   var|    0|   33|   ffffffff| 12
+             b|  int|   var|    0|   33|   ffffffff| 11
+             c|  int|   var|    0|   33|   ffffffff| 10
+             h|  int|   var|    0|   32|   ffffffff|  9
+             i|  int|   var|    0|   31|   ffffffff|  8
+             j|  int|   var|    0|   31|   ffffffff|  7
+             k|  int| array|  128|   30|   ffffffff| -1
+            k2|  int|   var|    0|   32|   ffffffff|  6
+          leap|  int|   var|    0|   32|   ffffffff|  5
+             m|  int|   var|    0|   32|   ffffffff|  4
+             n|  int|   var|    0|   31|   ffffffff|  3
+             s|  int|   var|    0|   31|   ffffffff|  2
+           val|  int|  para|    0|   28|   ffffffff|  1
+            x2|  int|   var|    0|   32|   ffffffff|  0
+factorial:
+          name|class|  type|  len|  def|       addr|reg
+            #1|  int|   var|    0|    6|   ffffffff|  0
+            #2|  int|   var|    0|    6|   ffffffff|  1
+             n|  int|  para|    0|    3|   ffffffff|  2
+mod:
+          name|class|  type|  len|  def|       addr|reg
+            #3|  int|   var|    0|   10|   ffffffff|  0
+            #4|  int|   var|    0|   10|   ffffffff|  1
+             x|  int|  para|    0|    9|   ffffffff|  2
+             y|  int|  para|    1|    9|   ffffffff|  3
+swap:
+          name|class|  type|  len|  def|       addr|reg
+          temp|  int|   var|    0|   16|   ffffffff|  0
+             x|  int|  para|    0|   15|   ffffffff|  1
+             y|  int|  para|    1|   15|   ffffffff|  2
+
+main:
+          name|class|  type|  len|  def|       addr|reg
+             n|  int|   var|    0|  128|   ffffffff|  0

@@ -137,15 +137,16 @@ void ST::printSym(std::ofstream&o)
 				std::setw(6) << "type" << '|' <<
 				std::setw(5) << "len" << '|' <<
 				std::setw(5) << "def" << '|' <<
-				std::setw(11) << "addr" << std::endl;
+				std::setw(11) << "addr" << '|' <<
+				std::setw(3) << "reg" << std::endl;
 			for (auto it2 = iter->second.begin(); it2 != iter->second.end(); it2++)
 				o << std::setw(14) << it2->first << '|' <<
 				std::setw(5) << SYM_CLS(it2->second) << '|' <<
 				std::setw(6) << SYM_TYP(it2->second) << '|' <<
 				std::dec << std::setw(5) << it2->second.length << '|' <<
 				std::dec << std::setw(5) << it2->second.defLine << '|'
-				  << std::setw(11) << std::hex << it2->second.addr << '|'  << std::endl;
-
+				  << std::setw(11) << std::hex << it2->second.addr << '|' <<
+				std::dec << std::setw(3) << it2->second.reg << std::endl;
 		}
 	}
 	o << std::endl << "main:" << std::endl;
@@ -154,13 +155,15 @@ void ST::printSym(std::ofstream&o)
 		std::setw(6) << "type" << '|' <<
 		std::setw(5) << "len" << '|' <<
 		std::setw(5) << "def" << '|' <<
-		std::setw(11) << "addr" << std::endl;
+		std::setw(11) << "addr" << '|' <<
+		std::setw(3) << "reg" << std::endl;
 	for (auto it2 = func_sym["main"].begin(); it2 != func_sym["main"].end(); it2++)
 		o << std::setw(14) << it2->first << '|' <<
 		std::setw(5) << SYM_CLS(it2->second) << '|' <<
 		std::setw(6) << SYM_TYP(it2->second) << '|' <<
 		std::dec << std::setw(5) << it2->second.length << '|' <<
 		std::dec << std::setw(5) << it2->second.defLine << '|'
-		  << std::setw(11) << std::hex << it2->second.addr << '|' << std::endl;
+		  << std::setw(11) << std::hex << it2->second.addr << '|' << 
+		std::dec << std::setw(3) << it2->second.reg << std::endl;
 }
 

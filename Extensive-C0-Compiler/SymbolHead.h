@@ -9,8 +9,7 @@ typedef struct
 	int length;		// const->value []->length, func->num_of_params
 	int defLine;	// Line No. of def of IDEN
 	int addr = -1;		// addr of IDEN
-	//记录下这个局部变量在这个函数的每个基本块里的使用情况
-	//bool flag[kMaxBasicBlock];
+	int reg = -1;	// which reg it'll use  t0 ~ t7, s0 ~ s8
 	std::string name;
 } varinfo;
 

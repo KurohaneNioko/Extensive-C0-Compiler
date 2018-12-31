@@ -1,8 +1,7 @@
 #include"ObjectCode.h"
-
+#include"OptimzeHead.h"
 #if DEBUG
 #define COMMENT 1
-#define MIPS_DEBUG 0
 #else
 #define COMMENT 0
 #endif
@@ -159,6 +158,38 @@ int nextRegIndex(int i)
 		i + 1 : 
 		i + 1 - reg_t_max - reg_s_max;
 }
+bool opr_is_const(std::string opr, int &rst)
+{
+	auto t = opr.begin();
+	if (*(opr.begin()) == '\'')
+	{
+		rst = *(t + 1);
+		return true;
+	}
+	int r = 0;
+	try
+	{
+		r = std::stoi(opr);
+	}
+	catch (const std::exception&)
+	{
+		return false;
+	}
+	rst = r;
+	return true;
+}
+int reg2Index(std::string reg)
+{
+	assert(reg.length() >= 3 && *(reg.begin())=='$');
+	if (reg[1] == 't')
+		return reg[2] - '0';
+	else if (reg[1] == 's')
+		return reg[2] - '0' + reg_t_max;
+	else if (reg == "$fp")
+		return reg_t_max + reg_s_max - 1;
+	assert(false);
+	return -1;
+}
 void modifyRegInfo(std::string &var, int &i)
 {
 	curRI.CLK_use[i] = true;
@@ -166,6 +197,8 @@ void modifyRegInfo(std::string &var, int &i)
 	curRI.ts_content[i] = var;
 	curRI.CLK_ptr = nextRegIndex(i);
 }
+
+#if !OPTIMIZE
 
 std::string regAppoint(std::string &var)
 {
@@ -259,18 +292,7 @@ std::string regAppoint(std::string &var)
 	modifyRegInfo(var, i);
 	return reg;
 }
-int reg2Index(std::string reg)
-{
-	assert(reg.length() >= 3 && *(reg.begin())=='$');
-	if (reg[1] == 't')
-		return reg[2] - '0';
-	else if (reg[1] == 's')
-		return reg[2] - '0' + reg_t_max;
-	else if (reg == "$fp")
-		return reg_t_max + reg_s_max - 1;
-	assert(false);
-	return -1;
-}
+
 std::string regSeek(std::string &v, bool is_rsrt)
 {	// if reg_t/s_max changed, modify here.
 	if (v == RETV0)
@@ -319,7 +341,7 @@ void futureUseChk(std::string opr, std::string reg, ociter o)
 	auto i = o + 1;
 	for (; i != Med::itmd_code.end(); i++)
 	{
-		if ((*i).op == OP::EXIT || (*i).op == OP::FUNC_END || (*i).rst == opr)
+		if ((*i).op == OP::FUNC_END || (*i).rst == opr)
 		{
 			int idx = reg2Index(reg);
 			curRI.ts_use[idx] = false;
@@ -335,27 +357,6 @@ void futureUseChk(std::string opr, std::string reg, ociter o)
 		int idx = reg2Index(reg);
 		curRI.ts_use[idx] = false;
 	}
-}
-
-bool opr_is_const(std::string opr, int &rst)
-{
-	auto t = opr.begin();
-	if (*(opr.begin()) == '\'')
-	{
-		rst = *(t + 1);
-		return true;
-	}
-	int r = 0;
-	try
-	{
-		r = std::stoi(opr);
-	}
-	catch (const std::exception&)
-	{
-		return false;
-	}
-	rst = r;
-	return true;
 }
 
 void write2RAM(std::string iden, std::string reg)
@@ -382,6 +383,189 @@ void write2RAM(std::string iden, std::string reg)
 		curRI.ts_use[reg2Index(reg)] = false;
 	}
 }
+#else
+void futureUseChk(std::string opr, std::string reg, ociter o)
+{
+	if (*opr.begin() != '#')
+	{
+		auto ducs = OPT::func_DU[curfunc][opr];
+		auto BBno = o->BBno;
+		auto firstBlkIR = OPT::firstIRinBLK(BBno);
+		auto line = std::distance(firstBlkIR, o);
+		for (auto i = ducs.begin(); i != ducs.end(); i++)
+		{
+			if (i->defBB == BBno && i->defBBLine == line)
+				return;
+			for (auto j = i->useinfo.begin(); j != i->useinfo.end(); j++)
+			{
+				if (j->BBno == BBno && j->BBLine == line && j != i->useinfo.end() - 1)
+					return;
+			}
+		}
+		int idx = reg2Index(reg);
+		curRI.ts_use[idx] = false;
+		//curRI.ts_content[idx] = "";
+
+		return;
+	}
+	auto i = o + 1;
+	for (; i != Med::itmd_code.end(); i++)
+	{
+		if ((*i).op == OP::FUNC_END || (*i).rst == opr)
+		{
+			int idx = reg2Index(reg);
+			curRI.ts_use[idx] = false;
+			curRI.ts_content[idx] = "";
+			return;
+		}
+		if ((*i).num1 == opr || (*i).num2 == opr
+			|| ((*i).op == OP::SCAN && (*i).num1 == opr))
+			return;
+	}
+	if (i == Med::itmd_code.end())
+	{
+		int idx = reg2Index(reg);
+		curRI.ts_use[idx] = false;
+	}
+}
+
+bool t8t9_use[2] = { false, false };
+std::string t8t9_content[2] = { "", "" };
+std::string regSeek(std::string &v, bool is_rsrt)
+{
+	if (v == RETV0)
+		return V0;
+	if (curRI.symtab.count(v) > 0 && curRI.symtab[v].reg >= 0)
+	{	//local  && has its own reg
+		if (is_rsrt)
+		{
+			auto regid = curRI.symtab[v].reg;
+			if (curRI.ts_use[regid] && curRI.ts_content[regid] == v)
+				return index2tempReg(regid);
+			if (!curRI.ts_use[regid])
+			{
+				varinfo t = curRI.symtab[v]; SSSS;
+				ss << (t.cls == ST::CHA_CLS ? LBU : LW) << " "
+					<< index2tempReg(regid) << " -" << (t.addr) << " (" << SP << ")";
+				mpss;
+				curRI.ts_use[regid] = true; curRI.ts_content[regid] = v;
+				return index2tempReg(regid);
+			}
+			if (curRI.ts_use[regid] && curRI.ts_content[regid] != v)
+			{
+				{
+					SSSS;
+					varinfo t = curRI.symtab[curRI.ts_content[regid]];
+					ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+						<< index2tempReg(regid) << " -" << (t.addr) << " (" << SP << ")";
+					mpss;
+				}
+				SSSS;
+				varinfo new_ = curRI.symtab[v];
+				ss << (new_.cls == ST::CHA_CLS ? LBU : LW) << " "
+					<< index2tempReg(regid) << " -" << (new_.addr) << " (" << SP << ")";
+				mpss;
+				curRI.ts_use[regid] = true; curRI.ts_content[regid] = v;
+				return index2tempReg(regid);
+			}
+		}
+		else
+		{
+			auto regid = curRI.symtab[v].reg;
+			if (curRI.ts_use[regid] && curRI.ts_content[regid] == v)
+				return index2tempReg(regid);
+			if (!curRI.ts_use[regid])
+			{
+				curRI.ts_use[regid] = true; curRI.ts_content[regid] = v;
+				return index2tempReg(regid);
+			}
+			if (curRI.ts_use[regid] && curRI.ts_content[regid] != v)
+			{
+				SSSS;
+				varinfo t = curRI.symtab[curRI.ts_content[regid]];
+				ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+					<< index2tempReg(regid) << " -" << (t.addr) << " (" << SP << ")";
+				mpss;
+				curRI.ts_use[regid] = true; curRI.ts_content[regid] = v;
+				return index2tempReg(regid);
+			}
+		}
+	}
+	else
+	{
+		assert(ST::global_sym.count(v) > 0 || curRI.symtab[v].reg < 0);
+		if (is_rsrt)
+			return T8;
+		else
+		{
+			if (!t8t9_use[0])
+			{
+				t8t9_use[0] = true;
+				return T8;
+			}
+			if (!t8t9_use[1])
+			{
+				t8t9_use[1] = true;
+				return T9;
+			}
+			if (t8t9_use[0] && t8t9_use[1])
+			{
+				t8t9_use[1] = false;
+				return T8;
+			}
+		}
+	}
+}
+void write2RAM(std::string iden, std::string reg)
+{
+	//if (*(iden.begin()) != '#')
+	{
+		SSSS;
+		if (curRI.symtab.count(iden) > 0)
+		{	// local var
+			/*varinfo t = curRI.symtab[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " -" << (t.addr) << " (" << SP << ")";*/
+		}
+		else
+		{	//global var
+			//std::cout << v << " " << curfunc << std::endl;
+			assert(ST::global_sym.count(iden) > 0);
+			varinfo t = ST::global_sym[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " " << mark2global_IDEN(iden);
+		}
+		mpss;
+		//curRI.ts_content[reg2Index(reg)] = "";
+		//curRI.ts_use[reg2Index(reg)] = false;
+	}
+}
+void write2RAM_BB(std::string iden, std::string reg)
+{
+	//if (*(iden.begin()) != '#')
+	{
+		SSSS;
+		if (curRI.symtab.count(iden) > 0)
+		{	// local var
+			varinfo t = curRI.symtab[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " -" << (t.addr) << " (" << SP << ")";
+		}
+		else
+		{	//global var
+			//std::cout << v << " " << curfunc << std::endl;
+			assert(ST::global_sym.count(iden) > 0);
+			varinfo t = ST::global_sym[iden];
+			ss << (t.cls == ST::CHA_CLS ? SB : SW) << " "
+				<< reg << " " << mark2global_IDEN(iden);
+		}
+		mpss;
+		//curRI.ts_content[reg2Index(reg)] = "";
+		//curRI.ts_use[reg2Index(reg)] = false;
+	}
+}
+#endif
+
 
 /* add _ before every global name to prevent iden like jal*/
 void codeHead()
@@ -1063,23 +1247,6 @@ void print(mcode &c, ociter o)
 }
 
 
-void spilt4mips(const std::string &code, std::vector<std::string> &r)
-{
-	for (auto i = code.begin(); i != code.end(); i++)
-	{
-		auto first_place = i;
-		auto last_place = i;
-		auto j = i + 1;
-		for (; j != code.end(); j++)
-			if (*j == ' ')
-				last_place = j;
-		std::string elmt = code.substr(
-			std::distance(i, code.begin()), std::distance(last_place, code.begin()));
-		r.push_back(elmt);
-		i = j;
-	}
-}
-
 void OC::Med2Mips(std::string mipsfile)
 {
 	codeHead();
@@ -1089,6 +1256,29 @@ void OC::Med2Mips(std::string mipsfile)
 	auto m = 0;
 	for (auto i = Med::itmd_code.begin(); i != Med::itmd_code.end(); i++)
 	{
+#if OPTIMIZE//&!AGRESSIVE
+		//now it's gonna be the last IR of a BB
+		if (i == Med::itmd_code.end() - 1 || i->BBno != (i + 1)->BBno)
+		{
+			for (auto i = 0; i < reg_t_max + reg_s_max; i++)
+			{
+				if (curRI.ts_use[i] == true)
+				{
+					int share_reg_local_var = 0;
+					for (auto j = curRI.symtab.begin(); j != curRI.symtab.end(); j++)
+					{
+						if (j->second.reg == i)
+							share_reg_local_var++;
+					}
+					if (share_reg_local_var > 1)
+					{
+						write2RAM_BB(curRI.ts_content[i], index2tempReg(i));
+						curRI.ts_content[i] = ""; curRI.ts_use[i] = false;
+					}
+				}
+			}
+		}
+#endif
 		if (i->op == OP::FUNC_BEGIN)
 			funcbegin(*i);
 		else if (i->op == OP::LABEL)
@@ -1120,21 +1310,7 @@ void OC::Med2Mips(std::string mipsfile)
 			print(*i, i);
 		else
 			assert(false);
-#if MIPS_DEBUG
-		bool putTab = false;
-		for (; m != mips.size(); m++)
-		{
-			if (mips[m] == ".text")
-			{
-				putTab = true;
-				std::cout << mips[m] << std::endl;
-				continue;
-			}
-			if (putTab && mips[m] != ".globl main" && mips[m].find(':') == -1)
-				std::cout << '\t';
-			std::cout << mips[m] << std::endl;
-		}
-#endif
+
 	}
 	mpb("exit:");
 	
@@ -1142,43 +1318,6 @@ void OC::Med2Mips(std::string mipsfile)
 	std::ofstream mipsout(mipsfile, std::ios::trunc | std::ofstream::ate);
 #else
 	std::ofstream mipsout("../mipsr.asm", std::ios::trunc | std::ofstream::ate);
-#endif
-
-#if 0 //OPTIMIZE
-	// try to optimize sw x xx xxx; lw x' xx xxx
-	bool aftertext = false;
-	for (auto iter = mips.begin(); iter != mips.end(); iter++)
-	{
-		if (!aftertext && (*iter) != ".text")
-			continue;
-		else if (!aftertext && (*iter) == ".text")
-			aftertext = true;
-		if ((*iter) == "exit:") break;
-		if (aftertext)
-		{
-			if ((*iter)[0] == '#') continue;
-			auto op = (*iter).substr(0, 2);
-			if (op == "sw" || op == "sb")
-			{
-				std::vector<std::string> code1;
-				spilt4mips(*iter, code1);
-							   
-				auto j = iter + 1;
-				for (; j != mips.end(); j++)
-					if ((*j)[0] != '#')
-						break;
-				if (j == mips.end()) continue;
-				if ((*j).size() >= 3)
-				{
-					std::vector<std::string> code2;
-					spilt4mips(*j, code2);
-					auto op2 = code2[0];
-					if(op=="sw" && op2=="lw" &&)
-				}
-			}
-		}
-		
-	}
 #endif
 	bool putTab = false;
 	for (auto iter = mips.begin(); iter != mips.end(); iter++)
@@ -1194,3 +1333,4 @@ void OC::Med2Mips(std::string mipsfile)
 		mipsout << *iter << std::endl;
 	}
 }
+

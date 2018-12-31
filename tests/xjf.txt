@@ -254,7 +254,7 @@ void main(){
 
 ===========测试1===========
 输入：（注意mars中输入时应是这个顺序： 1 enter 5 enter bc6 enter）
-1 5bc6
+1 5 bc6
 输出：
 588___ !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~___\n\t\\\'___@@@@@b
 
